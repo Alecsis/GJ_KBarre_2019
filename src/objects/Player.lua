@@ -29,8 +29,8 @@ local function Player()
     self.type = "player"
 
     self.dimensions = {
-        w = 32,
-        h = 64,
+        w = 64,
+        h = 128,
     }
 
     self.onGround = false

@@ -4,10 +4,10 @@ local function init(self)
     self.height = love.graphics.getHeight()
 
     ----- fonts -----
-    self.chooseFont = love.graphics.newFont(28)
+    self.chooseFont = love.graphics.newFont(32)
 
     ----- objects -----
-    self.platform = {x = 0, y = 0, width = 480, height = 160}
+    self.platform = {x = 0, y = 0, width = 800, height = 130}
     self.platform.x = (self.width - self.platform.width) / 2
     self.platform.y = self.height - self.platform.height
     self.platform.sprite = love.graphics.newImage("assets/platform.png")
@@ -21,7 +21,12 @@ local function init(self)
     self.background.image = love.graphics.newImage("assets/background.png")
     self.background.scale = math.max(self.background.width / self.background.image:getWidth(), self.background.height / self.background.image:getHeight())
 
-    self.leftBkg = { x=0, y=0, width=self.width / 2, height=self.height }
+    self.leftBkg = {
+        x=0,
+        y=0,
+        width=self.width / 2,
+        height=self.height
+    }
     self.leftBkg.color = { 1, 0, 0, 0 }
 
     self.rightBkg = {
