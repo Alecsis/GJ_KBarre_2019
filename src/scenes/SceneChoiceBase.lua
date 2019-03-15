@@ -3,10 +3,14 @@ local function update(self, dt)
 
     if self.player.pos.x < self.width / 2 then
         -- Select left choice
-        self.playerPosition = "left"
+        if self.playerSide ~= "left" then
+            self.playerSide = "left"
+        end
     else
         -- Select right choice
-        self.playerPosition = "right"
+        if self.playerSide ~= "right" then
+            self.playerSide = "right"
+        end
     end
 
     local gravity = 640 * dt
@@ -19,7 +23,7 @@ local function draw(self)
     love.graphics.print("Generic choice scene")
 
     -- draw left rectangle
-    if self.playerPosition == "left" then
+    if self.playerSide == "left" then
         self.leftBkg.color[4] = 0.5
         love.graphics.setColor(self.leftBkg.color)
         love.graphics.rectangle("fill", self.leftBkg.x, self.leftBkg.y, self.leftBkg.width, self.leftBkg.height)
@@ -37,7 +41,7 @@ local function draw(self)
         love.graphics.rectangle("line", self.leftBkg.x, self.leftBkg.y, self.leftBkg.width, self.leftBkg.height)
     end
     -- draw right rectangle
-    if self.playerPosition == "right" then
+    if self.playerSide == "right" then
         self.rightBkg.color[4] = 0.5
         love.graphics.setColor(self.rightBkg.color)
         love.graphics.rectangle("fill", self.rightBkg.x, self.rightBkg.y, self.rightBkg.width, self.rightBkg.height)
@@ -63,6 +67,7 @@ local function draw(self)
 
     -- draw player
     self.player:draw()
+end
 
 end
 
@@ -98,7 +103,7 @@ local function SceneChoiceBase(pSceneManager)
     player:setPosition(self.width / 2 - 50, self.height / 2)
     player:setVelocity(50, -100)
     self.player = player
-    self.playerPosition = "left"
+    self.playerSide = "left"
     
     ----- interface functions ----
     self.update = update
