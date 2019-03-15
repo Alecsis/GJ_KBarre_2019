@@ -3,10 +3,16 @@ local function update(self, dt)
 
     if self.player.pos.x < self.width / 2 then
         -- Select left choice
-        self.playerPosition = "left"
+        if self.playerSide ~= "left" then
+            self.playerSide = "left"
+            self:choiceChanged()
+        end
     else
         -- Select right choice
-        self.playerPosition = "right"
+        if self.playerSide ~= "right" then
+            self.playerSide = "right"
+            self:choiceChanged()
+        end
     end
 
     local gravity = 240 * dt
@@ -19,38 +25,38 @@ local function draw(self)
     love.graphics.print("Generic choice scene")
 
     -- draw left rectangle
-    if self.playerPosition == "left" then
-        self.leftBkg.color[4] = 0.5
+    if self.playerSide == "left" then
+        self.leftBkg.color[4] = 0.4
         love.graphics.setColor(self.leftBkg.color)
         love.graphics.rectangle("fill", self.leftBkg.x, self.leftBkg.y, self.leftBkg.width, self.leftBkg.height)
 
-        self.leftBkg.color[4] = 0.75
+        self.leftBkg.color[4] = 0.8
         love.graphics.setColor(self.leftBkg.color)
         love.graphics.rectangle("line", self.leftBkg.x, self.leftBkg.y, self.leftBkg.width, self.leftBkg.height)
     else
-        self.leftBkg.color[4] = 0.1
+        self.leftBkg.color[4] = 0.15
         love.graphics.setColor(self.leftBkg.color)
         love.graphics.rectangle("fill", self.leftBkg.x, self.leftBkg.y, self.leftBkg.width, self.leftBkg.height)
 
-        self.leftBkg.color[4] = 0.25
+        self.leftBkg.color[4] = 0.3
         love.graphics.setColor(self.leftBkg.color)
         love.graphics.rectangle("line", self.leftBkg.x, self.leftBkg.y, self.leftBkg.width, self.leftBkg.height)
     end
     -- draw right rectangle
-    if self.playerPosition == "right" then
-        self.rightBkg.color[4] = 0.5
+    if self.playerSide == "right" then
+        self.rightBkg.color[4] = 0.4
         love.graphics.setColor(self.rightBkg.color)
         love.graphics.rectangle("fill", self.rightBkg.x, self.rightBkg.y, self.rightBkg.width, self.rightBkg.height)
 
-        self.rightBkg.color[4] = 0.75
+        self.rightBkg.color[4] = 0.8
         love.graphics.setColor(self.rightBkg.color)
         love.graphics.rectangle("line", self.rightBkg.x, self.rightBkg.y, self.rightBkg.width, self.rightBkg.height)
     else
-        self.rightBkg.color[4] = 0.25
+        self.rightBkg.color[4] = 0.15
         love.graphics.setColor(self.rightBkg.color)
         love.graphics.rectangle("fill", self.rightBkg.x, self.rightBkg.y, self.rightBkg.width, self.rightBkg.height)
 
-        self.rightBkg.color[4] = 0.5
+        self.rightBkg.color[4] = 0.3
         love.graphics.setColor(self.rightBkg.color)
         love.graphics.rectangle("line", self.rightBkg.x, self.rightBkg.y, self.rightBkg.width, self.rightBkg.height)
     end
@@ -63,7 +69,10 @@ local function draw(self)
 
     -- draw player
     self.player:draw()
+end
 
+local function choiceChanged(self)
+    print("Player choice changed: " .. self.playerSide)
 end
 
 local function keyPressed(self, k)
@@ -98,12 +107,13 @@ local function SceneChoiceBase(pSceneManager)
     player:setPosition(self.width / 2 - 50, self.height / 2)
     player:setVelocity(100, -100)
     self.player = player
-    self.playerPosition = "left"
+    self.playerSide = "left"
     
     ----- interface functions ----
     self.update = update
     self.draw = draw
     self.keyPressed = keyPressed
+    self.choiceChanged = choiceChanged
 
     return self
 end
