@@ -17,6 +17,7 @@ local function SceneManager()
                 self.currentScene:exit()
             end
             self.currentScene = newScene
+            self.currentScene:init()
         end
     end
 
