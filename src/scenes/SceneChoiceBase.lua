@@ -24,6 +24,9 @@ end
 local function draw(self)
     love.graphics.print("Generic choice scene")
 
+    -- draw background
+    love.graphics.draw(self.background.image, self.background.x, self.background.y, 0, self.background.scale)
+
     -- draw left rectangle
     if self.playerSide == "left" then
         self.leftBkg.color[4] = 0.4
@@ -95,6 +98,10 @@ local function SceneChoiceBase(pSceneManager)
     self.platform.y = self.height - self.platform.height
     self.platform.sprite = love.graphics.newImage("assets/platform.png")
     self.platform.scale = self.platform.width / self.platform.sprite:getWidth()
+
+    self.background = { x=0, y=0, width=self.width, height=self.height }
+    self.background.image = love.graphics.newImage("assets/background.png")
+    self.background.scale = math.max(self.background.width / self.background.image:getWidth(), self.background.height / self.background.image:getHeight())
 
     self.leftBkg = { x=0, y=0, width=self.width / 2, height=self.height }
     self.leftBkg.color = { 1, 0, 0, 0 }
