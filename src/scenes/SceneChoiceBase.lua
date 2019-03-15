@@ -214,18 +214,21 @@ end
 local function choiceChanged(self)
     print("Player choice changed: " .. self.playerSide)
 
+    if not self.choices.switchMusic then
+        return
+    end
+
     if self.music then
         self.music:stop()
     end
 
     if self.playerSide == "left" then
         self.music = love.audio.newSource("assets/" .. self.choices.left.sound, "stream")
-        self.music:setLooping(true)
     else
         self.music = love.audio.newSource("assets/" .. self.choices.right.sound, "stream")
-        self.music:setLooping(true)
     end
 
+    self.music:setLooping(true)
     self.music:play()
 end
 
@@ -336,7 +339,9 @@ local function SceneChoiceBase(pSceneManager)
         right = {
             text = "Princesse Sarah",
             sound = "Princesse-Sarah-preview.mp3"
-        }
+        },
+        switchMusic = true,
+        backgroundMusic = ""
     }
     self:setChoices(choices)
 
