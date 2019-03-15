@@ -214,22 +214,39 @@ end
 local function choiceChanged(self)
     print("Player choice changed: " .. self.playerSide)
 
-    if not self.choices.switchMusic then
-        return
-    end
-
-    if self.music then
-        self.music:stop()
-    end
-
+    -- update background image
     if self.playerSide == "left" then
-        self.music = love.audio.newSource("assets/" .. self.choices.left.sound, "stream")
+        self.background.image = love.graphics.newImage("assets/" .. self.choices.left.background)
     else
-        self.music = love.audio.newSource("assets/" .. self.choices.right.sound, "stream")
+        self.background.image = love.graphics.newImage("assets/" .. self.choices.right.background)
     end
 
-    self.music:setLooping(true)
-    self.music:play()
+    -- update background scale
+    local xScale = self.background.width / self.background.image:getWidth()
+    local yScale = self.background.height / self.background.image:getHeight()
+    self.background.scale = math.max(xScale, yScale)
+
+    -- center the background
+    local xOffset = (self.background.scale - xScale) * self.background.width / 2
+    local yOffset = (self.background.scale - yScale) * self.background.height / 2
+    self.background.x = -xOffset
+    self.background.y = -yOffset
+
+    -- update music (if necessary)
+    if self.choices.switchMusic then
+        if self.music then
+            self.music:stop()
+        end
+
+        if self.playerSide == "left" then
+            self.music = love.audio.newSource("assets/" .. self.choices.left.sound, "stream")
+        else
+            self.music = love.audio.newSource("assets/" .. self.choices.right.sound, "stream")
+        end
+
+        self.music:setLooping(true)
+        self.music:play()
+    end
 end
 
 local function validatedChoice(self)
@@ -334,11 +351,13 @@ local function SceneChoiceBase(pSceneManager)
     choices = {
         left = {
             text = "Olive et Tom",
-            sound = "Olive-et-Tom-preview.mp3"
+            sound = "Olive-et-Tom-preview.mp3",
+            background = "Olive-et-Tom-background.jpg"
         },
         right = {
             text = "Princesse Sarah",
-            sound = "Princesse-Sarah-preview.mp3"
+            sound = "Princesse-Sarah-preview.mp3",
+            background = "Princesse-Sarah-background.jpg"
         },
         switchMusic = true,
         backgroundMusic = ""
