@@ -34,8 +34,8 @@ local function init(self)
 
     ----- player ----    
     local player = require("src.objects.Player")()
-    player:setPosition(self.width / 2 - 50, self.height / 2)
-    player:setVelocity(100, -100)
+    player:setPosition(self.width / 2 - 1, 0)
+    --player:setVelocity(100, -100)
     self.player = player
     self.playerSide = "left"
 end
@@ -212,7 +212,7 @@ end
 
 local function validatedChoice(self)
     print("Player chose " .. self.playerSide)
-    self.manager:load("start")
+    self.manager:load("choicebase")
 end
 
 local function updatePlayer(self, dt)
@@ -230,7 +230,7 @@ local function updatePlayer(self, dt)
     if isDown('left') then self.player:accelerate(-vel, 0) end
     if isDown('right') then self.player:accelerate(vel, 0) end
     if isDown('space') and self.player.onGround then
-        self.player:setVelocity(self.player.vel.x, - 500)
+        self.player:setVelocity(self.player.vel.x, - 1000)
         self.player.onGround = false
     end
 
