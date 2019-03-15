@@ -102,10 +102,7 @@ local function keyPressed(self, k)
     end
 end
 
-local function SceneChoiceBase(pSceneManager)
-    local SceneBase = require("lib.SceneBase")
-    local self = SceneBase(pSceneManager)
-
+local function init(self)
     ----- scene -----
     self.width = love.graphics.getWidth()
     self.height = love.graphics.getHeight()
@@ -136,10 +133,16 @@ local function SceneChoiceBase(pSceneManager)
     player:setVelocity(100, -100)
     self.player = player
     self.playerSide = "left"
+end
+
+local function SceneChoiceBase(pSceneManager)
+    local SceneBase = require("lib.SceneBase")
+    local self = SceneBase(pSceneManager)
     
     ----- interface functions ----
     self.update = update
     self.draw = draw
+    self.init = init
     self.keyPressed = keyPressed
     self.choiceChanged = choiceChanged
     self.validatedChoice = validatedChoice
