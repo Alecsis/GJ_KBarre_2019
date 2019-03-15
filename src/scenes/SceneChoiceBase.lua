@@ -7,7 +7,10 @@ local function init(self)
     self.chooseFont = love.graphics.newFont(28)
 
     ----- music -----
-    self.music = nil
+    if self.music then
+        self.music:stop()
+        self.music = nil
+    end
 
     ----- objects -----
     self.platform = {x = 0, y = 0, width = 480, height = 160}
