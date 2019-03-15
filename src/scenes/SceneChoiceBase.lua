@@ -6,6 +6,9 @@ local function init(self)
     ----- fonts -----
     self.chooseFont = love.graphics.newFont(28)
 
+    ----- music -----
+    self.music = nil
+
     ----- objects -----
     self.platform = {x = 0, y = 0, width = 480, height = 160}
     self.platform.x = (self.width - self.platform.width) / 2
@@ -37,7 +40,7 @@ local function init(self)
     player:setPosition(self.width / 2 - 50, self.height / 2)
     player:setVelocity(100, -100)
     self.player = player
-    self.playerSide = "left"
+    --self.playerSide = "left"
 end
 
 local function update(self, dt)
@@ -208,6 +211,20 @@ end
 
 local function choiceChanged(self)
     print("Player choice changed: " .. self.playerSide)
+
+    if self.music then
+        self.music:stop()
+    end
+
+    if self.playerSide == "left" then
+        self.music = love.audio.newSource("assets/" .. self.choices.left.sound, "stream")
+        self.music:setLooping(true)
+    else
+        self.music = love.audio.newSource("assets/" .. self.choices.right.sound, "stream")
+        self.music:setLooping(true)
+    end
+
+    self.music:play()
 end
 
 local function validatedChoice(self)
@@ -304,10 +321,12 @@ local function SceneChoiceBase(pSceneManager)
 
     choices = {
         left = {
-            text = "Press Y to confirm"
+            text = "Olive et Tom",
+            sound = "Olive-et-Tom-preview.mp3"
         },
         right = {
-            text = "Press X to doubt"
+            text = "Princesse Sarah",
+            sound = "Princesse-Sarah-preview.mp3"
         }
     }
     self:setChoices(choices)
