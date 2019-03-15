@@ -16,8 +16,8 @@ function love.load()
     sceneManager:register("start", sceneStart)
 
     -- load start scene by default
-    --sceneManager:load("start")
-    sceneManager:load("play")
+    sceneManager:load("start")
+    --sceneManager:load("play")
 end
 
 function love.update(dt)
