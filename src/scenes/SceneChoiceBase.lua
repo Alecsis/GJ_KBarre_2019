@@ -6,6 +6,7 @@ local function draw(self)
 
     -- draw all entities
     love.graphics.draw(self.platform.sprite, self.platform.x, self.platform.y, 0, self.platform.scale)
+    self.player:draw()
 end
 
 local function keyPressed(self, k)
@@ -29,7 +30,12 @@ local function SceneChoiceBase(pSceneManager)
     self.platform.sprite = love.graphics.newImage("assets/platform.png")
     self.platform.scale = self.platform.width / self.platform.sprite:getWidth()
 
-     ----- interface functions ----
+     ----- player ----    
+    local player = require("src.objects.Player")()
+    player:setPosition(self.w / 2, self.h / 2)
+    self.player = player
+    
+    ----- interface functions ----
     self.update = update
     self.draw = draw
     self.keyPressed = keyPressed
