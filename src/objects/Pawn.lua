@@ -22,14 +22,32 @@ local function move(self, dx, dy)
     self:setPosition(x + dx, y + dy)
 end
 
+local function setVelocity(self, vx, vy)
+    self.vel.x = vx
+    self.vel.y = vy
+end
+
+local function getVelocity(self)
+    return self.vel.x, self.vel.y
+end
+
+local function accelerate(self, dvx, dvy)
+    local vx, vy = self:getVelocity()
+    self:setVelocity(vx + dvx, vy + dvy)
+end
+
 local function Pawn()
     local self = require("lib.EntityBase")()
     self.type = "pawn"
 
     self.pos = {x = 0, y = 0}
+    self.vel = {x = 0, y = 0}
     self.setPosition = setPosition
     self.getPosition = getPosition
     self.move = move
+    self.setVelocity = setVelocity
+    self.getVelocity = getVelocity
+    self.accelerate = accelerate
 
     self.update = update
     self.draw = draw
