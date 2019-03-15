@@ -89,7 +89,7 @@ local function draw(self)
         love.graphics.setFont(self.chooseFont)
         love.graphics.setColor(1, 1, 1)
         love.graphics.printf(
-            "Press y to confirm",
+            self.choices.left.text,
             self.leftBkg.x,
             self.leftBkg.y + 50,
             self.leftBkg.width,
@@ -141,7 +141,7 @@ local function draw(self)
         love.graphics.setFont(self.chooseFont)
         love.graphics.setColor(1, 1, 1)
         love.graphics.printf(
-            "Press x to doubt",
+            self.choices.right.text,
             self.rightBkg.x,
             self.rightBkg.y + 50,
             self.rightBkg.width,
@@ -184,6 +184,10 @@ local function draw(self)
 
     -- draw player
     self.player:draw()
+end
+
+local function setChoices(self, choices)
+    self.choices = choices
 end
 
 local function keyPressed(self, k)
@@ -233,10 +237,21 @@ local function SceneChoiceBase(pSceneManager)
     self.update = update
     self.draw = draw
     self.init = init
+    self.setChoices = setChoices
     self.keyPressed = keyPressed
     self.choiceChanged = choiceChanged
     self.validatedChoice = validatedChoice
     self.updatePlayer = updatePlayer
+
+    choices = {
+        left = {
+            text = "Press Y to confirm"
+        },
+        right = {
+            text = "Press X to doubt"
+        }
+    }
+    self:setChoices(choices)
 
     return self
 end
