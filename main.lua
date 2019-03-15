@@ -4,20 +4,20 @@ function love.load()
     love.graphics.setDefaultFilter('nearest')
     local SceneManager = require("lib.SceneManager")
     local SceneStart = require("src.scenes.SceneStart")
-    local ScenePlay = require("src.scenes.ScenePlay")
+    local SceneChoiceBase = require("src.scenes.SceneChoiceBase")
 
     -- create scene manager
     sceneManager = SceneManager()
 
     -- register scenes
-    scenePlay = ScenePlay(sceneManager)
+    sceneChoiceBase = SceneChoiceBase(sceneManager)
     sceneStart = SceneStart(sceneManager)
 
-    sceneManager:register("play", scenePlay)
+    sceneManager:register("choicebase", sceneChoiceBase)
     sceneManager:register("start", sceneStart)
 
     -- load start scene by default
-    sceneManager:load("start")
+    sceneManager:load("choicebase")
     --sceneManager:load("play")
 end
 

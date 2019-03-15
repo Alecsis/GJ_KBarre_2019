@@ -10,7 +10,7 @@ local function SceneStart(pSceneManager)
         if k == "escape" then
             love.event.quit()
         else
-            self.manager:load('play')
+            self.manager:load('choicebase')
         end
     end
 

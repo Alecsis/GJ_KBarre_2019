@@ -10,7 +10,7 @@ local function draw(self)
 end
 
 local function Player()
-    local Pawn = require("src.objetcs.Pawn")
+    local Pawn = require("src.objects.Pawn")
     local self = Pawn()
 
     -- attributes
