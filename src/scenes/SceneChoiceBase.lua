@@ -1,4 +1,8 @@
 local function update(self, dt)
+    local gravity = 640 * dt
+    self.player:accelerate(0, gravity)
+    local vx, vy = self.player:getVelocity()
+    self.player:move(vx * dt, vy * dt)
 end
 
 local function draw(self)
@@ -33,6 +37,7 @@ local function SceneChoiceBase(pSceneManager)
      ----- player ----    
     local player = require("src.objects.Player")()
     player:setPosition(self.width / 2, self.height / 2)
+    player:setVelocity(50, -100)
     self.player = player
     
     ----- interface functions ----
