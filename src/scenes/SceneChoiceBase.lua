@@ -1,4 +1,13 @@
 local function update(self, dt)
+    self.player:update()
+
+    if self.player.pos.x < self.width / 2 then
+        -- Select left choice
+        self.playerPosition = "left"
+    else
+        -- Select right choice
+        self.playerPosition = "right"
+    end
 end
 
 local function draw(self)
@@ -7,6 +16,43 @@ local function draw(self)
     -- draw all entities
     love.graphics.draw(self.platform.sprite, self.platform.x, self.platform.y, 0, self.platform.scale)
     self.player:draw()
+
+    -- draw left rectangle
+    if self.playerPosition == "left" then
+        self.leftBkg.color[4] = 0.5
+        love.graphics.setColor(self.leftBkg.color)
+        love.graphics.rectangle("fill", self.leftBkg.x, self.leftBkg.y, self.leftBkg.width, self.leftBkg.height)
+
+        self.leftBkg.color[4] = 0.75
+        love.graphics.setColor(self.leftBkg.color)
+        love.graphics.rectangle("line", self.leftBkg.x, self.leftBkg.y, self.leftBkg.width, self.leftBkg.height)
+    else
+        self.leftBkg.color[4] = 0.1
+        love.graphics.setColor(self.leftBkg.color)
+        love.graphics.rectangle("fill", self.leftBkg.x, self.leftBkg.y, self.leftBkg.width, self.leftBkg.height)
+
+        self.leftBkg.color[4] = 0.25
+        love.graphics.setColor(self.leftBkg.color)
+        love.graphics.rectangle("line", self.leftBkg.x, self.leftBkg.y, self.leftBkg.width, self.leftBkg.height)
+    end
+    -- draw right rectangle
+    if self.playerPosition == "right" then
+        self.rightBkg.color[4] = 0.5
+        love.graphics.setColor(self.rightBkg.color)
+        love.graphics.rectangle("fill", self.rightBkg.x, self.rightBkg.y, self.rightBkg.width, self.rightBkg.height)
+
+        self.rightBkg.color[4] = 0.75
+        love.graphics.setColor(self.rightBkg.color)
+        love.graphics.rectangle("line", self.rightBkg.x, self.rightBkg.y, self.rightBkg.width, self.rightBkg.height)
+    else
+        self.rightBkg.color[4] = 0.25
+        love.graphics.setColor(self.rightBkg.color)
+        love.graphics.rectangle("fill", self.rightBkg.x, self.rightBkg.y, self.rightBkg.width, self.rightBkg.height)
+
+        self.rightBkg.color[4] = 0.5
+        love.graphics.setColor(self.rightBkg.color)
+        love.graphics.rectangle("line", self.rightBkg.x, self.rightBkg.y, self.rightBkg.width, self.rightBkg.height)
+    end
 end
 
 local function keyPressed(self, k)
@@ -30,10 +76,17 @@ local function SceneChoiceBase(pSceneManager)
     self.platform.sprite = love.graphics.newImage("assets/platform.png")
     self.platform.scale = self.platform.width / self.platform.sprite:getWidth()
 
+    self.leftBkg = { x=0, y=0, width=self.width / 2, height=self.height }
+    self.leftBkg.color = { 1, 0, 0, 0 }
+
+    self.rightBkg = { x=self.width / 2, y=0, width=self.width / 2, height=self.height }
+    self.rightBkg.color = { 0, 0, 1, 0 }
+
      ----- player ----    
     local player = require("src.objects.Player")()
     player:setPosition(self.width / 2, self.height / 2)
     self.player = player
+    self.playerPosition = "left"
     
     ----- interface functions ----
     self.update = update
