@@ -27,7 +27,7 @@ local function init(self)
         width=self.width / 2,
         height=self.height
     }
-    self.leftBkg.color = { 1, 0, 0, 0 }
+    self.leftBkg.color = { 0, 0, 0, 0.5 }
 
     self.rightBkg = {
         x = self.width / 2,
@@ -35,7 +35,7 @@ local function init(self)
         width = self.width / 2,
         height = self.height
     }
-    self.rightBkg.color = {0, 0, 1, 0}
+    self.rightBkg.color = {0, 0, 0, 0.5}
 
     ----- player ----    
     local player = require("src.objects.Player")()
@@ -76,6 +76,7 @@ local function draw(self)
     love.graphics.print("Generic choice scene")
 
     -- draw background
+    love.graphics.setColor(1, 1, 1, 0.8)
     love.graphics.draw(
         self.background.image,
         self.background.x,
@@ -83,62 +84,11 @@ local function draw(self)
         0,
         self.background.scale
     )
+    love.graphics.setColor(1, 1, 1)
 
-    -- draw left rectangle
+    -- draw rectangle hiding one side
     if self.playerSide == "left" then
-        self.leftBkg.color[4] = 0.4
-        love.graphics.setColor(self.leftBkg.color)
-        love.graphics.rectangle(
-            "fill",
-            self.leftBkg.x,
-            self.leftBkg.y,
-            self.leftBkg.width,
-            self.leftBkg.height
-        )
-
-        self.leftBkg.color[4] = 0.8
-        love.graphics.setColor(self.leftBkg.color)
-        love.graphics.rectangle(
-            "line",
-            self.leftBkg.x,
-            self.leftBkg.y,
-            self.leftBkg.width,
-            self.leftBkg.height
-        )
-
-        love.graphics.setFont(self.chooseFont)
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.printf(
-            self.choices.left.text,
-            self.leftBkg.x,
-            self.leftBkg.y + 50,
-            self.leftBkg.width,
-            'center'
-        )
-    else
-        self.leftBkg.color[4] = 0.15
-        love.graphics.setColor(self.leftBkg.color)
-        love.graphics.rectangle(
-            "fill",
-            self.leftBkg.x,
-            self.leftBkg.y,
-            self.leftBkg.width,
-            self.leftBkg.height
-        )
-
-        self.leftBkg.color[4] = 0.3
-        love.graphics.setColor(self.leftBkg.color)
-        love.graphics.rectangle(
-            "line",
-            self.leftBkg.x,
-            self.leftBkg.y,
-            self.leftBkg.width,
-            self.leftBkg.height
-        )
-    end
-    -- draw right rectangle
-    if self.playerSide == "right" then
-        self.rightBkg.color[4] = 0.4
+        self.rightBkg.color[4] = 0.3
         love.graphics.setColor(self.rightBkg.color)
         love.graphics.rectangle(
             "fill",
@@ -161,31 +111,41 @@ local function draw(self)
         love.graphics.setFont(self.chooseFont)
         love.graphics.setColor(1, 1, 1)
         love.graphics.printf(
+            self.choices.left.text,
+            self.leftBkg.x,
+            self.leftBkg.y + 50,
+            self.leftBkg.width,
+            'center'
+        )
+    else
+        self.leftBkg.color[4] = 0.3
+        love.graphics.setColor(self.leftBkg.color)
+        love.graphics.rectangle(
+            "fill",
+            self.leftBkg.x,
+            self.leftBkg.y,
+            self.leftBkg.width,
+            self.leftBkg.height
+        )
+
+        self.leftBkg.color[4] = 0.8
+        love.graphics.setColor(self.leftBkg.color)
+        love.graphics.rectangle(
+            "line",
+            self.leftBkg.x,
+            self.leftBkg.y,
+            self.leftBkg.width,
+            self.leftBkg.height
+        )
+
+        love.graphics.setFont(self.chooseFont)
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.printf(
             self.choices.right.text,
             self.rightBkg.x,
             self.rightBkg.y + 50,
             self.rightBkg.width,
             'center'
-        )
-    else
-        self.rightBkg.color[4] = 0.15
-        love.graphics.setColor(self.rightBkg.color)
-        love.graphics.rectangle(
-            "fill",
-            self.rightBkg.x,
-            self.rightBkg.y,
-            self.rightBkg.width,
-            self.rightBkg.height
-        )
-
-        self.rightBkg.color[4] = 0.3
-        love.graphics.setColor(self.rightBkg.color)
-        love.graphics.rectangle(
-            "line",
-            self.rightBkg.x,
-            self.rightBkg.y,
-            self.rightBkg.width,
-            self.rightBkg.height
         )
     end
 
