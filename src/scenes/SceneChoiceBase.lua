@@ -37,8 +37,8 @@ local function init(self)
 
     ----- player ----    
     local player = require("src.objects.Player")()
-    player:setPosition(self.width / 2 - 50, self.height / 2)
-    player:setVelocity(100, -100)
+    player:setPosition(self.width / 2 - 1, 0)
+    --player:setVelocity(100, -100)
     self.player = player
     --self.playerSide = "left"
 end
@@ -229,14 +229,14 @@ end
 
 local function validatedChoice(self)
     print("Player chose " .. self.playerSide)
-    self.manager:load("start")
+    self.manager:load("choicebase")
 end
 
 local function updatePlayer(self, dt)
     self.player:update()
 
     ---- Player movement ----
-    local gravity = 240 * dt
+    local gravity = 3040 * dt
 
     -- keep Y velocity
     self.player:setVelocity(0, self.player.vel.y)
@@ -246,6 +246,10 @@ local function updatePlayer(self, dt)
     local vel = 300
     if isDown('left') then self.player:accelerate(-vel, 0) end
     if isDown('right') then self.player:accelerate(vel, 0) end
+    if isDown('space') and self.player.onGround then
+        self.player:setVelocity(self.player.vel.x, - 1000)
+        self.player.onGround = false
+    end
 
     -- accelerate
     self.player:accelerate(0, gravity)
@@ -262,17 +266,19 @@ local function updatePlayer(self, dt)
     local goingDown = self.player.vel.y > 0
     local dy = 0
     if goingDown then 
-        local collision = self:isInPlatform(pright - pw / 4, pbottom) 
+        self.player.onGround = false
+        local collision = self:isInPlatform(pright - pw / 5, pbottom) 
                         or self:isInPlatform((pleft + pright) / 2, pbottom) 
-                        or self:isInPlatform(pleft + pw / 4, pbottom)
+                        or self:isInPlatform(pleft + pw / 5, pbottom)
         if collision then
             self.player:setVelocity(self.player.vel.x, 0)
             dy = self.platform.top - 0.1 - pbottom
+            self.player.onGround = true
         end
     else
-        local collision = self:isInPlatform(pright - pw / 4, ptop) 
+        local collision = self:isInPlatform(pright - pw / 5, ptop) 
                         or self:isInPlatform((pleft + pright) / 2, ptop) 
-                        or self:isInPlatform(pleft + pw / 4, ptop)
+                        or self:isInPlatform(pleft + pw / 5, ptop)
         if collision then
             dy = self.platform.right + 0.1 - pleft
         end
@@ -283,16 +289,16 @@ local function updatePlayer(self, dt)
     local goingRight = self.player.vel.x > 0
     local dx = 0
     if goingRight then 
-        local collision = self:isInPlatform(pright, ptop + ph / 4) 
+        local collision = self:isInPlatform(pright, ptop + ph / 5) 
                         or self:isInPlatform(pright, (ptop + pbottom) / 2) 
-                        or self:isInPlatform(pright, pbottom - ph / 4)
+                        or self:isInPlatform(pright, pbottom - ph / 5)
         if collision then
             dx = self.platform.left + 0.1 - pright 
         end
     else
-        local collision = self:isInPlatform(pleft, ptop + ph / 4) 
+        local collision = self:isInPlatform(pleft, ptop + ph / 5) 
                         or self:isInPlatform(pleft, (ptop + pbottom) / 2) 
-                        or self:isInPlatform(pleft, pbottom - ph / 4)
+                        or self:isInPlatform(pleft, pbottom - ph / 5)
         if collision then
             dx = self.platform.right - 0.1 - pleft
         end
