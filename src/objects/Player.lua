@@ -33,6 +33,8 @@ local function Player()
         h = 64,
     }
 
+    self.onGround = false
+
     -- methods
     self.getDimensions = getDimensions
     self.getBounds = getBounds
