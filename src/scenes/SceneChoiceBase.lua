@@ -26,37 +26,37 @@ local function draw(self)
 
     -- draw left rectangle
     if self.playerSide == "left" then
-        self.leftBkg.color[4] = 0.5
+        self.leftBkg.color[4] = 0.4
         love.graphics.setColor(self.leftBkg.color)
         love.graphics.rectangle("fill", self.leftBkg.x, self.leftBkg.y, self.leftBkg.width, self.leftBkg.height)
 
-        self.leftBkg.color[4] = 0.75
+        self.leftBkg.color[4] = 0.8
         love.graphics.setColor(self.leftBkg.color)
         love.graphics.rectangle("line", self.leftBkg.x, self.leftBkg.y, self.leftBkg.width, self.leftBkg.height)
     else
-        self.leftBkg.color[4] = 0.1
+        self.leftBkg.color[4] = 0.15
         love.graphics.setColor(self.leftBkg.color)
         love.graphics.rectangle("fill", self.leftBkg.x, self.leftBkg.y, self.leftBkg.width, self.leftBkg.height)
 
-        self.leftBkg.color[4] = 0.25
+        self.leftBkg.color[4] = 0.3
         love.graphics.setColor(self.leftBkg.color)
         love.graphics.rectangle("line", self.leftBkg.x, self.leftBkg.y, self.leftBkg.width, self.leftBkg.height)
     end
     -- draw right rectangle
     if self.playerSide == "right" then
-        self.rightBkg.color[4] = 0.5
+        self.rightBkg.color[4] = 0.4
         love.graphics.setColor(self.rightBkg.color)
         love.graphics.rectangle("fill", self.rightBkg.x, self.rightBkg.y, self.rightBkg.width, self.rightBkg.height)
 
-        self.rightBkg.color[4] = 0.75
+        self.rightBkg.color[4] = 0.8
         love.graphics.setColor(self.rightBkg.color)
         love.graphics.rectangle("line", self.rightBkg.x, self.rightBkg.y, self.rightBkg.width, self.rightBkg.height)
     else
-        self.rightBkg.color[4] = 0.25
+        self.rightBkg.color[4] = 0.15
         love.graphics.setColor(self.rightBkg.color)
         love.graphics.rectangle("fill", self.rightBkg.x, self.rightBkg.y, self.rightBkg.width, self.rightBkg.height)
 
-        self.rightBkg.color[4] = 0.5
+        self.rightBkg.color[4] = 0.3
         love.graphics.setColor(self.rightBkg.color)
         love.graphics.rectangle("line", self.rightBkg.x, self.rightBkg.y, self.rightBkg.width, self.rightBkg.height)
     end
