@@ -18,10 +18,6 @@ end
 local function draw(self)
     love.graphics.print("Generic choice scene")
 
-    -- draw all entities
-    love.graphics.draw(self.platform.sprite, self.platform.x, self.platform.y, 0, self.platform.scale)
-    self.player:draw()
-
     -- draw left rectangle
     if self.playerPosition == "left" then
         self.leftBkg.color[4] = 0.5
@@ -58,6 +54,16 @@ local function draw(self)
         love.graphics.setColor(self.rightBkg.color)
         love.graphics.rectangle("line", self.rightBkg.x, self.rightBkg.y, self.rightBkg.width, self.rightBkg.height)
     end
+
+    -- reset colors
+    love.graphics.setColor(1, 1, 1)
+
+    -- draw platform
+    love.graphics.draw(self.platform.sprite, self.platform.x, self.platform.y, 0, self.platform.scale)
+
+    -- draw player
+    self.player:draw()
+
 end
 
 local function keyPressed(self, k)
@@ -89,7 +95,7 @@ local function SceneChoiceBase(pSceneManager)
 
      ----- player ----    
     local player = require("src.objects.Player")()
-    player:setPosition(self.width / 2, self.height / 2)
+    player:setPosition(self.width / 2 - 50, self.height / 2)
     player:setVelocity(50, -100)
     self.player = player
     self.playerPosition = "left"
