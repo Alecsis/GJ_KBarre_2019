@@ -6,12 +6,6 @@ local function init(self)
     ----- fonts -----
     self.chooseFont = love.graphics.newFont(28)
 
-    ----- music -----
-    if self.music then
-        self.music:stop()
-        self.music = nil
-    end
-
     ----- objects -----
     self.platform = {x = 0, y = 0, width = 480, height = 160}
     self.platform.x = (self.width - self.platform.width) / 2
@@ -66,6 +60,11 @@ local function update(self, dt)
     if self.player.pos.y > self.height + 2 * self.player.dimensions.h then
         self:validatedChoice()
     end
+end
+
+local function exit(self)
+    self.music:stop()
+    self.music = nil
 end
 
 local function draw(self)
@@ -320,6 +319,7 @@ local function SceneChoiceBase(pSceneManager)
     ----- interface functions ----
     self.isInPlatform = isInPlatform
     self.update = update
+    self.exit = exit
     self.draw = draw
     self.init = init
     self.setChoices = setChoices
