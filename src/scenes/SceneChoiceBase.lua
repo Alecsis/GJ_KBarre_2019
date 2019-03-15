@@ -43,7 +43,7 @@ local function init(self)
     player:setPosition(self.width / 2 - 1, 0)
     --player:setVelocity(100, -100)
     self.player = player
-    --self.playerSide = "left"
+    self.playerSide = nil
 end
 
 local function update(self, dt)
