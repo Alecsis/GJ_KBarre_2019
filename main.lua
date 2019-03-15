@@ -2,6 +2,8 @@ local sceneManager = nil
 
 function love.load()
     love.graphics.setDefaultFilter('nearest')
+    io.stdout:setvbuf('no')
+
     local SceneManager = require("lib.SceneManager")
     local SceneStart = require("src.scenes.SceneStart")
     local SceneChoiceBase = require("src.scenes.SceneChoiceBase")
