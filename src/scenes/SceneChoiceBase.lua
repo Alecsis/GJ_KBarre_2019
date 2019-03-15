@@ -5,11 +5,13 @@ local function update(self, dt)
         -- Select left choice
         if self.playerSide ~= "left" then
             self.playerSide = "left"
+            self:choiceChanged()
         end
     else
         -- Select right choice
         if self.playerSide ~= "right" then
             self.playerSide = "right"
+            self:choiceChanged()
         end
     end
 
@@ -69,6 +71,8 @@ local function draw(self)
     self.player:draw()
 end
 
+local function choiceChanged(self)
+    print("Player choice changed: " .. self.playerSide)
 end
 
 local function keyPressed(self, k)
@@ -109,6 +113,7 @@ local function SceneChoiceBase(pSceneManager)
     self.update = update
     self.draw = draw
     self.keyPressed = keyPressed
+    self.choiceChanged = choiceChanged
 
     return self
 end
