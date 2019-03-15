@@ -1,6 +1,6 @@
 local function draw(self)
-    local x = self.position.x
-    local y = self.position.y
+    local x = self.pos.x
+    local y = self.pos.y
     local w = self.dimensions.w
     local h = self.dimensions.h
     love.graphics.setColor(1,1,1)

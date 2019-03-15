@@ -32,7 +32,7 @@ local function SceneChoiceBase(pSceneManager)
 
      ----- player ----    
     local player = require("src.objects.Player")()
-    player:setPosition(self.w / 2, self.h / 2)
+    player:setPosition(self.width / 2, self.height / 2)
     self.player = player
     
     ----- interface functions ----
