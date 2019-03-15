@@ -15,6 +15,10 @@ local function update(self, dt)
         end
     end
 
+    if self.player.pos.x > self.height then
+        self:validatedChoice()
+    end
+
     local gravity = 240 * dt
     self.player:accelerate(0, gravity)
     local vx, vy = self.player:getVelocity()
@@ -87,6 +91,11 @@ local function choiceChanged(self)
     print("Player choice changed: " .. self.playerSide)
 end
 
+local function validatedChoice(self)
+    print("Player chose " .. self.playerSide)
+    self.manager:load("start")
+end
+
 local function keyPressed(self, k)
     if k == "escape" then
         self.manager:load("start")
@@ -133,6 +142,7 @@ local function SceneChoiceBase(pSceneManager)
     self.draw = draw
     self.keyPressed = keyPressed
     self.choiceChanged = choiceChanged
+    self.validatedChoice = validatedChoice
 
     return self
 end
