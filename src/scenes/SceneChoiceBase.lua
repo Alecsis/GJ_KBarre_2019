@@ -36,6 +36,10 @@ local function draw(self)
         self.leftBkg.color[4] = 0.8
         love.graphics.setColor(self.leftBkg.color)
         love.graphics.rectangle("line", self.leftBkg.x, self.leftBkg.y, self.leftBkg.width, self.leftBkg.height)
+
+        love.graphics.setFont(self.chooseFont)
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.printf("Press y to confirm",  self.leftBkg.x, self.leftBkg.y + 50, self.leftBkg.width, 'center')
     else
         self.leftBkg.color[4] = 0.15
         love.graphics.setColor(self.leftBkg.color)
@@ -54,6 +58,10 @@ local function draw(self)
         self.rightBkg.color[4] = 0.8
         love.graphics.setColor(self.rightBkg.color)
         love.graphics.rectangle("line", self.rightBkg.x, self.rightBkg.y, self.rightBkg.width, self.rightBkg.height)
+
+        love.graphics.setFont(self.chooseFont)
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.printf("Press x to doubt",  self.rightBkg.x, self.rightBkg.y + 50, self.rightBkg.width, 'center')
     else
         self.rightBkg.color[4] = 0.15
         love.graphics.setColor(self.rightBkg.color)
@@ -64,8 +72,9 @@ local function draw(self)
         love.graphics.rectangle("line", self.rightBkg.x, self.rightBkg.y, self.rightBkg.width, self.rightBkg.height)
     end
 
-    -- reset colors
+    -- reset drawing options
     love.graphics.setColor(1, 1, 1)
+    love.graphics.setFont(love.graphics.newFont())
 
     -- draw platform
     love.graphics.draw(self.platform.sprite, self.platform.x, self.platform.y, 0, self.platform.scale)
@@ -91,6 +100,9 @@ local function SceneChoiceBase(pSceneManager)
     ----- scene -----
     self.width = love.graphics.getWidth()
     self.height = love.graphics.getHeight()
+
+    ----- fonts -----
+    self.chooseFont = love.graphics.newFont(28)
 
     ----- objects -----
     self.platform = { x=0, y=0, width=480, height=160 }
