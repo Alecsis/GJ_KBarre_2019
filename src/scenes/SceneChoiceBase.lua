@@ -5,6 +5,7 @@ end
 
 local function draw(self)
     love.graphics.print("Generic choice scene")
+    self.player:draw()
 end
 
 local function keyPressed(self, k)
@@ -16,7 +17,11 @@ end
 local function SceneChoiceBase(pSceneManager)
     local SceneBase = require("lib.SceneBase")
     local self = SceneBase(pSceneManager)
-
+    
+    local player = require("src.objects.Player")()
+    player:setPosition(self.w / 2, self.h / 2)
+    self.player = player
+    
     ----- interface functions ----
     self.update = update
     self.draw = draw
