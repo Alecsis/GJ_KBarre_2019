@@ -232,8 +232,8 @@ local function choiceChanged(self)
     self.background.scale = math.max(xScale, yScale)
 
     -- center the background
-    local xOffset = (self.background.scale - xScale) * self.background.width / 2
-    local yOffset = (self.background.scale - yScale) * self.background.height / 2
+    local xOffset = (self.background.scale - xScale) * self.background.image:getWidth() / 2
+    local yOffset = (self.background.scale - yScale) * self.background.image:getHeight() / 2
     self.background.x = -xOffset
     self.background.y = -yOffset
 
