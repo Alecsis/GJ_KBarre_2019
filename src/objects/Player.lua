@@ -62,24 +62,12 @@ end
 
 local function getDimensions(self) return self.dimensions.w, self.dimensions.h end
 
-local function Player()
-    local Pawn = require("src.objects.Pawn")
-    local self = Pawn()
-
-    -- attributes
-    self.type = "player"
-
-    local playerProps = require("data.PlayerProperties")
-    local spritesheet = playerProps.spritesheet
-
-    -- physical bounds
+local function setSpritesheet(self, playerProps, spritesheet)
+     -- physical bounds
     self.dimensions = {
         w = spritesheet.frameWidth,
         h = spritesheet.frameHeight,
     }
-
-    -- do we collide bottom
-    self.onGround = false
 
     -- animations
     self.lstAnimations = playerProps.animations
@@ -109,12 +97,27 @@ local function Player()
         end
         self.lstQuads[animType] = quads
     end
+end
 
-    -- methods
+local function Player()
+    local Pawn = require("src.objects.Pawn")
+    local self = Pawn()
+
+    -- attributes
+    self.type = "player"  -- do we collide bottom
+    self.onGround = false
+
+     -- methods
     self.update = update
     self.getDimensions = getDimensions
     self.getBounds = getBounds
     self.draw = draw
+    self.setSpritesheet = setSpritesheet
+
+
+    -- spritesheet & animations
+    local playerProps = require("data.PlayerProperties")
+    self:setSpritesheet(playerProps, playerProps.spritesheet)
 
     return self
 end
