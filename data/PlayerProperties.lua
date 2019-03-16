@@ -49,4 +49,24 @@ props.animationsPikachu = {
     },
 }
 
+props.spritesheetBall = {
+    filename = "assets/ballonFoot.png",
+    frameWidth = 11 * scale,
+    frameHeight = 11 * scale,
+    width = 4,
+}
+
+props.animationsBall = {
+    ["idle"] = {
+        frames = {1},
+        speed = 0,
+        next = "walk",
+    },
+    ["walk"] = {
+        frames = {1, 2, 3, 4},
+        speed = 1/4,
+        next = "idle",
+    },
+}
+
 return props

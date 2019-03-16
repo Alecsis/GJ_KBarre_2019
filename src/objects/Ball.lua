@@ -4,9 +4,7 @@ local function draw(self)
     local w = self.dimensions.w
     local h = self.dimensions.h
     love.graphics.setColor(1, 1, 1)
-    -- love.graphics.rectangle("fill", x - w / 2, y - h, w, h)
-    -- love.graphics.setColor(1, 0, 1)
-    -- love.graphics.rectangle("line", x - w / 2, y - h, w, h)
+
     local quad = self.lstQuads[self.currentAnimation][self.frame]
     love.graphics.draw(
         self.image,
@@ -37,6 +35,36 @@ local function update(self, dt)
         -- print(anim.frames[self.frame])
     end
 
+    if self.vel.x > 0 then
+        self:accelerate(-2000*dt, 0)
+
+        if self.vel.x < 0 then
+            self.vel.x = 0
+        end
+    elseif self.vel.x < 0 then
+        self:accelerate(2000*dt, 0)
+
+        if self.vel.x > 0 then
+            self.vel.x = 0
+        end
+    end
+
+    if math.abs(self.vel.x) < 1000 then
+        if self:isInPlayer(self.pos.x - self.dimensions.w / 2, self.pos.y + self.dimensions.h) then
+            -- collide top left
+            self:setVelocity(1200, -800)
+        elseif self:isInPlayer(self.pos.x - self.dimensions.w / 2, self.pos.y) then
+            -- collide bottom left
+            self:setVelocity(1200, -800)
+        elseif self:isInPlayer(self.pos.x + self.dimensions.w / 2, self.pos.y + self.dimensions.h) then
+            -- collide top right
+            self:setVelocity(-1200, -800)
+        elseif self:isInPlayer(self.pos.x + self.dimensions.w / 2, self.pos.y) then
+            -- collide bottom right
+            self:setVelocity(-1200, -800)
+        end
+    end
+
     if self.currentAnimation == "idle" then
         if self.vel.x ~= 0 then
             self.currentAnimation = "walk"
@@ -60,6 +88,11 @@ local function getBounds(self)
     return top, right, bottom, left
 end
 
+local function isInPlayer(self, x, y)
+    local top, right, bottom, left = self.player:getBounds()
+    return not (x < left or x > right or y < top or y > bottom)
+end
+
 local function getDimensions(self) return self.dimensions.w, self.dimensions.h end
 
 local function setSpritesheet(self, playerProps, spritesheet)
@@ -70,7 +103,7 @@ local function setSpritesheet(self, playerProps, spritesheet)
     }
 
     -- animations
-    self.lstAnimations = playerProps.animations
+    self.lstAnimations = playerProps.animationsBall
     self.currentAnimation = playerProps.defaultAnimation
     self.frame = 1
     self.animTmr = 0
@@ -99,30 +132,14 @@ local function setSpritesheet(self, playerProps, spritesheet)
     end
 end
 
-local function addPikachu(self)
-    self.hasPikachu = true
-end
-
-local function addBall(self)
-    self.hasBall = true
-end
-
-local function makeGirly(self)
-    local playerProps = require("data.PlayerProperties")
-    self:setSpritesheet(playerProps, playerProps.spritesheetGirly)
-    self.isGirly = true
-end
-
-local function Player()
+local function Ball(player)
     local Pawn = require("src.objects.Pawn")
     local self = Pawn()
 
     -- attributes
     self.type = "player"  -- do we collide bottom
     self.onGround = false
-    self.hasPikachu = false
-    self.hasBall = false
-    self.isGirly = false
+    self.player = player
 
      -- methods
     self.update = update
@@ -130,16 +147,13 @@ local function Player()
     self.getBounds = getBounds
     self.draw = draw
     self.setSpritesheet = setSpritesheet
-    self.addPikachu = addPikachu
-    self.addBall = addBall
-    self.makeGirly = makeGirly
-
+    self.isInPlayer = isInPlayer
 
     -- spritesheet & animations
     local playerProps = require("data.PlayerProperties")
-    self:setSpritesheet(playerProps, playerProps.spritesheet)
+    self:setSpritesheet(playerProps, playerProps.spritesheetBall)
 
     return self
 end
 
-return Player
+return Ball

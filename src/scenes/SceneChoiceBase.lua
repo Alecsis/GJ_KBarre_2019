@@ -41,8 +41,11 @@ local function init(self, args)
     ----- player ----
     self.player:setPosition(self.width / 2 - 1, 0)
     self.pikachu:setPosition(self.player.pos.x - 50, self.player.pos.y)
+    self.ball:setPosition(self.player.pos.x + 100, self.player.pos.y)
+
     self.player:setVelocity(0, 0)
     self.pikachu:setVelocity(0, 0)
+    self.ball:setVelocity(0, 0)
 
     self.playerSide = "left"
     self:choiceChanged(self.playerSide)
@@ -105,6 +108,8 @@ local function draw(self)
     if self.player.hasPikachu then
         self.pikachu:draw()
     end
+    self.ball:draw()
+
     self.player:draw()
 
     if self.shadeTmr > 0 then
@@ -169,8 +174,22 @@ local function updatePawns(self, dt)
 
     -- pikachu movement
     if self.player.hasPikachu then
+        print(self.player.pos.x)
         self.pikachu:update(dt)
         self:handleCollisions(self.pikachu, dt)
+    end
+
+    -- ball movement
+    if self.player.hasBall then
+        self.ball:update(dt)
+
+        local vy = self.ball.vel.y
+        self:handleCollisions(self.ball, dt)
+        local newvy = self.ball.vel.y
+
+        if vy > 20 and newvy < 20 then
+            self.ball.vel.y = -vy / 2
+        end
     end
 end
 
@@ -221,12 +240,13 @@ local function isInPlatform(self, x, y)
     return not (x < self.platform.left or x > self.platform.right or y < self.platform.top or y > self.platform.bottom)
 end
 
-local function SceneChoiceBase(pSceneManager, pData, player, pikachu)
+local function SceneChoiceBase(pSceneManager, pData, player, pikachu, ball)
     local SceneBase = require("lib.SceneBase")
     local self = SceneBase(pSceneManager)
     self.data = pData
     self.player = player
     self.pikachu = pikachu
+    self.ball = ball
 
     ----- interface functions ----
     self.isInPlatform = isInPlatform

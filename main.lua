@@ -16,6 +16,7 @@ function love.load()
     -- create player
     local player = require("src.objects.Player")()
     local pikachu = require("src.objects.Pikachu")(player)
+    local ball = require("src.objects.Ball")(player)
     
     -- register scenes
     local SceneData = require("data.SceneData")
@@ -23,7 +24,7 @@ function love.load()
     sceneManager:register("transition", SceneTransitionImage(sceneManager))
     for k, v in pairs(SceneData) do
         if v.type == "choice" then
-            sceneManager:register(k, SceneChoiceBase(sceneManager, v, player, pikachu))
+            sceneManager:register(k, SceneChoiceBase(sceneManager, v, player, pikachu, ball))
         elseif v.type == "narrative" then
             sceneManager:register(k, SceneNarration(sceneManager, v))
         end
