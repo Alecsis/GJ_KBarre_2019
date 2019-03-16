@@ -24,7 +24,7 @@ local function init(self, args)
     local newH = self.mariobg.imgh * self.mariobg.scale
     self.mariobg.y = self.height - newH
 
-    self.platform = {x = 0, y = 0, width = 800, height = 104 / 2}
+    self.platform = {x = 0, y = 0, width = 800, height = 52}
     self.platform.x = (self.width - self.platform.width) / 2
     self.platform.y = self.height - self.platform.height
     self.platform.sprite = love.graphics.newImage("assets/platform.png")

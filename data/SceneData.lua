@@ -4,12 +4,12 @@ local scenes = {
         sound = "beginningTheme.mp3",
         script = {
             "Relive your childhood",
-            "between nostalgia and fond memories. ",
+            "between nostalgia and fond memories.",
             "And discover another life",
-            "in the  intertwined paths",
-            "of a great adventure !",
+            "in the intertwined paths",
+            "of a great adventure!",
         },
-        transition = {speed = 2, image = "coeurPixel.jpg",},
+        transition = {speed = 2, image = "coeurPixel.png",},
         destination = "start"
     },
     ["start"] = {
