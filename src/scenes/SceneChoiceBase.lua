@@ -224,7 +224,7 @@ local function validatedChoice(self)
 end
 
 local function updatePlayer(self, dt)
-    self.player:update()
+    self.player:update(dt)
 
     ---- Player movement ----
     local gravity = 3040 * dt
@@ -235,8 +235,14 @@ local function updatePlayer(self, dt)
     -- keyboard input
     local isDown = love.keyboard.isDown
     local vel = 300
-    if isDown('left') then self.player:accelerate(-vel, 0) end
-    if isDown('right') then self.player:accelerate(vel, 0) end
+    if isDown('left') then 
+        self.player:accelerate(-vel, 0) 
+        self.player.xflip = -1
+    end
+    if isDown('right') then 
+        self.player:accelerate(vel, 0) 
+        self.player.xflip = 1
+    end
     if isDown('space') and self.player.onGround then
         self.player:setVelocity(self.player.vel.x, - 1000)
         self.player.onGround = false
