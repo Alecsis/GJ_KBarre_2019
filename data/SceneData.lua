@@ -60,7 +60,7 @@ local scenes = {
             },
             right = {
                 text = "Pokemon",
-                sound = "Pokemon-generique.mp3",
+                sound = "PokemonGenerique.mp3",
                 background = "Pokemon.jpg",
                 destination = "start",
             },
