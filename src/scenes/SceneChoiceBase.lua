@@ -25,7 +25,8 @@ local function init(self)
         x=0,
         y=0,
         width=self.width / 2,
-        height=self.height
+        height=self.height,
+        image = love.graphics.newImage("assets/" .. self.choices.left.background)
     }
     self.leftBkg.color = { 0, 0, 0, 0.5 }
 
@@ -33,7 +34,8 @@ local function init(self)
         x = self.width / 2,
         y = 0,
         width = self.width / 2,
-        height = self.height
+        height = self.height,
+        image = love.graphics.newImage("assets/" .. self.choices.right.background)
     }
     self.rightBkg.color = {0, 0, 0, 0.5}
 
@@ -172,7 +174,7 @@ end
 
 local function keyPressed(self, k)
     if k == "escape" then
-        self.manager:load("start")
+        self.manager:load("menu")
     end
 end
 
@@ -181,9 +183,9 @@ local function choiceChanged(self)
 
     -- update background image
     if self.playerSide == "left" then
-        self.background.image = love.graphics.newImage("assets/" .. self.choices.left.background)
+        self.background.image = self.leftBkg.image
     else
-        self.background.image = love.graphics.newImage("assets/" .. self.choices.right.background)
+        self.background.image = self.rightBkg.image
     end
 
     -- update background scale
@@ -216,7 +218,9 @@ end
 
 local function validatedChoice(self)
     print("Player chose " .. self.playerSide)
-    self.manager:load("choicebase")
+    local destination = self.choices[self.playerSide].text
+    print("Going to: " .. destination)
+    self.manager:load(destination)
 end
 
 local function updatePlayer(self, dt)
@@ -297,7 +301,7 @@ local function isInPlatform(self, x, y)
     return not (x < self.platform.left or x > self.platform.right or y < self.platform.top or y > self.platform.bottom)
 end
 
-local function SceneChoiceBase(pSceneManager)
+local function SceneChoiceBase(pSceneManager, pChoices)
     local SceneBase = require("lib.SceneBase")
     local self = SceneBase(pSceneManager)
     
@@ -313,21 +317,7 @@ local function SceneChoiceBase(pSceneManager)
     self.validatedChoice = validatedChoice
     self.updatePlayer = updatePlayer
 
-    choices = {
-        left = {
-            text = "Olive et Tom",
-            sound = "Olive-et-Tom-preview.mp3",
-            background = "Olive-et-Tom-background.jpg"
-        },
-        right = {
-            text = "Princesse Sarah",
-            sound = "Princesse-Sarah-preview.mp3",
-            background = "Princesse-Sarah-background.jpg"
-        },
-        switchMusic = true,
-        backgroundMusic = ""
-    }
-    self:setChoices(choices)
+    self:setChoices(pChoices)
 
     return self
 end

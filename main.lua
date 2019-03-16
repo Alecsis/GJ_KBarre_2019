@@ -1,26 +1,27 @@
 local sceneManager = nil
 
 function love.load()
-    love.graphics.setDefaultFilter('nearest')
-    io.stdout:setvbuf('no')
+    love.graphics.setDefaultFilter("nearest")
+    io.stdout:setvbuf("no")
 
     local SceneManager = require("lib.SceneManager")
-    local SceneStart = require("src.scenes.SceneStart")
+    local SceneMenu = require("src.scenes.SceneMenu")
     local SceneChoiceBase = require("src.scenes.SceneChoiceBase")
+
+    local SceneData = require("data.SceneData")
 
     -- create scene manager
     sceneManager = SceneManager()
 
     -- register scenes
-    sceneChoiceBase = SceneChoiceBase(sceneManager)
-    sceneStart = SceneStart(sceneManager)
-
-    sceneManager:register("choicebase", sceneChoiceBase)
-    sceneManager:register("start", sceneStart)
+    sceneManager:register("menu", SceneMenu(sceneManager))
+    sceneManager:register("start", SceneChoiceBase(sceneManager, SceneData["start"].choice))
+    sceneManager:register("Olive et Tom", SceneChoiceBase(sceneManager, SceneData["Olive et Tom"].choice))
+    sceneManager:register("Princesse Sarah", SceneChoiceBase(sceneManager, SceneData["Princesse Sarah"].choice))
 
     -- load start scene by default
-    sceneManager:load("choicebase")
-    --sceneManager:load("play")
+    sceneManager:load("start")
+    --sceneManager:load("menu")
 end
 
 function love.update(dt)
@@ -28,7 +29,7 @@ function love.update(dt)
 end
 
 function love.draw()
-    love.graphics.setColor(1,1,1)
+    love.graphics.setColor(1, 1, 1)
     sceneManager:draw()
 end
 
