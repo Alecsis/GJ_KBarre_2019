@@ -19,6 +19,9 @@ local function draw(self)
         w / 2, -- x origin
         0 -- y origin
     )
+
+    local top, right, bottom, left = self:getBounds()
+    love.graphics.rectangle('line', left, top, right - left, bottom - top)
 end
 
 local function update(self, dt)
@@ -62,8 +65,9 @@ end
 
 local function getDimensions(self) return self.dimensions.w, self.dimensions.h end
 
-local function setSpritesheet(self, playerProps, spritesheet)
-     -- physical bounds
+local function setSpritesheet(self, playerProps)
+    -- physical bounds
+    local spritesheet = playerProps.spritesheet
     self.dimensions = {
         w = spritesheet.frameWidth,
         h = spritesheet.frameHeight,
@@ -86,7 +90,7 @@ local function setSpritesheet(self, playerProps, spritesheet)
             local col = frame - row * spritesheet.width
             local x = (col - 1) * spritesheet.frameWidth
             local y = row * spritesheet.frameHeight
-            --print(x, y)
+            -- print(x, y)
             quads[i] = love.graphics.newQuad(
                 x,
                 y,
@@ -99,13 +103,9 @@ local function setSpritesheet(self, playerProps, spritesheet)
     end
 end
 
-local function addPikachu(self)
-    self.hasPikachu = true
-end
+local function addPikachu(self) self.hasPikachu = true end
 
-local function addBall(self)
-    self.hasBall = true
-end
+local function addBall(self) self.hasBall = true end
 
 local function makeGirly(self)
     local playerProps = require("data.PlayerProperties")
@@ -118,13 +118,13 @@ local function Player()
     local self = Pawn()
 
     -- attributes
-    self.type = "player"  -- do we collide bottom
+    self.type = "player" -- do we collide bottom
     self.onGround = false
     self.hasPikachu = false
     self.hasBall = false
     self.isGirly = false
 
-     -- methods
+    -- methods
     self.update = update
     self.getDimensions = getDimensions
     self.getBounds = getBounds
@@ -134,10 +134,9 @@ local function Player()
     self.addBall = addBall
     self.makeGirly = makeGirly
 
-
     -- spritesheet & animations
-    local playerProps = require("data.PlayerProperties")
-    self:setSpritesheet(playerProps, playerProps.spritesheet)
+    local props = require("data.EntitiesProperties")
+    self:setSpritesheet(props["default"])
 
     return self
 end

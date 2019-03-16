@@ -50,13 +50,13 @@ local function update(self, dt)
     end
 
     if math.abs(self.vel.x) < 1000 then
-        if self:isInPlayer(self.pos.x - self.dimensions.w / 2, self.pos.y + self.dimensions.h) then
+        if self:isInPlayer(self.pos.x - self.dimensions.w / 2, self.pos.y - self.dimensions.h) then
             -- collide top left
             self:setVelocity(1200, -800)
         elseif self:isInPlayer(self.pos.x - self.dimensions.w / 2, self.pos.y) then
             -- collide bottom left
             self:setVelocity(1200, -800)
-        elseif self:isInPlayer(self.pos.x + self.dimensions.w / 2, self.pos.y + self.dimensions.h) then
+        elseif self:isInPlayer(self.pos.x + self.dimensions.w / 2, self.pos.y - self.dimensions.h) then
             -- collide top right
             self:setVelocity(-1200, -800)
         elseif self:isInPlayer(self.pos.x + self.dimensions.w / 2, self.pos.y) then
@@ -95,7 +95,8 @@ end
 
 local function getDimensions(self) return self.dimensions.w, self.dimensions.h end
 
-local function setSpritesheet(self, playerProps, spritesheet)
+local function setSpritesheet(self, playerProps)
+    local spritesheet = playerProps.spritesheet
      -- physical bounds
     self.dimensions = {
         w = spritesheet.frameWidth,
@@ -103,7 +104,7 @@ local function setSpritesheet(self, playerProps, spritesheet)
     }
 
     -- animations
-    self.lstAnimations = playerProps.animationsBall
+    self.lstAnimations = playerProps.animations
     self.currentAnimation = playerProps.defaultAnimation
     self.frame = 1
     self.animTmr = 0
@@ -150,8 +151,8 @@ local function Ball(player)
     self.isInPlayer = isInPlayer
 
     -- spritesheet & animations
-    local playerProps = require("data.PlayerProperties")
-    self:setSpritesheet(playerProps, playerProps.spritesheetBall)
+    local props = require("data.EntitiesProperties")
+    self:setSpritesheet(props["ball"])
 
     return self
 end
