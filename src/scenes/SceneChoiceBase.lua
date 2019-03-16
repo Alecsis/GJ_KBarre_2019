@@ -10,10 +10,6 @@ local function init(self, args)
 
     -- choices
     self.choices = self.data.choices
-    self.musics = {
-        ["left"] = love.audio.newSource("assets/" .. self.choices.left.sound, "stream"),
-        ["right"] = love.audio.newSource("assets/" .. self.choices.right.sound, "stream")
-    }
 
     ----- objects -----
 
@@ -74,7 +70,7 @@ local function update(self, dt)
 
     local volume = math.abs(self.player.pos.x - self.width / 2) / (self.width / 2)
     -- volume = math.pow(volume, 1/3)
-    self.musics[self.playerSide]:setVolume(volume)
+    self.currentMusic:setVolume(volume)
 
     if self.player.pos.y > self.height + 2 * self.player.dimensions.h then self:validatedChoice() end
 end
@@ -127,9 +123,12 @@ local function choiceChanged(self, newSide)
     -- print("Player choice changed: " .. self.playerSide)
     -- update music (if necessary)
     --self.currentMusic:stop()
-    self.musics[self.playerSide]:stop()
+    if self.currentMusic then
+        self.currentMusic:release()
+    end
+    self.currentMusic = love.audio.newSource('assets/' .. self.choices[newSide].sound, "stream")
+    self.currentMusic:play()
     self.playerSide = newSide
-    self.musics[self.playerSide]:play()
 end
 
 local function validatedChoice(self)
@@ -139,7 +138,7 @@ local function validatedChoice(self)
     self.manager:load(
         "transition",
         {
-            music = self.musics[self.playerSide],
+            music = self.currentMusic,
             image = self.choices[self.playerSide].background,
             speed = 1,
             destination = self.choices[self.playerSide].destination
