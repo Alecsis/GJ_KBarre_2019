@@ -16,8 +16,9 @@ function love.load()
     -- register scenes
     sceneManager:register("menu", SceneMenu(sceneManager))
     sceneManager:register("start", SceneChoiceBase(sceneManager, SceneData["start"].choice))
-    sceneManager:register("Olive et Tom", SceneChoiceBase(sceneManager, SceneData["Olive et Tom"].choice))
     sceneManager:register("Princesse Sarah", SceneChoiceBase(sceneManager, SceneData["Princesse Sarah"].choice))
+    sceneManager:register("Tamagochi", SceneChoiceBase(sceneManager, SceneData["Tamagochi"].choice))
+    sceneManager:register("Olive et Tom", SceneChoiceBase(sceneManager, SceneData["Olive et Tom"].choice))
 
     -- load start scene by default
     sceneManager:load("start")

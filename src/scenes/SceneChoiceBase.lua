@@ -179,7 +179,7 @@ local function keyPressed(self, k)
 end
 
 local function choiceChanged(self)
-    print("Player choice changed: " .. self.playerSide)
+    --print("Player choice changed: " .. self.playerSide)
 
     -- update background image
     if self.playerSide == "left" then
@@ -218,7 +218,7 @@ end
 
 local function validatedChoice(self)
     print("Player chose " .. self.playerSide)
-    local destination = self.choices[self.playerSide].text
+    local destination = self.choices[self.playerSide].destination
     print("Going to: " .. destination)
     self.manager:load(destination)
 end

@@ -98,7 +98,7 @@ local function Player()
             local col = frame - row * spritesheet.width
             local x = (col - 1) * spritesheet.frameWidth
             local y = row * spritesheet.frameHeight
-            print(x, y)
+            --print(x, y)
             quads[i] = love.graphics.newQuad(
                 x,
                 y,
