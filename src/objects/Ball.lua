@@ -56,10 +56,10 @@ local function update(self, dt)
         elseif self:isInPlayer(self.pos.x - self.dimensions.w / 2, self.pos.y) then
             -- collide bottom left
             self:setVelocity(1200, -800)
-        elseif self:isInPlayer(self.pos.x + self.dimensions.w / 2, self.pos.y + self.dimensions.h) then
+        elseif self:isInPlayer(self.pos.x + self.dimensions.w / 2, self.pos.y + self.dimensions.h) and not self.againstWall then
             -- collide top right
             self:setVelocity(-1200, -800)
-        elseif self:isInPlayer(self.pos.x + self.dimensions.w / 2, self.pos.y) then
+        elseif self:isInPlayer(self.pos.x + self.dimensions.w / 2, self.pos.y) and not self.againstWall then
             -- collide bottom right
             self:setVelocity(-1200, -800)
         end
@@ -139,6 +139,7 @@ local function Ball(player)
     -- attributes
     self.type = "player"  -- do we collide bottom
     self.onGround = false
+    self.againstWall = false
     self.player = player
 
      -- methods

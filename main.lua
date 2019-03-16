@@ -9,6 +9,7 @@ function love.load()
     local SceneNarration = require("src.scenes.SceneNarration")
     local SceneChoiceBase = require("src.scenes.SceneChoiceBase")
     local SceneTransitionImage = require("src.scenes.SceneTransitionImage")
+    local SceneGameBall = require("src.scenes.SceneGameBall")
 
     -- create scene manager
     sceneManager = SceneManager()
@@ -28,11 +29,13 @@ function love.load()
         elseif v.type == "narrative" then
             sceneManager:register(k, SceneNarration(sceneManager, v))
         end
-    end    
+    end
 
+    sceneManager:register("Ball", SceneGameBall(sceneManager, player, pikachu, ball))
 
     -- load start scene by default
-    sceneManager:load("Beginning")
+    -- sceneManager:load("Beginning")
+    sceneManager:load("Ball")
 end
 
 function love.update(dt) sceneManager:update(dt) end

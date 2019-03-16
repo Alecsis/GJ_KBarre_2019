@@ -121,6 +121,7 @@ local function Pikachu(player)
     -- attributes
     self.type = "player"  -- do we collide bottom
     self.onGround = false
+    self.againstWall = false
     self.player = player
 
      -- methods
