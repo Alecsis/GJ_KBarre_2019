@@ -4,7 +4,7 @@ local function SceneBase(pSceneManager)
 
     scene.lstEntities = {}
 
-    function scene:init()
+    function scene:init(args)
     end
 
     function scene:exit()

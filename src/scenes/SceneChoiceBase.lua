@@ -1,4 +1,4 @@
-local function init(self)
+local function init(self, args)
     ----- scene -----
     self.width = love.graphics.getWidth()
     self.height = love.graphics.getHeight()

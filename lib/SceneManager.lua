@@ -8,7 +8,7 @@ local function SceneManager()
         self.lstScenes[k] = v
     end
 
-    function sceneManager:load(k)
+    function sceneManager:load(k, args)
         local newScene = self.lstScenes[k]
         if newScene == nil then
             print("!SceneManager: Scene " .. k .. " unknown.")
@@ -17,7 +17,7 @@ local function SceneManager()
                 self.currentScene:exit()
             end
             self.currentScene = newScene
-            self.currentScene:init()
+            self.currentScene:init(args)
         end
     end
 
