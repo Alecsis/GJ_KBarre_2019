@@ -38,17 +38,11 @@ local function init(self, args)
     self.platform.left = self.platform.x
     self.platform.right = self.platform.x + self.platform.width
 
-    local player = require("src.objects.Player")()
-    player:setPosition(self.width / 2 - 1, 0)
-    -- player:setVelocity(100, -100)
-    self.player = player
-
     ----- player ----
+    self.player:setPosition(self.width / 2 - 1, 0)
     self.pikachu:setPosition(self.player.pos.x - 50, self.player.pos.y)
     self.player:setVelocity(0, 0)
     self.pikachu:setVelocity(0, 0)
-
-    self.player:setPosition(self.width / 2 - 1, 0)
 
     self.playerSide = "left"
     self:choiceChanged(self.playerSide)
