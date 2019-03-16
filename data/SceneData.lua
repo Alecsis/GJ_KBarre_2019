@@ -47,6 +47,23 @@ local scenes = {
             },
         },
     },
+    ["Olive et Tom"] = {
+        type = "choice",
+        choices = {
+            left = {
+                text = "Didle",
+                sound = "Diddle-musique.mp3",
+                background = "Diddle.jpg",
+                destination = "start",
+            },
+            right = {
+                text = "Pokemon",
+                sound = "pokemonGenerique.mp3",
+                background = "Pokemon.jpg",
+                destination = "start",
+            },
+        },
+    },
     ["Tamagochi"] = {
         type = "choice",
         choices = {
