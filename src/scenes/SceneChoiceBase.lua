@@ -45,8 +45,11 @@ local function init(self, args)
 
     self.playerSide = "left"
     self:choiceChanged(self.playerSide)
-    self.currentMusic = love.audio.newSource('assets/' .. self.choices[self.playerSide].sound, "stream")
-    self.currentMusic:play()
+
+    if not self.currentMusic:isPlaying() then
+        self.currentMusic = love.audio.newSource('assets/' .. self.choices[self.playerSide].sound, "stream")
+        self.currentMusic:play()
+    end
 end
 
 local function update(self, dt)
