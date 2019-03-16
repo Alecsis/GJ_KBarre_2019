@@ -151,7 +151,7 @@ local function Ball(player)
 
     -- spritesheet & animations
     local playerProps = require("data.PlayerProperties")
-    self:setSpritesheet(playerProps, playerProps.spritesheetBall)
+    self:setSpritesheet(playerProps, playerProps.spritesheetPikachu)
 
     return self
 end

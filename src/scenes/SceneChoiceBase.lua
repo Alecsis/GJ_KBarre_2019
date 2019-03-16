@@ -37,11 +37,11 @@ local function init(self, args)
     ----- player ----
     self.player:setPosition(self.width / 2 - 1, 0)
     self.pikachu:setPosition(self.player.pos.x - 50, self.player.pos.y)
-    self.ball:setPosition(self.player.pos.x + 100, self.player.pos.y)
+    self.ball:setPosition(0, self.height - 100)
 
     self.player:setVelocity(0, 0)
     self.pikachu:setVelocity(0, 0)
-    self.ball:setVelocity(0, 0)
+    self.ball:setVelocity(1000, -1000)
 
     self.playerSide = "left"
     self:choiceChanged(self.playerSide)
@@ -50,6 +50,8 @@ local function init(self, args)
         self.currentMusic = love.audio.newSource('assets/' .. self.choices[self.playerSide].sound, "stream")
         self.currentMusic:play()
     end
+
+    self.player:addBall()
 end
 
 local function update(self, dt)
@@ -194,6 +196,16 @@ local function updatePawns(self, dt)
 
         if vy > 20 and newvy < 20 then
             self.ball.vel.y = -vy / 2
+        end
+
+        if self.ball.pos.y > self.height + 100 then
+            if self.ball.pos.x > self.width / 2 then
+                self.ball:setPosition(0, self.height - 100)
+                self.ball:setVelocity(1000, -1000)
+            else
+                self.ball:setPosition(self.width, self.height - 100)
+                self.ball:setVelocity(-1000, -1000)
+            end
         end
     end
 end
