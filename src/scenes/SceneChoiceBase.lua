@@ -9,7 +9,11 @@ local function init(self, args)
     self.chooseFont = love.graphics.newFont(32)
 
     -- choices
-    self:setChoices(self.data.choices)
+    self.choices = self.data.choices
+    self.musics = {
+        ["left"] = love.audio.newSource("assets/" .. self.choices.left.sound, "stream"),
+        ["right"] = love.audio.newSource("assets/" .. self.choices.right.sound, "stream")
+    }
 
     ----- objects -----
 
@@ -34,56 +38,14 @@ local function init(self, args)
     self.platform.left = self.platform.x
     self.platform.right = self.platform.x + self.platform.width
 
-    self.background = {x = 0, y = 0, width = self.width, height = self.height}
-    self.background.image = love.graphics.newImage("assets/background.png")
-    self.background.scale = math.max(
-        self.background.width / self.background.image:getWidth(),
-        self.background.height / self.background.image:getHeight()
-    )
-
-    local frame = {width = self.width / 3, height = self.height / 3,}
-
-    self.leftBkg = {
-        x = self.width / 4,
-        y = self.height / 3,
-        width = frame.width,
-        height = frame.height,
-        image = love.graphics.newImage("assets/" .. self.choices.left.background)
-    }
-    self.leftBkg.imgw = self.leftBkg.image:getWidth()
-    self.leftBkg.imgh = self.leftBkg.image:getHeight()
-    self.leftBkg.scale = math.max(
-        self.leftBkg.width / self.leftBkg.imgw,
-        self.leftBkg.height / self.leftBkg.imgh
-    )
-
-    self.rightBkg = {
-        x = 3 * self.width / 4,
-        y = self.height / 3,
-        width = frame.width,
-        height = frame.height,
-        image = love.graphics.newImage("assets/" .. self.choices.right.background)
-    }
-    self.rightBkg.imgw = self.rightBkg.image:getWidth()
-    self.rightBkg.imgh = self.rightBkg.image:getHeight()
-    self.rightBkg.scale = math.max(
-        self.rightBkg.width / self.rightBkg.imgw,
-        self.rightBkg.height / self.rightBkg.imgh
-    )
-
-    self.musicLeft = love.audio.newSource("assets/" .. self.choices.left.sound, "stream")
-    self.musicRight = love.audio.newSource("assets/" .. self.choices.right.sound, "stream")
-
-
     ----- player ----    
     local player = require("src.objects.Player")()
     player:setPosition(self.width / 2 - 1, 0)
     -- player:setVelocity(100, -100)
     self.player = player
-    self.playerSide = nil
 
     self.playerSide = "left"
-    self:choiceChanged()
+    self:choiceChanged(self.playerSide)
 end
 
 local function update(self, dt)
@@ -95,28 +57,23 @@ local function update(self, dt)
     if self.player.pos.x < self.width / 2 - 1 then
         -- Select left choice
         if self.playerSide ~= "left" then
-            self.playerSide = "left"
-            self:choiceChanged()
+            self:choiceChanged("left")
         end
     elseif self.player.pos.x > self.width / 2 + 1 then
         -- Select right choice
         if self.playerSide ~= "right" then
-            self.playerSide = "right"
-            self:choiceChanged()
+            self:choiceChanged("right")
         end
     end
 
     local volume = math.abs(self.player.pos.x - self.width / 2) / (self.width / 2)
-    -- voume = math.pow(volume, 1/3)
-    self.music = love.audio.newSource("assets/" .. self.choices.left.sound, "stream")
-    self.music:setVolume(volume)
+    -- volume = math.pow(volume, 1/3)
+    self.musics[self.playerSide]:setVolume(volume)
 
     if self.player.pos.y > self.height + 2 * self.player.dimensions.h then self:validatedChoice() end
 end
 
 local function exit(self)
-    self.music:stop()
-    self.music = nil
 end
 
 local function draw(self)
@@ -130,42 +87,6 @@ local function draw(self)
         0,
         self.mariobg.scale
     )
-
-    -- draw frames
-    love.graphics.draw(
-        self.leftBkg.image,
-        self.leftBkg.x - self.leftBkg.width / 2,
-        self.leftBkg.y - self.leftBkg.height / 2,
-        0,
-        self.leftBkg.scale
-    )
-    love.graphics.draw(
-        self.rightBkg.image,
-        self.rightBkg.x - self.rightBkg.width / 2,
-        self.rightBkg.y - self.rightBkg.height / 2,
-        0,
-        self.rightBkg.scale
-    )
-    --[[
-    love.graphics.setFont(self.chooseFont)
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.printf(
-        self.choices.left.text,
-        self.leftBkg.x,
-        self.leftBkg.y + 50,
-        self.leftBkg.width,
-        'center'
-    )
-
-    love.graphics.setFont(self.chooseFont)
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.printf(
-        self.choices.right.text,
-        self.rightBkg.x,
-        self.rightBkg.y + 50,
-        self.rightBkg.width,
-        'center'
-    )]]
 
     -- reset drawing options
     love.graphics.setColor(1, 1, 1)
@@ -193,49 +114,23 @@ local function setChoices(self, choices) self.choices = choices end
 
 local function keyPressed(self, k) if k == "escape" then self.manager:load("menu") end end
 
-local function choiceChanged(self)
+local function choiceChanged(self, newSide)
     -- print("Player choice changed: " .. self.playerSide)
-
-    -- update background image
-    if self.playerSide == "left" then
-        self.background.image = self.leftBkg.image
-    else
-        self.background.image = self.rightBkg.image
-    end
-
-    -- update background scale
-    local xScale = self.background.width / self.background.image:getWidth()
-    local yScale = self.background.height / self.background.image:getHeight()
-    self.background.scale = math.max(xScale, yScale)
-
-    -- center the background
-    local xOffset = (self.background.scale - xScale) * self.background.image:getWidth() / 2
-    local yOffset = (self.background.scale - yScale) * self.background.image:getHeight() / 2
-    self.background.x = -xOffset
-    self.background.y = -yOffset
-
     -- update music (if necessary)
-    if self.choices.switchMusic then
-        if self.music then self.music:stop() end
-
-        if self.playerSide == "left" then
-            self.music = love.audio.newSource("assets/" .. self.choices.left.sound, "stream")
-        else
-            self.music = love.audio.newSource("assets/" .. self.choices.right.sound, "stream")
-        end
-
-        self.music:setLooping(true)
-        self.music:play()
-    end
+    --self.currentMusic:stop()
+    self.musics[self.playerSide]:stop()
+    self.playerSide = newSide
+    self.musics[self.playerSide]:play()
 end
 
 local function validatedChoice(self)
     -- print("Player chose " .. self.playerSide)
     -- print("Going to: " .. destination)
+    -- load new scene
     self.manager:load(
         "transition",
         {
-            music = self.music,
+            music = self.musics[self.playerSide],
             image = self.choices[self.playerSide].background,
             speed = 1,
             destination = self.choices[self.playerSide].destination
