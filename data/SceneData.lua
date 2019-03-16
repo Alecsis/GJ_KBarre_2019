@@ -8,6 +8,29 @@ local scenes = {
     ["Pokemon"] = "choice",
     ["Skyblog"] = "choice",
     ["MSN"] = "choice",
+    ["Beginning"] = "narrative",
+    ["Heart"] = "transition"
+}
+
+local transitions = {
+    ["Heart"] = {
+        speed = 4,
+        image = "coeurPixel.jpg",
+        sound = "beginningTheme.jpg",
+    }
+}
+
+local narratives = {
+    ["Beginning"] = {
+        sound = "beginningTheme.mp3",
+        script = {
+            "Relive your childhood",
+            "between nostalgia and fond memories. ",
+            "And discover another life",
+            "in the  intertwined paths",
+            "of a great adventure !",
+        },
+    },
 }
 
 local choices = {
@@ -73,9 +96,10 @@ local choices = {
     },
 }
 
-
 local ScenesData = {
     scenes = scenes,
     choices = choices,
+    narratives = narratives,
+    transitions = transitions,
 }
 return ScenesData

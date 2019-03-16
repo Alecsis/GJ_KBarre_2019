@@ -1,3 +1,5 @@
+local utf8 = require("utf8")
+
 local function SceneNarration(pSceneManager, pData)
     local self = require("lib.SceneBase")(pSceneManager)
 
@@ -16,13 +18,14 @@ local function SceneNarration(pSceneManager, pData)
     self.font = love.graphics.newFont(32)
     self.writeTmr = -1
     self.writeSpeed = 0.05
+    self.music = love.audio.newSource("assets/" .. pData.sound, "stream")
 
     function self:init(args)
         self.indexLine = 1
         self.indexChar = 0
         self.lineDone = false
         self.writeTmr = 0
-        self.currentLine:sub(1,1)
+        self.music:play()        
     end
 
     function self:keyPressed(k)
@@ -32,7 +35,8 @@ local function SceneNarration(pSceneManager, pData)
         if k == "space" or k == "return" then
             if self.lineDone then
                 if self.indexLine == self.nbLines then
-                    self.manager:load("start")
+                    print("oui")
+                    self.manager:load("Heart", {next="start", music=self.music})
                 else
                     self:newLine()
                 end
@@ -54,7 +58,8 @@ local function SceneNarration(pSceneManager, pData)
             if self.writeTmr > self.writeSpeed then
                 self.writeTmr = 0
                 self.indexChar = self.indexChar + 1
-                self.toWrite = self.toWrite .. self.currentLine:sub(self.indexChar, self.indexChar)
+                local char = self.currentLine:sub(self.indexChar, self.indexChar)
+                self.toWrite = self.toWrite .. char
                 if self.indexChar > string.len(self.currentLine) then
                     self.indexChar = 1
                     self.lineDone = true

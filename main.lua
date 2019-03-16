@@ -8,16 +8,19 @@ function love.load()
     local SceneMenu = require("src.scenes.SceneMenu")
     local SceneNarration = require("src.scenes.SceneNarration")
     local SceneChoiceBase = require("src.scenes.SceneChoiceBase")
+    local SceneTransitionImage = require("src.scenes.SceneTransitionImage")
 
     local SceneData = require("data.SceneData")
     local choices = SceneData.choices
+    local narratives = SceneData.narratives
+    local transitions = SceneData.transitions
 
     -- create scene manager
     sceneManager = SceneManager()
 
     -- register scenes
-    local data = {script = {"Hello", "How are you ?", "Bye",}}
-    sceneManager:register("narrative", SceneNarration(sceneManager, data))
+    sceneManager:register("Beginning", SceneNarration(sceneManager, narratives["Beginning"]))
+    sceneManager:register("Heart", SceneTransitionImage(sceneManager, transitions["Heart"]))
     sceneManager:register("menu", SceneMenu(sceneManager))
     sceneManager:register(
         "start",
@@ -40,7 +43,7 @@ function love.load()
     -- sceneManager:register("MSN", SceneChoiceBase(sceneManager, SceneData["MSN"].choice))
 
     -- load start scene by default
-    sceneManager:load("narrative")
+    sceneManager:load("Beginning")
     -- sceneManager:load("menu")
 end
 

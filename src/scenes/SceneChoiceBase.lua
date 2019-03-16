@@ -3,6 +3,8 @@ local function init(self, args)
     self.width = love.graphics.getWidth()
     self.height = love.graphics.getHeight()
 
+    self.shadeTmr = 1
+
     ----- fonts -----
     self.chooseFont = love.graphics.newFont(32)
 
@@ -52,6 +54,9 @@ end
 
 local function update(self, dt)
     self:updatePlayer(dt)
+
+    self.shadeTmr = self.shadeTmr - dt
+    if self.shadeTmr <= 0 then self.shadeTmr = 0 end
 
     if self.player.pos.x < self.width / 2 then
         -- Select left choice
@@ -167,6 +172,11 @@ local function draw(self)
 
     -- draw player
     self.player:draw()
+
+    if self.shadeTmr > 0 then
+        love.graphics.setColor(0, 0, 0, self.shadeTmr)
+        love.graphics.rectangle("fill", 0, 0, self.width, self.height)
+    end
 end
 
 local function setChoices(self, choices) self.choices = choices end
