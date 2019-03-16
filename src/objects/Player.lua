@@ -99,6 +99,16 @@ local function setSpritesheet(self, playerProps, spritesheet)
     end
 end
 
+local function addPikachu(self)
+    self.hasPikachu = true
+end
+
+local function makeGirly(self)
+    local playerProps = require("data.PlayerProperties")
+    self:setSpritesheet(playerProps, playerProps.spritesheetGirly)
+    self.isGirly = true
+end
+
 local function Player()
     local Pawn = require("src.objects.Pawn")
     local self = Pawn()
@@ -106,6 +116,8 @@ local function Player()
     -- attributes
     self.type = "player"  -- do we collide bottom
     self.onGround = false
+    self.hasPikachu = false
+    self.isGirly = false
 
      -- methods
     self.update = update
@@ -113,6 +125,8 @@ local function Player()
     self.getBounds = getBounds
     self.draw = draw
     self.setSpritesheet = setSpritesheet
+    self.addPikachu = addPikachu
+    self.makeGirly = makeGirly
 
 
     -- spritesheet & animations

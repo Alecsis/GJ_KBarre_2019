@@ -180,7 +180,9 @@ local function draw(self)
     )
 
     -- draw player
-    self.pikachu:draw()
+    if self.player.hasPikachu then
+        self.pikachu:draw()
+    end
     self.player:draw()
 
     if self.shadeTmr > 0 then
@@ -270,8 +272,10 @@ local function updatePawns(self, dt)
     self:handleCollisions(self.player, dt)
 
     -- pikachu movement
-    self.pikachu:update(dt)
-    self:handleCollisions(self.pikachu, dt)
+    if self.player.hasPikachu then
+        self.pikachu:update(dt)
+        self:handleCollisions(self.pikachu, dt)
+    end
 end
 
 local function handleCollisions(self, pawn, dt)
