@@ -17,7 +17,7 @@ local function SceneNarration(pSceneManager, pData)
     self.destination = pData.destination
     self.font = love.graphics.newFont(32)
     self.writeTmr = -1
-    self.writeSpeed = 0.05
+    self.writeSpeed = 0.01
     self.music = love.audio.newSource("assets/" .. pData.sound, "stream")
 
     function self:init(args)
@@ -75,4 +75,4 @@ local function SceneNarration(pSceneManager, pData)
     return self
 end
 
-return SceneNarration   
+return SceneNarration

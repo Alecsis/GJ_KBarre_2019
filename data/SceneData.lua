@@ -14,7 +14,7 @@ local scenes = {
 
 local transitions = {
     ["Heart"] = {
-        speed = 4,
+        speed = 7,
         image = "coeurPixel.jpg",
         sound = "beginningTheme.jpg",
     }

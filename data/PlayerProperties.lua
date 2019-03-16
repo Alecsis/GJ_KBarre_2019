@@ -2,7 +2,8 @@ local props = {}
 
 local scale = 4
 props.spritesheet = {
-    filename = "assets/player-export.png",
+    --filename = "assets/player-export.png",
+    filename = "assets/girly.png",
     frameWidth = 16 * scale,
     frameHeight = 32 * scale,
     width = 8,

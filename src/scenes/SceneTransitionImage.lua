@@ -12,11 +12,14 @@ local function SceneTransitionImage(pSceneManager, pData)
         self.tmr = 0
         self.alpha = 0
         self.music = args.music
+        self.musicVol = 1
     end
 
     function self:update(dt)
         self.tmr = self.tmr + dt
         self.alpha = math.sin(math.pi * self.tmr / self.speed)
+        self.musicVol = math.cos(math.pi * self.tmr / self.speed / 2)
+        self.music:setVolume(self.musicVol)
         if self.tmr > self.speed then
             self.music:stop()
             self.manager:load(self.next)

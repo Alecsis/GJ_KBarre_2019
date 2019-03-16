@@ -72,6 +72,8 @@ local function update(self, dt)
         end
     end
 
+    self.music:setVolume(0 + 1 * math.abs(self.player.pos.x - self.width / 2) / self.width / 2)
+
     if self.player.pos.y > self.height + 2 * self.player.dimensions.h then self:validatedChoice() end
 end
 
