@@ -50,6 +50,8 @@ local function init(self, args)
     -- player:setVelocity(100, -100)
     self.player = player
     self.playerSide = nil
+
+    self:choiceChanged('left')
 end
 
 local function update(self, dt)
@@ -58,13 +60,13 @@ local function update(self, dt)
     self.shadeTmr = self.shadeTmr - dt
     if self.shadeTmr <= 0 then self.shadeTmr = 0 end
 
-    if self.player.pos.x < self.width / 2 then
+    if self.player.pos.x < self.width / 2 - 1 then
         -- Select left choice
         if self.playerSide ~= "left" then
             self.playerSide = "left"
             self:choiceChanged()
         end
-    else
+    elseif self.player.pos.x > self.width / 2 + 1 then
         -- Select right choice
         if self.playerSide ~= "right" then
             self.playerSide = "right"
@@ -72,7 +74,9 @@ local function update(self, dt)
         end
     end
 
-    self.music:setVolume(0 + 1 * math.abs(self.player.pos.x - self.width / 2) / self.width / 2)
+    local volume = math.abs(self.player.pos.x - self.width / 2) / (self.width / 2)
+    --voume = math.pow(volume, 1/3)
+    self.music:setVolume(volume)
 
     if self.player.pos.y > self.height + 2 * self.player.dimensions.h then self:validatedChoice() end
 end

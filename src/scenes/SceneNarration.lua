@@ -40,6 +40,9 @@ local function SceneNarration(pSceneManager, pData)
                 else
                     self:newLine()
                 end
+            else
+                self.lineDone = true
+                self.toWrite = self.currentLine
             end
         end
     end
