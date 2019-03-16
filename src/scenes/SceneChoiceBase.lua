@@ -8,8 +8,23 @@ local function init(self, args)
     ----- fonts -----
     self.chooseFont = love.graphics.newFont(32)
 
+    -- choices
+    self:setChoices(self.data.choices)
+
     ----- objects -----
-    self.platform = {x = 0, y = 0, width = 800, height = 104}
+
+    self.mariobg = {x = 0, y = 0, width = self.width, height = self.height}
+    self.mariobg.image = love.graphics.newImage("assets/mario-export.png")
+    self.mariobg.imgw = self.mariobg.image:getWidth()
+    self.mariobg.imgh = self.mariobg.image:getHeight()
+    self.mariobg.scale = math.max(
+        self.mariobg.width / self.mariobg.imgw,
+        self.mariobg.height / self.mariobg.imgh
+    )
+    local newH = self.mariobg.imgh * self.mariobg.scale
+    self.mariobg.y = self.height - newH
+
+    self.platform = {x = 0, y = 0, width = 800, height = 104 / 2}
     self.platform.x = (self.width - self.platform.width) / 2
     self.platform.y = self.height - self.platform.height
     self.platform.sprite = love.graphics.newImage("assets/platform.png")
@@ -26,23 +41,39 @@ local function init(self, args)
         self.background.height / self.background.image:getHeight()
     )
 
+    local frame = {width = self.width / 3, height = self.height / 3,}
+
     self.leftBkg = {
-        x = 0,
-        y = 0,
-        width = self.width / 2,
-        height = self.height,
+        x = self.width / 4,
+        y = self.height / 3,
+        width = frame.width,
+        height = frame.height,
         image = love.graphics.newImage("assets/" .. self.choices.left.background)
     }
-    self.leftBkg.color = {0, 0, 0, 0.5}
+    self.leftBkg.imgw = self.leftBkg.image:getWidth()
+    self.leftBkg.imgh = self.leftBkg.image:getHeight()
+    self.leftBkg.scale = math.max(
+        self.leftBkg.width / self.leftBkg.imgw,
+        self.leftBkg.height / self.leftBkg.imgh
+    )
 
     self.rightBkg = {
-        x = self.width / 2,
-        y = 0,
-        width = self.width / 2,
-        height = self.height,
+        x = 3 * self.width / 4,
+        y = self.height / 3,
+        width = frame.width,
+        height = frame.height,
         image = love.graphics.newImage("assets/" .. self.choices.right.background)
     }
-    self.rightBkg.color = {0, 0, 0, 0.5}
+    self.rightBkg.imgw = self.rightBkg.image:getWidth()
+    self.rightBkg.imgh = self.rightBkg.image:getHeight()
+    self.rightBkg.scale = math.max(
+        self.rightBkg.width / self.rightBkg.imgw,
+        self.rightBkg.height / self.rightBkg.imgh
+    )
+
+    self.musicLeft = love.audio.newSource("assets/" .. self.choices.left.sound, "stream")
+    self.musicRight = love.audio.newSource("assets/" .. self.choices.right.sound, "stream")
+
 
     ----- player ----    
     local player = require("src.objects.Player")()
@@ -51,7 +82,8 @@ local function init(self, args)
     self.player = player
     self.playerSide = nil
 
-    self:choiceChanged('left')
+    self.playerSide = "left"
+    self:choiceChanged()
 end
 
 local function update(self, dt)
@@ -75,7 +107,8 @@ local function update(self, dt)
     end
 
     local volume = math.abs(self.player.pos.x - self.width / 2) / (self.width / 2)
-    --voume = math.pow(volume, 1/3)
+    -- voume = math.pow(volume, 1/3)
+    self.music = love.audio.newSource("assets/" .. self.choices.left.sound, "stream")
     self.music:setVolume(volume)
 
     if self.player.pos.y > self.height + 2 * self.player.dimensions.h then self:validatedChoice() end
@@ -90,78 +123,49 @@ local function draw(self)
     love.graphics.print("Generic choice scene")
 
     -- draw background
-    love.graphics.setColor(1, 1, 1, 0.8)
     love.graphics.draw(
-        self.background.image,
-        self.background.x,
-        self.background.y,
+        self.mariobg.image,
+        self.mariobg.x,
+        self.mariobg.y,
         0,
-        self.background.scale
+        self.mariobg.scale
     )
+
+    -- draw frames
+    love.graphics.draw(
+        self.leftBkg.image,
+        self.leftBkg.x - self.leftBkg.width / 2,
+        self.leftBkg.y - self.leftBkg.height / 2,
+        0,
+        self.leftBkg.scale
+    )
+    love.graphics.draw(
+        self.rightBkg.image,
+        self.rightBkg.x - self.rightBkg.width / 2,
+        self.rightBkg.y - self.rightBkg.height / 2,
+        0,
+        self.rightBkg.scale
+    )
+    --[[
+    love.graphics.setFont(self.chooseFont)
     love.graphics.setColor(1, 1, 1)
+    love.graphics.printf(
+        self.choices.left.text,
+        self.leftBkg.x,
+        self.leftBkg.y + 50,
+        self.leftBkg.width,
+        'center'
+    )
 
-    -- draw rectangle hiding one side
-    if self.playerSide == "left" then
-        self.rightBkg.color[4] = 0.3
-        love.graphics.setColor(self.rightBkg.color)
-        love.graphics.rectangle(
-            "fill",
-            self.rightBkg.x,
-            self.rightBkg.y,
-            self.rightBkg.width,
-            self.rightBkg.height
-        )
-
-        self.rightBkg.color[4] = 0.8
-        love.graphics.setColor(self.rightBkg.color)
-        love.graphics.rectangle(
-            "line",
-            self.rightBkg.x,
-            self.rightBkg.y,
-            self.rightBkg.width,
-            self.rightBkg.height
-        )
-
-        love.graphics.setFont(self.chooseFont)
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.printf(
-            self.choices.left.text,
-            self.leftBkg.x,
-            self.leftBkg.y + 50,
-            self.leftBkg.width,
-            'center'
-        )
-    else
-        self.leftBkg.color[4] = 0.3
-        love.graphics.setColor(self.leftBkg.color)
-        love.graphics.rectangle(
-            "fill",
-            self.leftBkg.x,
-            self.leftBkg.y,
-            self.leftBkg.width,
-            self.leftBkg.height
-        )
-
-        self.leftBkg.color[4] = 0.8
-        love.graphics.setColor(self.leftBkg.color)
-        love.graphics.rectangle(
-            "line",
-            self.leftBkg.x,
-            self.leftBkg.y,
-            self.leftBkg.width,
-            self.leftBkg.height
-        )
-
-        love.graphics.setFont(self.chooseFont)
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.printf(
-            self.choices.right.text,
-            self.rightBkg.x,
-            self.rightBkg.y + 50,
-            self.rightBkg.width,
-            'center'
-        )
-    end
+    love.graphics.setFont(self.chooseFont)
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.printf(
+        self.choices.right.text,
+        self.rightBkg.x,
+        self.rightBkg.y + 50,
+        self.rightBkg.width,
+        'center'
+    )]]
 
     -- reset drawing options
     love.graphics.setColor(1, 1, 1)
@@ -226,10 +230,17 @@ local function choiceChanged(self)
 end
 
 local function validatedChoice(self)
-    print("Player chose " .. self.playerSide)
-    local destination = self.choices[self.playerSide].destination
-    print("Going to: " .. destination)
-    self.manager:load(destination)
+    -- print("Player chose " .. self.playerSide)
+    -- print("Going to: " .. destination)
+    self.manager:load(
+        "transition",
+        {
+            music = self.music,
+            image = self.choices[self.playerSide].background,
+            speed = 1,
+            destination = self.choices[self.playerSide].destination
+        }
+    )
 end
 
 local function updatePlayer(self, dt)
@@ -302,9 +313,10 @@ local function isInPlatform(self, x, y)
     return not (x < self.platform.left or x > self.platform.right or y < self.platform.top or y > self.platform.bottom)
 end
 
-local function SceneChoiceBase(pSceneManager, pChoices)
+local function SceneChoiceBase(pSceneManager, pData)
     local SceneBase = require("lib.SceneBase")
     local self = SceneBase(pSceneManager)
+    self.data = pData
 
     ----- interface functions ----
     self.isInPlatform = isInPlatform
@@ -317,8 +329,6 @@ local function SceneChoiceBase(pSceneManager, pChoices)
     self.choiceChanged = choiceChanged
     self.validatedChoice = validatedChoice
     self.updatePlayer = updatePlayer
-
-    self:setChoices(pChoices)
 
     return self
 end

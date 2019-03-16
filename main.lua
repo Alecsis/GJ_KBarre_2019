@@ -10,41 +10,25 @@ function love.load()
     local SceneChoiceBase = require("src.scenes.SceneChoiceBase")
     local SceneTransitionImage = require("src.scenes.SceneTransitionImage")
 
-    local SceneData = require("data.SceneData")
-    local choices = SceneData.choices
-    local narratives = SceneData.narratives
-    local transitions = SceneData.transitions
-
+    
     -- create scene manager
     sceneManager = SceneManager()
-
+    
     -- register scenes
-    sceneManager:register("Beginning", SceneNarration(sceneManager, narratives["Beginning"]))
-    sceneManager:register("Heart", SceneTransitionImage(sceneManager, transitions["Heart"]))
+    local SceneData = require("data.SceneData")
     sceneManager:register("menu", SceneMenu(sceneManager))
-    sceneManager:register(
-        "start",
-        SceneChoiceBase(sceneManager, choices["start"])
-    )
-    sceneManager:register(
-        "Princesse Sarah",
-        SceneChoiceBase(sceneManager, choices["Princesse Sarah"])
-    )
-    sceneManager:register(
-        "Tamagochi",
-        SceneChoiceBase(sceneManager, choices["Tamagochi"])
-    )
-    sceneManager:register(
-        "Olive et Tom",
-        SceneChoiceBase(sceneManager, choices["Olive et Tom"])
-    )
+    sceneManager:register("transition", SceneTransitionImage(sceneManager))
+    for k, v in pairs(SceneData) do
+        if v.type == "choice" then
+            sceneManager:register(k, SceneChoiceBase(sceneManager, v))
+        elseif v.type == "narrative" then
+            sceneManager:register(k, SceneNarration(sceneManager, v))
+        end
+    end    
 
-    -- sceneManager:register("Skyblog", SceneChoiceBase(sceneManager, SceneData["Skyblog"].choice))
-    -- sceneManager:register("MSN", SceneChoiceBase(sceneManager, SceneData["MSN"].choice))
 
     -- load start scene by default
     sceneManager:load("Beginning")
-    -- sceneManager:load("menu")
 end
 
 function love.update(dt) sceneManager:update(dt) end

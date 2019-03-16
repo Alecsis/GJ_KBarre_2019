@@ -1,18 +1,31 @@
-local function SceneTransitionImage(pSceneManager, pData)
+local function SceneTransitionImage(pSceneManager)
     local self = require("lib.SceneBase")(pSceneManager)
     self.screenw = love.graphics.getWidth()
     self.screenh = love.graphics.getHeight()
-    self.image = love.graphics.newImage("assets/" .. pData.image)
-    self.imagew = self.image:getWidth()
-    self.imageh = self.image:getHeight()
-    self.speed = pData.speed
-
+    
     function self:init(args)
-        self.next = args.next
+        self.image = love.graphics.newImage("assets/" .. args.image)
+        self.imagew = self.image:getWidth()
+        self.imageh = self.image:getHeight()
+
+        self.speed = args.speed
+
+        self.destination = args.destination
+
         self.tmr = 0
         self.alpha = 0
+
         self.music = args.music
         self.musicVol = 1
+
+        self.sound = args.sound
+        if self.sound then
+            self.sound:play()
+        end
+    end
+
+    function self:exit()
+        self.image:release()
     end
 
     function self:update(dt)
@@ -22,7 +35,7 @@ local function SceneTransitionImage(pSceneManager, pData)
         self.music:setVolume(self.musicVol)
         if self.tmr > self.speed then
             self.music:stop()
-            self.manager:load(self.next)
+            self.manager:load(self.destination)
         end
     end
 

@@ -2,6 +2,7 @@ local utf8 = require("utf8")
 
 local function SceneNarration(pSceneManager, pData)
     local self = require("lib.SceneBase")(pSceneManager)
+    self.data = pData
 
     self.width = love.graphics.getWidth()
     self.height = love.graphics.getHeight()
@@ -14,7 +15,6 @@ local function SceneNarration(pSceneManager, pData)
     self.indexChar = 0
     self.currentLine = self.script[self.indexLine]
     self.toWrite = ""
-    self.destination = pData.destination
     self.font = love.graphics.newFont(32)
     self.writeTmr = -1
     self.writeSpeed = 0.01
@@ -25,18 +25,23 @@ local function SceneNarration(pSceneManager, pData)
         self.indexChar = 0
         self.lineDone = false
         self.writeTmr = 0
-        self.music:play()        
+        self.music:play()
     end
 
     function self:keyPressed(k)
-        if k == "escape" then
-            love.event.quit()
-        end
+        if k == "escape" then love.event.quit() end
         if k == "space" or k == "return" then
             if self.lineDone then
                 if self.indexLine == self.nbLines then
-                    print("oui")
-                    self.manager:load("Heart", {next="start", music=self.music})
+                    self.manager:load(
+                        "transition",
+                        {
+                            destination = self.data.destination,
+                            music = self.music,
+                            image = self.data.transition.image,
+                            speed = self.data.transition.speed
+                        }
+                    )
                 else
                     self:newLine()
                 end
@@ -71,8 +76,15 @@ local function SceneNarration(pSceneManager, pData)
         end
     end
 
-    function self:draw() 
-        love.graphics.printf(self.toWrite, self.font, 0, self.height / 2, self.width, "center")
+    function self:draw()
+        love.graphics.printf(
+            self.toWrite,
+            self.font,
+            0,
+            self.height / 2,
+            self.width,
+            "center"
+        )
     end
 
     return self
