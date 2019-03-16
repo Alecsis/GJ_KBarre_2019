@@ -74,12 +74,9 @@ local function init(self, args)
     self.musicLeft = love.audio.newSource("assets/" .. self.choices.left.sound, "stream")
     self.musicRight = love.audio.newSource("assets/" .. self.choices.right.sound, "stream")
 
-
-    ----- player ----    
-    local player = require("src.objects.Player")()
-    player:setPosition(self.width / 2 - 1, 0)
+    ----- player ----
+    self.player:setPosition(self.width / 2 - 1, 0)
     -- player:setVelocity(100, -100)
-    self.player = player
     self.playerSide = nil
 
     self.playerSide = "left"
@@ -313,10 +310,11 @@ local function isInPlatform(self, x, y)
     return not (x < self.platform.left or x > self.platform.right or y < self.platform.top or y > self.platform.bottom)
 end
 
-local function SceneChoiceBase(pSceneManager, pData)
+local function SceneChoiceBase(pSceneManager, pData, player)
     local SceneBase = require("lib.SceneBase")
     local self = SceneBase(pSceneManager)
     self.data = pData
+    self.player = player
 
     ----- interface functions ----
     self.isInPlatform = isInPlatform

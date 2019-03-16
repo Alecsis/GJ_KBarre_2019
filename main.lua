@@ -10,9 +10,11 @@ function love.load()
     local SceneChoiceBase = require("src.scenes.SceneChoiceBase")
     local SceneTransitionImage = require("src.scenes.SceneTransitionImage")
 
-    
     -- create scene manager
     sceneManager = SceneManager()
+
+    -- create player
+    local player = require("src.objects.Player")()
     
     -- register scenes
     local SceneData = require("data.SceneData")
@@ -20,7 +22,7 @@ function love.load()
     sceneManager:register("transition", SceneTransitionImage(sceneManager))
     for k, v in pairs(SceneData) do
         if v.type == "choice" then
-            sceneManager:register(k, SceneChoiceBase(sceneManager, v))
+            sceneManager:register(k, SceneChoiceBase(sceneManager, v, player))
         elseif v.type == "narrative" then
             sceneManager:register(k, SceneNarration(sceneManager, v))
         end
