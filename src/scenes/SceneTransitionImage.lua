@@ -28,7 +28,7 @@ local function SceneTransitionImage(pSceneManager)
         self.image:release()
         if self.music then
             self.music:stop()
-            self.music:release()
+            --self.music:release()
         end
     end
 

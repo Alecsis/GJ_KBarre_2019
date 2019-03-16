@@ -126,6 +126,7 @@ local function choiceChanged(self, newSide)
     -- update music (if necessary)
     --self.currentMusic:stop()
     if self.currentMusic then
+        self.currentMusic:stop()
         self.currentMusic:release()
     end
     self.currentMusic = love.audio.newSource('assets/' .. self.choices[newSide].sound, "stream")
