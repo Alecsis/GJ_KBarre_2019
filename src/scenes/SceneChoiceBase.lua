@@ -7,7 +7,7 @@ local function init(self, args)
     self.chooseFont = love.graphics.newFont(32)
 
     ----- objects -----
-    self.platform = {x = 0, y = 0, width = 800, height = 130}
+    self.platform = {x = 0, y = 0, width = 800, height = 104}
     self.platform.x = (self.width - self.platform.width) / 2
     self.platform.y = self.height - self.platform.height
     self.platform.sprite = love.graphics.newImage("assets/platform.png")
@@ -17,18 +17,21 @@ local function init(self, args)
     self.platform.left = self.platform.x
     self.platform.right = self.platform.x + self.platform.width
 
-    self.background = { x=0, y=0, width=self.width, height=self.height }
+    self.background = {x = 0, y = 0, width = self.width, height = self.height}
     self.background.image = love.graphics.newImage("assets/background.png")
-    self.background.scale = math.max(self.background.width / self.background.image:getWidth(), self.background.height / self.background.image:getHeight())
+    self.background.scale = math.max(
+        self.background.width / self.background.image:getWidth(),
+        self.background.height / self.background.image:getHeight()
+    )
 
     self.leftBkg = {
-        x=0,
-        y=0,
-        width=self.width / 2,
-        height=self.height,
+        x = 0,
+        y = 0,
+        width = self.width / 2,
+        height = self.height,
         image = love.graphics.newImage("assets/" .. self.choices.left.background)
     }
-    self.leftBkg.color = { 0, 0, 0, 0.5 }
+    self.leftBkg.color = {0, 0, 0, 0.5}
 
     self.rightBkg = {
         x = self.width / 2,
@@ -42,7 +45,7 @@ local function init(self, args)
     ----- player ----    
     local player = require("src.objects.Player")()
     player:setPosition(self.width / 2 - 1, 0)
-    --player:setVelocity(100, -100)
+    -- player:setVelocity(100, -100)
     self.player = player
     self.playerSide = nil
 end
@@ -64,9 +67,7 @@ local function update(self, dt)
         end
     end
 
-    if self.player.pos.y > self.height + 2 * self.player.dimensions.h then
-        self:validatedChoice()
-    end
+    if self.player.pos.y > self.height + 2 * self.player.dimensions.h then self:validatedChoice() end
 end
 
 local function exit(self)
@@ -168,18 +169,12 @@ local function draw(self)
     self.player:draw()
 end
 
-local function setChoices(self, choices)
-    self.choices = choices
-end
+local function setChoices(self, choices) self.choices = choices end
 
-local function keyPressed(self, k)
-    if k == "escape" then
-        self.manager:load("menu")
-    end
-end
+local function keyPressed(self, k) if k == "escape" then self.manager:load("menu") end end
 
 local function choiceChanged(self)
-    --print("Player choice changed: " .. self.playerSide)
+    -- print("Player choice changed: " .. self.playerSide)
 
     -- update background image
     if self.playerSide == "left" then
@@ -201,9 +196,7 @@ local function choiceChanged(self)
 
     -- update music (if necessary)
     if self.choices.switchMusic then
-        if self.music then
-            self.music:stop()
-        end
+        if self.music then self.music:stop() end
 
         if self.playerSide == "left" then
             self.music = love.audio.newSource("assets/" .. self.choices.left.sound, "stream")
@@ -235,16 +228,16 @@ local function updatePlayer(self, dt)
     -- keyboard input
     local isDown = love.keyboard.isDown
     local vel = 300
-    if isDown('left') then 
-        self.player:accelerate(-vel, 0) 
+    if isDown('left') then
+        self.player:accelerate(-vel, 0)
         self.player.xflip = -1
     end
-    if isDown('right') then 
-        self.player:accelerate(vel, 0) 
+    if isDown('right') then
+        self.player:accelerate(vel, 0)
         self.player.xflip = 1
     end
-    if isDown('space') and self.player.onGround then
-        self.player:setVelocity(self.player.vel.x, - 1000)
+    if (isDown('space') or isDown("up")) and self.player.onGround then
+        self.player:setVelocity(self.player.vel.x, -1000)
         self.player.onGround = false
     end
 
@@ -258,47 +251,33 @@ local function updatePlayer(self, dt)
     ---- collision with platform ----
     -- player bounds
     local pw, ph = self.player:getDimensions()
-    
+
     local ptop, pright, pbottom, pleft = self.player:getBounds()
     local goingDown = self.player.vel.y > 0
     local dy = 0
-    if goingDown then 
+    if goingDown then
         self.player.onGround = false
-        local collision = self:isInPlatform(pright - pw / 5, pbottom) 
-                        or self:isInPlatform((pleft + pright) / 2, pbottom) 
-                        or self:isInPlatform(pleft + pw / 5, pbottom)
+        local collision = self:isInPlatform(pright - pw / 5, pbottom) or self:isInPlatform((pleft + pright) / 2, pbottom) or self:isInPlatform(pleft + pw / 5, pbottom)
         if collision then
             self.player:setVelocity(self.player.vel.x, 0)
             dy = self.platform.top - 0.1 - pbottom
             self.player.onGround = true
         end
     else
-        local collision = self:isInPlatform(pright - pw / 5, ptop) 
-                        or self:isInPlatform((pleft + pright) / 2, ptop) 
-                        or self:isInPlatform(pleft + pw / 5, ptop)
-        if collision then
-            dy = self.platform.right + 0.1 - pleft
-        end
+        local collision = self:isInPlatform(pright - pw / 5, ptop) or self:isInPlatform((pleft + pright) / 2, ptop) or self:isInPlatform(pleft + pw / 5, ptop)
+        if collision then dy = self.platform.right + 0.1 - pleft end
     end
     self.player:move(0, dy)
 
     local ptop, pright, pbottom, pleft = self.player:getBounds()
     local goingRight = self.player.vel.x > 0
     local dx = 0
-    if goingRight then 
-        local collision = self:isInPlatform(pright, ptop + ph / 5) 
-                        or self:isInPlatform(pright, (ptop + pbottom) / 2) 
-                        or self:isInPlatform(pright, pbottom - ph / 5)
-        if collision then
-            dx = self.platform.left + 0.1 - pright 
-        end
+    if goingRight then
+        local collision = self:isInPlatform(pright, ptop + ph / 5) or self:isInPlatform(pright, (ptop + pbottom) / 2) or self:isInPlatform(pright, pbottom - ph / 5)
+        if collision then dx = self.platform.left + 0.1 - pright end
     else
-        local collision = self:isInPlatform(pleft, ptop + ph / 5) 
-                        or self:isInPlatform(pleft, (ptop + pbottom) / 2) 
-                        or self:isInPlatform(pleft, pbottom - ph / 5)
-        if collision then
-            dx = self.platform.right - 0.1 - pleft
-        end
+        local collision = self:isInPlatform(pleft, ptop + ph / 5) or self:isInPlatform(pleft, (ptop + pbottom) / 2) or self:isInPlatform(pleft, pbottom - ph / 5)
+        if collision then dx = self.platform.right - 0.1 - pleft end
     end
     self.player:move(dx, 0)
 end
@@ -310,7 +289,7 @@ end
 local function SceneChoiceBase(pSceneManager, pChoices)
     local SceneBase = require("lib.SceneBase")
     local self = SceneBase(pSceneManager)
-    
+
     ----- interface functions ----
     self.isInPlatform = isInPlatform
     self.update = update
