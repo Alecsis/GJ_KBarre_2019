@@ -4,9 +4,7 @@ local function draw(self)
     local w = self.dimensions.w
     local h = self.dimensions.h
     love.graphics.setColor(1, 1, 1)
-    -- love.graphics.rectangle("fill", x - w / 2, y - h, w, h)
-    -- love.graphics.setColor(1, 0, 1)
-    -- love.graphics.rectangle("line", x - w / 2, y - h, w, h)
+
     local quad = self.lstQuads[self.currentAnimation][self.frame]
     love.graphics.draw(
         self.image,
