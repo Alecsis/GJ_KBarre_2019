@@ -2,7 +2,13 @@ local props = {}
 
 local scale = 4
 props.spritesheet = {
-    --filename = "assets/player-export.png",
+    filename = "assets/player-export.png",
+    frameWidth = 16 * scale,
+    frameHeight = 32 * scale,
+    width = 8,
+}
+
+props.spritesheetGirly = {
     filename = "assets/girly.png",
     frameWidth = 16 * scale,
     frameHeight = 32 * scale,
@@ -22,5 +28,25 @@ props.animations = {
     },
 }
 props.defaultAnimation = "idle"
+
+props.spritesheetPikachu = {
+    filename = "assets/pikachu.png",
+    frameWidth = 16 * scale,
+    frameHeight = 18 * scale,
+    width = 4,
+}
+
+props.animationsPikachu = {
+    ["idle"] = {
+        frames = {5, 6, 7, 8},
+        speed = 1/4,
+        next = "walk",
+    },
+    ["walk"] = {
+        frames = {1, 2, 3, 4},
+        speed = 1/4,
+        next = "idle",
+    },
+}
 
 return props

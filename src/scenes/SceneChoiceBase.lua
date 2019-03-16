@@ -38,18 +38,24 @@ local function init(self, args)
     self.platform.left = self.platform.x
     self.platform.right = self.platform.x + self.platform.width
 
-    ----- player ----    
     local player = require("src.objects.Player")()
     player:setPosition(self.width / 2 - 1, 0)
     -- player:setVelocity(100, -100)
     self.player = player
+
+    ----- player ----
+    self.pikachu:setPosition(self.player.pos.x - 50, self.player.pos.y)
+    self.player:setVelocity(0, 0)
+    self.pikachu:setVelocity(0, 0)
+
+    self.player:setPosition(self.width / 2 - 1, 0)
 
     self.playerSide = "left"
     self:choiceChanged(self.playerSide)
 end
 
 local function update(self, dt)
-    self:updatePlayer(dt)
+    self:updatePawns(dt)
 
     self.shadeTmr = self.shadeTmr - dt
     if self.shadeTmr <= 0 then self.shadeTmr = 0 end
@@ -102,6 +108,9 @@ local function draw(self)
     )
 
     -- draw player
+    if self.player.hasPikachu then
+        self.pikachu:draw()
+    end
     self.player:draw()
 
     if self.shadeTmr > 0 then
@@ -138,11 +147,10 @@ local function validatedChoice(self)
     )
 end
 
-local function updatePlayer(self, dt)
+local function updatePawns(self, dt)
     self.player:update(dt)
 
     ---- Player movement ----
-    local gravity = 3040 * dt
 
     -- keep Y velocity
     self.player:setVelocity(0, self.player.vel.y)
@@ -163,36 +171,47 @@ local function updatePlayer(self, dt)
         self.player.onGround = false
     end
 
+    self:handleCollisions(self.player, dt)
+
+    -- pikachu movement
+    if self.player.hasPikachu then
+        self.pikachu:update(dt)
+        self:handleCollisions(self.pikachu, dt)
+    end
+end
+
+local function handleCollisions(self, pawn, dt)
     -- accelerate
-    self.player:accelerate(0, gravity)
+    local gravity = 3040 * dt
+    pawn:accelerate(0, gravity)
 
     -- update position
-    local vx, vy = self.player:getVelocity()
-    self.player:move(vx * dt, vy * dt)
+    local vx, vy = pawn:getVelocity()
+    pawn:move(vx * dt, vy * dt)
 
     ---- collision with platform ----
     -- player bounds
-    local pw, ph = self.player:getDimensions()
+    local pw, ph = pawn:getDimensions()
 
-    local ptop, pright, pbottom, pleft = self.player:getBounds()
-    local goingDown = self.player.vel.y > 0
+    local ptop, pright, pbottom, pleft = pawn:getBounds()
+    local goingDown = pawn.vel.y > 0
     local dy = 0
     if goingDown then
-        self.player.onGround = false
+        pawn.onGround = false
         local collision = self:isInPlatform(pright - pw / 5, pbottom) or self:isInPlatform((pleft + pright) / 2, pbottom) or self:isInPlatform(pleft + pw / 5, pbottom)
         if collision then
-            self.player:setVelocity(self.player.vel.x, 0)
+            pawn:setVelocity(pawn.vel.x, 0)
             dy = self.platform.top - 0.1 - pbottom
-            self.player.onGround = true
+            pawn.onGround = true
         end
     else
         local collision = self:isInPlatform(pright - pw / 5, ptop) or self:isInPlatform((pleft + pright) / 2, ptop) or self:isInPlatform(pleft + pw / 5, ptop)
         if collision then dy = self.platform.right + 0.1 - pleft end
     end
-    self.player:move(0, dy)
+    pawn:move(0, dy)
 
-    local ptop, pright, pbottom, pleft = self.player:getBounds()
-    local goingRight = self.player.vel.x > 0
+    local ptop, pright, pbottom, pleft = pawn:getBounds()
+    local goingRight = pawn.vel.x > 0
     local dx = 0
     if goingRight then
         local collision = self:isInPlatform(pright, ptop + ph / 5) or self:isInPlatform(pright, (ptop + pbottom) / 2) or self:isInPlatform(pright, pbottom - ph / 5)
@@ -201,17 +220,19 @@ local function updatePlayer(self, dt)
         local collision = self:isInPlatform(pleft, ptop + ph / 5) or self:isInPlatform(pleft, (ptop + pbottom) / 2) or self:isInPlatform(pleft, pbottom - ph / 5)
         if collision then dx = self.platform.right - 0.1 - pleft end
     end
-    self.player:move(dx, 0)
+    pawn:move(dx, 0)
 end
 
 local function isInPlatform(self, x, y)
     return not (x < self.platform.left or x > self.platform.right or y < self.platform.top or y > self.platform.bottom)
 end
 
-local function SceneChoiceBase(pSceneManager, pData)
+local function SceneChoiceBase(pSceneManager, pData, player, pikachu)
     local SceneBase = require("lib.SceneBase")
     local self = SceneBase(pSceneManager)
     self.data = pData
+    self.player = player
+    self.pikachu = pikachu
 
     ----- interface functions ----
     self.isInPlatform = isInPlatform
@@ -223,7 +244,8 @@ local function SceneChoiceBase(pSceneManager, pData)
     self.keyPressed = keyPressed
     self.choiceChanged = choiceChanged
     self.validatedChoice = validatedChoice
-    self.updatePlayer = updatePlayer
+    self.updatePawns = updatePawns
+    self.handleCollisions = handleCollisions
 
     return self
 end

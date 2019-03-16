@@ -37,6 +37,23 @@ local function update(self, dt)
         -- print(anim.frames[self.frame])
     end
 
+    if self.player.pos.x < self.pos.x then
+        self.xflip = -1
+    else
+        self.xflip = 1
+    end
+
+    if math.abs(self.player.pos.x - self.pos.x) > 100 then
+        self.vel.x = self.player.vel.x
+    else
+        self.vel.x = 0
+    end
+
+    if (self.pos.y - self.player.pos.y) > 2 * self.dimensions.h and self.onGround then
+        self:setVelocity(self.vel.x, -800)
+        self.onGround = false
+    end
+
     if self.currentAnimation == "idle" then
         if self.vel.x ~= 0 then
             self.currentAnimation = "walk"
@@ -70,7 +87,7 @@ local function setSpritesheet(self, playerProps, spritesheet)
     }
 
     -- animations
-    self.lstAnimations = playerProps.animations
+    self.lstAnimations = playerProps.animationsPikachu
     self.currentAnimation = playerProps.defaultAnimation
     self.frame = 1
     self.animTmr = 0
@@ -99,25 +116,14 @@ local function setSpritesheet(self, playerProps, spritesheet)
     end
 end
 
-local function addPikachu(self)
-    self.hasPikachu = true
-end
-
-local function makeGirly(self)
-    local playerProps = require("data.PlayerProperties")
-    self:setSpritesheet(playerProps, playerProps.spritesheetGirly)
-    self.isGirly = true
-end
-
-local function Player()
+local function Pikachu(player)
     local Pawn = require("src.objects.Pawn")
     local self = Pawn()
 
     -- attributes
     self.type = "player"  -- do we collide bottom
     self.onGround = false
-    self.hasPikachu = false
-    self.isGirly = false
+    self.player = player
 
      -- methods
     self.update = update
@@ -125,15 +131,13 @@ local function Player()
     self.getBounds = getBounds
     self.draw = draw
     self.setSpritesheet = setSpritesheet
-    self.addPikachu = addPikachu
-    self.makeGirly = makeGirly
 
 
     -- spritesheet & animations
     local playerProps = require("data.PlayerProperties")
-    self:setSpritesheet(playerProps, playerProps.spritesheet)
+    self:setSpritesheet(playerProps, playerProps.spritesheetPikachu)
 
     return self
 end
 
-return Player
+return Pikachu
