@@ -53,15 +53,19 @@ local function update(self, dt)
         if self:isInPlayer(self.pos.x - self.dimensions.w / 2, self.pos.y - self.dimensions.h) then
             -- collide top left
             self:setVelocity(1200, -800)
+            self.onGround = false
         elseif self:isInPlayer(self.pos.x - self.dimensions.w / 2, self.pos.y) then
             -- collide bottom left
             self:setVelocity(1200, -800)
-        elseif self:isInPlayer(self.pos.x + self.dimensions.w / 2, self.pos.y + self.dimensions.h) and not self.againstWall then
+            self.onGround = false
+        elseif self:isInPlayer(self.pos.x + self.dimensions.w / 2, self.pos.y + self.dimensions.h) and not (self.againstWall and not self.onGround) then
             -- collide top right
             self:setVelocity(-1200, -800)
-        elseif self:isInPlayer(self.pos.x + self.dimensions.w / 2, self.pos.y) and not self.againstWall then
+            self.onGround = false
+        elseif self:isInPlayer(self.pos.x + self.dimensions.w / 2, self.pos.y) and not (self.againstWall and not self.onGround) then
             -- collide bottom right
             self:setVelocity(-1200, -800)
+            self.onGround = false
         end
     end
 

@@ -22,7 +22,6 @@ local function init(self, args)
     self.mariobg.y = self.height - newH
 
     self.platform = {x = 0, y = 0, width = self.width - 200, height = 52}
-    -- self.platform.x = (self.width - self.platform.width) / 2
     self.platform.y = self.height - self.platform.height
     self.platform.sprite = love.graphics.newImage("assets/platform.png")
     self.platform.scale = self.platform.width / self.platform.sprite:getWidth()
@@ -39,6 +38,18 @@ local function init(self, args)
     self.wall.bottom = self.wall.y + self.wall.height
     self.wall.left = self.wall.x
     self.wall.right = self.wall.x + self.wall.width
+
+    self.cages = {}
+    self.cages.sprite = love.graphics.newImage("assets/cageFoot.png")
+    self.cages.height = self.ball.dimensions.h * 4
+    self.cages.scale = self.cages.height / self.cages.sprite:getHeight()
+    self.cages.width = self.cages.scale * self.cages.sprite:getWidth()
+    self.cages.x = self.platform.x + self.platform.width - self.cages.width
+    self.cages.y = self.platform.y - self.cages.height
+    self.cages.top = self.cages.y
+    self.cages.bottom = self.cages.y + self.cages.height
+    self.cages.left = self.cages.x
+    self.cages.right = self.cages.x + self.cages.width
 
     ----- player ----
     self.player:setPosition(self.width / 2 - 1, 0)
@@ -93,6 +104,15 @@ local function draw(self)
     -- draw player
     self.ball:draw()
     self.player:draw()
+
+    -- draw cages
+    love.graphics.draw(
+        self.cages.sprite,
+        self.cages.x,
+        self.cages.y,
+        0,
+        self.cages.scale
+    )
 
     if self.shadeTmr > 0 then
         love.graphics.setColor(0, 0, 0, self.shadeTmr)
@@ -167,6 +187,43 @@ local function handleCollisions(self, pawn, dt)
     local vx, vy = pawn:getVelocity()
     pawn:move(vx * dt, vy * dt)
 
+    ----- collision with cages -----
+    if pawn == self.ball then
+        -- side
+        local pw, ph = pawn:getDimensions()
+
+        local ptop, pright, pbottom, pleft = pawn:getBounds()
+
+        local ptop, pright, pbottom, pleft = pawn:getBounds()
+        local goingRight = pawn.vel.x > 0
+        local dx = 0
+        if goingRight then
+        local collision = self:isInCage(pright, ptop + ph / 5) or self:isInCage(pright, (ptop + pbottom) / 2) or self:isInCage(pright, pbottom - ph / 5)
+            if collision then dx = self.cages.right - 10 - 0.1 - pright - 10 end
+        end
+        pawn:move(dx, 0)
+
+        -- top
+        local pw, ph = pawn:getDimensions()
+
+        local ptop, pright, pbottom, pleft = pawn:getBounds()
+        local goingDown = pawn.vel.y > 0
+        local dy = 0
+        if goingDown then
+            pawn.onGround = false
+            local collision = self:isInCage(pright - pw / 5, pbottom) or self:isInCage((pleft + pright) / 2, pbottom) or self:isInCage(pleft + pw / 5, pbottom)
+            if collision then
+                pawn:setVelocity(pawn.vel.x, 0)
+                dy = self.cages.top - 0.1 - pbottom
+                pawn.onGround = true
+            end
+        else
+            local collision = self:isInCage(pright - pw / 5, ptop) or self:isInCage((pleft + pright) / 2, ptop) or self:isInCage(pleft + pw / 5, ptop)
+            if collision then dy = self.cages.right + 0.1 - pleft end
+        end
+        pawn:move(0, dy)
+    end
+
     ---- collision with platform ----
     -- player bounds
     local pw, ph = pawn:getDimensions()
@@ -216,6 +273,18 @@ local function isInWall(self, x, y)
     return not (x < self.wall.left or x > self.wall.right or y < self.wall.top or y > self.wall.bottom)
 end
 
+local function isInCage(self, x, y)
+    if (x >= self.cages.right - 10 and x < self.cages.right and y > self.cages.top and y < self.cages.bottom) then
+        return true
+    end
+
+    if (x > self.cages.left and x < self.cages.right and y < self.cages.top and y >= self.cages.top - 10) then
+        return true
+    end
+
+    return false
+end
+
 
 local function SceneChoiceBase(pSceneManager, player, pikachu, ball)
     local SceneBase = require("lib.SceneBase")
@@ -226,6 +295,7 @@ local function SceneChoiceBase(pSceneManager, player, pikachu, ball)
     ----- interface functions ----
     self.isInPlatform = isInPlatform
     self.isInWall = isInWall
+    self.isInCage = isInCage
     self.update = update
     self.exit = exit
     self.draw = draw
