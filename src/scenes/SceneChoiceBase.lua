@@ -47,7 +47,10 @@ local function init(self, args)
     self:choiceChanged(self.playerSide)
 
     if not self.currentMusic:isPlaying() then
-        self.currentMusic = love.audio.newSource('assets/' .. self.choices[self.playerSide].sound, "stream")
+        self.currentMusic = love.audio.newSource(
+            'assets/' .. self.choices[self.playerSide].sound,
+            "stream"
+        )
         self.currentMusic:play()
     end
 
@@ -62,14 +65,10 @@ local function update(self, dt)
 
     if self.player.pos.x < self.width / 2 - 1 then
         -- Select left choice
-        if self.playerSide ~= "left" then
-            self:choiceChanged("left")
-        end
+        if self.playerSide ~= "left" then self:choiceChanged("left") end
     elseif self.player.pos.x > self.width / 2 + 1 then
         -- Select right choice
-        if self.playerSide ~= "right" then
-            self:choiceChanged("right")
-        end
+        if self.playerSide ~= "right" then self:choiceChanged("right") end
     end
 
     local volume = math.abs(self.player.pos.x - self.width / 2) / (self.width / 2)
@@ -79,8 +78,7 @@ local function update(self, dt)
     if self.player.pos.y > self.height + 2 * self.player.dimensions.h then self:validatedChoice() end
 end
 
-local function exit(self)
-end
+local function exit(self) end
 
 local function draw(self)
     love.graphics.print("Generic choice scene")
@@ -108,9 +106,7 @@ local function draw(self)
     )
 
     -- draw player
-    if self.player.hasPikachu then
-        self.pikachu:draw()
-    end
+    if self.player.hasPikachu then self.pikachu:draw() end
     self.ball:draw()
 
     self.player:draw()
@@ -128,7 +124,7 @@ local function keyPressed(self, k) if k == "escape" then self.manager:load("menu
 local function choiceChanged(self, newSide)
     -- print("Player choice changed: " .. self.playerSide)
     -- update music (if necessary)
-    --self.currentMusic:stop()
+    -- self.currentMusic:stop()
     if self.currentMusic then
         self.currentMusic:stop()
         self.currentMusic:release()
@@ -165,11 +161,19 @@ local function updatePawns(self, dt)
     local isDown = love.keyboard.isDown
     local vel = 300
     if isDown('left') then
-        self.player:accelerate(-vel, 0)
+        if isDown("lshift") then
+            self.player:accelerate(-vel * 2, 0)
+        else
+            self.player:accelerate(-vel, 0)
+        end
         self.player.xflip = -1
     end
     if isDown('right') then
-        self.player:accelerate(vel, 0)
+        if isDown("lshift") then
+            self.player:accelerate(vel * 2, 0)
+        else
+            self.player:accelerate(vel, 0)
+        end
         self.player.xflip = 1
     end
     if (isDown('space') or isDown("up")) and self.player.onGround then
@@ -194,9 +198,7 @@ local function updatePawns(self, dt)
         self:handleCollisions(self.ball, dt)
         local newvy = self.ball.vel.y
 
-        if vy > 20 and newvy < 20 then
-            self.ball.vel.y = -vy / 2
-        end
+        if vy > 20 and newvy < 20 then self.ball.vel.y = -vy / 2 end
 
         if self.ball.pos.y > self.height + 100 then
             if self.ball.pos.x > self.width / 2 then

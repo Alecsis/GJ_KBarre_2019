@@ -77,7 +77,8 @@ end
 
 local function getDimensions(self) return self.dimensions.w, self.dimensions.h end
 
-local function setSpritesheet(self, playerProps, spritesheet)
+local function setSpritesheet(self, playerProps)
+    local spritesheet = playerProps.spritesheet
      -- physical bounds
     self.dimensions = {
         w = spritesheet.frameWidth,
@@ -85,7 +86,7 @@ local function setSpritesheet(self, playerProps, spritesheet)
     }
 
     -- animations
-    self.lstAnimations = playerProps.animationsPikachu
+    self.lstAnimations = playerProps.animations
     self.currentAnimation = playerProps.defaultAnimation
     self.frame = 1
     self.animTmr = 0
@@ -133,8 +134,8 @@ local function Pikachu(player)
 
 
     -- spritesheet & animations
-    local playerProps = require("data.PlayerProperties")
-    self:setSpritesheet(playerProps, playerProps.spritesheetPikachu)
+    local props = require("data.EntitiesProperties")
+    self:setSpritesheet(props["pikachu"])
 
     return self
 end
