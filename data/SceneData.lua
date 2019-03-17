@@ -141,8 +141,8 @@ local scenes = {
             choices = {
                 left = {
                     text = "Les DVD",
-                    sound = "Princesse-Sarah-preview.mp3",
-                    background = "dvdSound.jpg",
+                    sound = "dvdSound.mp3",
+                    background = "dvd.jpeg",
                     npc = nil,
                     destination = "lesDVD",
                 },  
@@ -255,8 +255,9 @@ local scenes = {
                 },
             },
             transition = true,
+        },
 
-            "agentsSecret"] = {
+            ["agentsSecret"] = {
                 type = "choice",
                 choices = {
                     left = {
@@ -275,7 +276,7 @@ local scenes = {
                     },
                 },
             },
-        },
+
 
         ["lastLevel"] = {
             type = "narrative",
