@@ -11,6 +11,8 @@ function love.load()
     local SceneTransitionImage = require("src.scenes.SceneTransitionImage")
     local SceneGameBall = require("src.scenes.SceneGameBall")
 
+    local PathsVerification = require("tests.PathsVerification")
+
     -- create scene manager
     sceneManager = SceneManager()
 
@@ -32,7 +34,10 @@ function love.load()
         end
     end
 
+    PathsVerification(SceneData, "Beginning")
+
     -- load start scene by default
+    
     sceneManager:load("Beginning")
     --sceneManager:load("Ball")
 end
