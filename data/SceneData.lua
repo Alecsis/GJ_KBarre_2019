@@ -27,10 +27,16 @@ local scenes = {
                 sound = "Olive-et-Tom-preview.mp3",
                 background = "Olive-et-Tom-background.jpg",
                 npc = "Olive-et-Tom",
-                destination = "Olive et Tom",
+                destination = "Olive et Tom minijeu",
             },
         },
         transition = true,
+    },
+    ["Olive et Tom minijeu"] = {
+        type = "game",
+        scene = "SceneGameBall",
+        background = "Olive-et-Tom-background.jpg",
+        destination = "firstLevel"
     },
     ["Princesse Sarah"] = {
         type = "choice",
@@ -59,7 +65,7 @@ local scenes = {
                 sound = "Diddle-musique.mp3",
                 background = "Diddle.jpg",
                 npc = "Diddle",
-                destination = "start",
+                destination = "firstLevel",
             },
             right = {
                 text = "Pokemon",

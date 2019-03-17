@@ -28,6 +28,9 @@ function love.load()
             sceneManager:register(k, SceneChoiceBase(sceneManager, v, player, pikachu, ball))
         elseif v.type == "narrative" then
             sceneManager:register(k, SceneNarration(sceneManager, v))
+        elseif v.type == "game" then
+            local Scene = require("src.scenes." .. v.scene)
+            sceneManager:register(k, Scene(sceneManager, v, player, pikachu, ball))
         end
     end
 

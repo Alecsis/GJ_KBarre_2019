@@ -66,6 +66,7 @@ local function init(self, args)
     self.npc.xflip = -1
 
     ----- player ----
+    self.player:addBall()
     self.player:setPosition(self.width / 2 - 1, 0)
     self.ball:setPosition(0, self.height - 100)
 
@@ -87,12 +88,7 @@ local function update(self, dt)
     if self.player.pos.y > self.height + 2 * self.player.dimensions.h then self:validatedChoice() end
 end
 
-local function exit(self)
-    if self.music then
-        self.music:stop()
-        self.music:release()
-    end
-end
+local function exit(self) end
 
 local function draw(self)
     love.graphics.print("Generic choice scene")
@@ -321,10 +317,25 @@ local function isInCage(self, x, y)
     return false
 end
 
+local function validatedChoice(self)
+    -- print("Player chose " .. self.playerSide)
+    -- print("Going to: " .. destination)
+    -- load new scene
+    self.manager:load(
+        "transition",
+        {
+            music = self.music,
+            image = self.data.background,
+            speed = 1,
+            destination = self.data.destination
+        }
+    )
+end
 
-local function SceneChoiceBase(pSceneManager, player, pikachu, ball)
+local function SceneChoiceBase(pSceneManager, pData, player, pikachu, ball)
     local SceneBase = require("lib.SceneBase")
     local self = SceneBase(pSceneManager)
+    self.data = pData
     self.player = player
     self.ball = ball
 
