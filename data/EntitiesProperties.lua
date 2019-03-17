@@ -32,6 +32,7 @@ local props = {
             },
             ["walk"] = {frames = {1, 2, 3, 4}, speed = 1 / 8, next = "walk",},
         },
+        defaultAnimation = "idle",
     },
     ["ball"] = {
         spritesheet = {
