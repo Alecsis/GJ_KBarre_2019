@@ -134,8 +134,8 @@ local scenes = {
                 right = {
                     npc = "oliveEtTom",
                     text = "La trilogie du samedi",
-                    sound = "Olive-et-Tom-preview.mp3",
-                    background = "Olive-et-Tom-background.jpg",
+                    sound = "trilogieDuSamedi.mp3",
+                    background = "trilogieDuSamedi.jpg",
                     destination = "trilogieDuSamedi",
                 },
             },
@@ -166,7 +166,7 @@ local scenes = {
                 left = {
                     npc = "",
                     text = "Prison Break",
-                    sound = "aventurierIndochine.mp3",
+                    sound = "PrisonBreak.mp3",
                     background = "Diddle.jpg",
                     destination = "",
                 },
