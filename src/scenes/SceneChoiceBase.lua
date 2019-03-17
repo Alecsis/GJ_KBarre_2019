@@ -52,6 +52,7 @@ local function init(self, args)
             "stream"
         )
         self.currentMusic:play()
+        self.currentMusic:setLooping(true)
     end
 
     self.player:addBall()
@@ -131,6 +132,7 @@ local function choiceChanged(self, newSide)
     end
     self.currentMusic = love.audio.newSource('assets/' .. self.choices[newSide].sound, "stream")
     self.currentMusic:play()
+    self.currentMusic:setLooping(true)
     self.playerSide = newSide
 end
 
