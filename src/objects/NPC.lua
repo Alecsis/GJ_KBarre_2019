@@ -35,6 +35,12 @@ local function update(self, dt)
     end
 end
 
+local function release(self)
+    self.image = nil
+    self.lstAnimations = nil
+    self.lstQuads = nil
+end
+
 local function setSpritesheet(self, playerProps)
     local spritesheet = playerProps.spritesheet
     -- self.dimensions.w = spritesheet.frameWidth
@@ -87,6 +93,7 @@ local function NPC(key)
     self.update = update
     self.draw = draw
     self.setSpritesheet = setSpritesheet
+    self.release = release
 
     -- spritesheet & animations
     local props = require("data.EntitiesProperties")
