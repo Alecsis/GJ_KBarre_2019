@@ -98,10 +98,11 @@ local scenes = {
             },
         },
     },
+
     -- Scène narration level one -- 
         ["firstLevel"] = {
             type = "narrative",
-            sound = "theLeftouts".mp3",
+            sound = "theLeftouts.mp3",
             script = {
                 "If you could go back",
                 "would you choose the same things?",
