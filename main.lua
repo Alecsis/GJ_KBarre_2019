@@ -37,7 +37,7 @@ function love.load()
         end
     end
 
-    -- PathsVerification(SceneData, "Beginning")
+    --PathsVerification(SceneData, "Beginning")
 
     -- load start scene by default
     
