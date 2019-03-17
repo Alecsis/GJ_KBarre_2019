@@ -250,7 +250,7 @@ local scenes = {
                 right = {
                     text = "Indochine",
                     sound = "aventurierIndochine.mp3",
-                    background = "tektonic.jpg",
+                    background = "indochine.jpg",
                     npc = nil,
                     destination = "lastLevel",
                 },
