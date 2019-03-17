@@ -31,8 +31,6 @@ function love.load()
         end
     end
 
-    sceneManager:register("Ball", SceneGameBall(sceneManager, player, pikachu, ball))
-
     -- load start scene by default
     sceneManager:load("Beginning")
     --sceneManager:load("Ball")
