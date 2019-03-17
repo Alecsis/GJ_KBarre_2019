@@ -295,7 +295,6 @@ local scenes = {
 
         ["final"] = {
             type = "final",
-            sound = "Ilona.mp3",
         },
 
 }
