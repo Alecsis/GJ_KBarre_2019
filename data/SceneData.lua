@@ -101,7 +101,7 @@ local scenes = {
     -- Scène narration level one -- 
         ["firstLevel"] = {
             type = "narrative",
-            sound = "beginningTheme.mp3",
+            sound = "theLeftouts".mp3",
             script = {
                 "If you could go back",
                 "would you choose the same things?",
@@ -280,7 +280,7 @@ local scenes = {
 
         ["lastLevel"] = {
             type = "narrative",
-            sound = "beginningTheme.mp3",
+            sound = "Ilona.mp3",
             script = {
                 "What sort of adult are you ?",
                 "Nobody can tell you but yourself.",
