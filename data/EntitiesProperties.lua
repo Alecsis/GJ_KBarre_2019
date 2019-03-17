@@ -62,6 +62,19 @@ local props = {
         defaultAnimation = "idle",
 
     },
+    ["golden snitch"] = {
+        spritesheet = {
+            filename = "assets/goldenSnitchAnimated.png",
+            frameWidth = 32 * scale,
+            frameHeight = 14 * scale,
+            width = 4,
+        },
+        animations = {
+            ["idle"] = {frames = {1, 2, 3, 4}, speed = 1 / 8, next = "idle",},
+        },
+        defaultAnimation = "idle",
+
+    },
     ["Olive-et-Tom"] = {
         spritesheet = {
             filename = "assets/oliveEtTomAnimated.png",

@@ -70,6 +70,8 @@ local function init(self, args)
         self.currentMusic:play()
         self.currentMusic:setLooping(true)
     end
+
+    localSelf = self
 end
 
 local function update(self, dt)
@@ -112,10 +114,6 @@ local function draw(self)
         self.mariobg.scale
     )
 
-    -- reset drawing options
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.setFont(love.graphics.newFont())
-
     -- draw platform
     love.graphics.draw(
         self.platform.sprite,
@@ -124,6 +122,25 @@ local function draw(self)
         0,
         self.platform.scale
     )
+
+    -- draw text
+    love.graphics.setFont(love.graphics.newFont(32))
+    love.graphics.setColor(0, 0, 0)
+
+    if self.playerSide == "left" then
+        love.graphics.stencil(self.leftStencil, "replace", 1)
+        love.graphics.setStencilTest("greater", 0)
+        love.graphics.printf(self.choices[self.playerSide].text, 100, 100, self.width / 2 - 100, "center")
+        love.graphics.setStencilTest()
+    else
+        love.graphics.stencil(self.rightStencil, "replace", 1)
+        love.graphics.setStencilTest("greater", 0)
+        love.graphics.printf(self.choices[self.playerSide].text, self.width / 2, 100, self.width / 2 - 100, "center")
+        love.graphics.setStencilTest()
+    end
+
+    love.graphics.setFont(love.graphics.newFont())
+    love.graphics.setColor(1, 1, 1)
 
     -- draw npcs and player
     if self.npcLeft then self.npcLeft:draw() end
@@ -356,6 +373,18 @@ local function isInPlatform(self, pPlatform, x, y)
     return not (x < pPlatform.left or x > pPlatform.right or y < pPlatform.top or y > pPlatform.bottom)
 end
 
+local function leftStencil()
+    if localSelf.playerSide == "left" then
+        love.graphics.rectangle("fill", localSelf.player.pos.x, 0, localSelf.width / 2 - localSelf.player.pos.x, localSelf.height)
+    end
+end
+
+local function rightStencil()
+    if localSelf.playerSide == "right" then
+        love.graphics.rectangle("fill", localSelf.width / 2, 0, localSelf.player.pos.x - localSelf.width / 2, localSelf.height)
+    end
+end
+
 local function SceneChoiceBase(pSceneManager, pData, player)
     local SceneBase = require("lib.SceneBase")
     local self = SceneBase(pSceneManager)
@@ -376,8 +405,11 @@ local function SceneChoiceBase(pSceneManager, pData, player)
     self.updatePawns = updatePawns
     self.ballLogic = ballLogic
     self.playerLogic = playerLogic
+    self.leftStencil = leftStencil
+    self.rightStencil = rightStencil
 
     return self
 end
 
+local localSelf = {}
 return SceneChoiceBase
