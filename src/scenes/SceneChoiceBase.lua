@@ -196,6 +196,7 @@ local function validatedChoice(self)
     -- load new scene
     if self.choices[self.playerSide].action then self.choices[self.playerSide].action(self.player) end
 
+    table.insert(self.player.history, self.choices[self.playerSide].text)
     self.manager:load(
         "transition",
         {

@@ -135,6 +135,7 @@ local function Player()
     self.hasBall = false
     self.hasSnitch = false
     self.isGirly = false
+    self.history = {}
 
     self.pikachu = require("src.objects.Pikachu")(self)
     self.ball = require("src.objects.Ball")(self)
