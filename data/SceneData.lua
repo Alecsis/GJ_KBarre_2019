@@ -53,7 +53,7 @@ local scenes = {
                 text = "Tamagochi",
                 sound = "Tamagotchi.mp3",
                 background = "tamagochi.jpg",
-                npc = nil,
+                npc = "tamagotchi",
                 destination = "Tamagochi",
             },
         },

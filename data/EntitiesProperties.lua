@@ -114,6 +114,19 @@ local props = {
         defaultAnimation = "idle",
 
     },
+    ["tamagotchi"] = {
+        spritesheet = {
+            filename = "assets/tamagotchiAnimated.png",
+            frameWidth = 140,
+            frameHeight = 160,
+            width = 2,
+        },
+        animations = {
+            ["idle"] = {frames = {1, 2}, speed = 1 / 2, next = "idle",},
+        },
+        defaultAnimation = "idle",
+
+    },
 }
 
 return props
