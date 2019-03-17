@@ -60,9 +60,12 @@ local function init(self, args)
     self.player.goldenSnitch:setVelocity(0, 0)
 
     self.playerSide = "left"
+    self.currentMusic = nil
     self:choiceChanged(self.playerSide)
 
     if not self.currentMusic:isPlaying() then
+        self.currentMusic:release()
+        self.currentMusic = nil
         self.currentMusic = love.audio.newSource(
             'assets/' .. self.choices[self.playerSide].sound,
             "stream"
@@ -100,7 +103,23 @@ local function update(self, dt)
     if self.player.pos.y > self.height + 2 * self.player.dimensions.h then self:validatedChoice() end
 end
 
-local function exit(self) end
+local function exit(self)
+    self.mariobg.image = nil
+    self.mariobg = nil
+
+    self.platform.sprite = nil
+    self.platform = nil
+
+    if self.npcLeft then
+        self.npcLeft:release()
+        self.npcLeft = nil
+    end
+
+    if self.npcRight then
+        self.npcRight:release()
+        self.npcRight = nil
+    end
+end
 
 local function draw(self)
     love.graphics.print("Generic choice scene")
