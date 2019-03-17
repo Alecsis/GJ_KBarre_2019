@@ -255,6 +255,26 @@ local scenes = {
                 },
             },
             transition = true,
+
+            "agentsSecret"] = {
+                type = "choice",
+                choices = {
+                    left = {
+                        text = "Code Lyoko",
+                        sound = "codeLyoko.mp3",
+                        background = "codeLyoko.jpg",
+                        npc = nil,
+                        destination = "lastLevel",
+                    },
+                    right = {
+                        text = "Totally Spies",
+                        sound = "totallySpied.mp3",
+                        background = "totallySpies.jpg",
+                        npc = nil,
+                        destination = "lastLevel",
+                    },
+                },
+            },
         },
 
         ["lastLevel"] = {
