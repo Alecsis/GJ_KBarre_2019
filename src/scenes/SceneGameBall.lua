@@ -213,8 +213,8 @@ local function playerLogic(self)
         end
         self.player.xflip = -1
     end
-    if isDown('right') or isDown('down') then
-        if isDown('lshift') then
+    if isDown('right') then
+        if isDown('lshift') or isDown('down') then
             self.player:accelerate(2 * vel, 0)
         else
             self.player:accelerate(vel, 0)
