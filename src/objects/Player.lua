@@ -55,16 +55,6 @@ local function update(self, dt)
     end
 end
 
-local function getBounds(self)
-    local top = self.pos.y - self.dimensions.h
-    local bottom = self.pos.y
-    local right = self.pos.x + self.dimensions.w / 2
-    local left = self.pos.x - self.dimensions.w / 2
-    return top, right, bottom, left
-end
-
-local function getDimensions(self) return self.dimensions.w, self.dimensions.h end
-
 local function setSpritesheet(self, playerProps)
     -- physical bounds
     local spritesheet = playerProps.spritesheet
@@ -113,6 +103,18 @@ local function makeGirly(self)
     self.isGirly = true
 end
 
+local function onCollision(pSide)
+    if pSide == "top" then
+        self.vel.y = 0
+    elseif pSide == "bottom" then
+        self.vel.y = 0
+    elseif pSide == "left" then
+        self.vel.x = 0
+    elseif pSide == "right" then
+        self.vel.x = 0
+    end
+end
+
 local function Player()
     local Pawn = require("src.objects.Pawn")
     local self = Pawn()
@@ -126,10 +128,9 @@ local function Player()
 
     -- methods
     self.update = update
-    self.getDimensions = getDimensions
-    self.getBounds = getBounds
     self.draw = draw
     self.setSpritesheet = setSpritesheet
+    self.onCollision = self.onCollision
     self.addPikachu = addPikachu
     self.addBall = addBall
     self.makeGirly = makeGirly

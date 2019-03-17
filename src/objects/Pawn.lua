@@ -36,18 +36,45 @@ local function accelerate(self, dvx, dvy)
     self:setVelocity(vx + dvx, vy + dvy)
 end
 
+
+local function getBounds(self)
+    local top = self.pos.y - self.dimensions.h
+    local bottom = self.pos.y
+    local right = self.pos.x + self.dimensions.w / 2
+    local left = self.pos.x - self.dimensions.w / 2
+    return top, right, bottom, left
+end
+
+local function getDimensions(self) return self.dimensions.w, self.dimensions.h end
+
+local function onCollision(pSide)
+    if pSide == "top" then
+        self.vel.y = - self.vel.y
+    elseif pSide == "bottom" then
+        self.vel.y = - self.vel.y
+    elseif pSide == "left" then
+        self.vel.x = - self.vel.x
+    elseif pSide == "right" then
+        self.vel.x = - self.vel.x
+    end
+end
+
 local function Pawn()
     local self = require("lib.EntityBase")()
     self.type = "pawn"
 
     self.pos = {x = 0, y = 0}
     self.vel = {x = 0, y = 0}
+    self.dimensions = {w = 0, h = 0}
     self.setPosition = setPosition
     self.getPosition = getPosition
     self.move = move
+    self.getDimensions = getDimensions
+    self.getBounds = getBounds
     self.setVelocity = setVelocity
     self.getVelocity = getVelocity
     self.accelerate = accelerate
+    self.onCollision = onCollision
 
     self.update = update
     self.draw = draw

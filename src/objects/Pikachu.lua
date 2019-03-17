@@ -67,16 +67,6 @@ local function update(self, dt)
     end
 end
 
-local function getBounds(self)
-    local top = self.pos.y - self.dimensions.h
-    local bottom = self.pos.y
-    local right = self.pos.x + self.dimensions.w / 2
-    local left = self.pos.x - self.dimensions.w / 2
-    return top, right, bottom, left
-end
-
-local function getDimensions(self) return self.dimensions.w, self.dimensions.h end
-
 local function setSpritesheet(self, playerProps)
     local spritesheet = playerProps.spritesheet
      -- physical bounds
@@ -126,8 +116,6 @@ local function Pikachu(player)
 
      -- methods
     self.update = update
-    self.getDimensions = getDimensions
-    self.getBounds = getBounds
     self.draw = draw
     self.setSpritesheet = setSpritesheet
 
