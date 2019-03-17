@@ -206,14 +206,14 @@ local function playerLogic(self)
     local isDown = love.keyboard.isDown
     local vel = 300
     if isDown('left') then
-        if isDown('lshift') then
+        if isDown('lshift') or isDown('down') then
             self.player:accelerate(-2 * vel, 0)
         else
             self.player:accelerate(-vel, 0)
         end
         self.player.xflip = -1
     end
-    if isDown('right') then
+    if isDown('right') or isDown('down') then
         if isDown('lshift') then
             self.player:accelerate(2 * vel, 0)
         else
