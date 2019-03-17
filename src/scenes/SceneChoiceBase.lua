@@ -54,8 +54,6 @@ local function init(self, args)
         self.currentMusic:play()
         self.currentMusic:setLooping(true)
     end
-
-    self.player:addBall()
 end
 
 local function update(self, dt)
