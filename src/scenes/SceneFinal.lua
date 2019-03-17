@@ -12,9 +12,9 @@ local function init(self, args)
     self.choices = self.data.choices
 
     ----- player ----
-    self.player:setPosition(self.height - self.player.dimensions.h - 20, 20 + self.player.dimensions.w / 2)
-    self.player.pikachu:setPosition(self.player.pos.x - 50, self.player.pos.y)
-    self.player.ball:setPosition(self.player.pos.x + 50, self.player.pos.y)
+    self.player:setPosition(250, self.height - self.player.dimensions.w / 2 - 20)
+    self.player.pikachu:setPosition(self.player.pos.x - 80, self.player.pos.y)
+    self.player.ball:setPosition(self.player.pos.x + 80, self.player.pos.y)
     self.player.goldenSnitch:setPosition(self.player.pos.x, self.player.pos.y - self.player.dimensions.h)
 
     self.player:setVelocity(0, 0)
@@ -27,7 +27,11 @@ local function init(self, args)
     self.currentMusic:setVolume(1)
     self.currentMusic:setLooping(true)
 
-    print(self.player.history)
+    self.text = ""
+    for i=1, #self.player.history do
+        local ligne = self.player.history[i]
+        self.text = self.text .. i .. ": " .. ligne .. "\n"
+    end
 end
 
 local function update(self, dt)
@@ -39,8 +43,6 @@ end
 local function exit(self) end
 
 local function draw(self)
-    love.graphics.print("Generic choice scene")
-
     -- draw npcs and player
     self.player:draw()
 
@@ -48,6 +50,11 @@ local function draw(self)
         love.graphics.setColor(0, 0, 0, self.shadeTmr)
         love.graphics.rectangle("fill", 0, 0, self.width, self.height)
     end
+
+    -- draw text
+    love.graphics.setFont(love.graphics.newFont(25))
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.printf(self.text, 0, 100, self.width, "center")
 end
 
 local function setChoices(self, choices) self.choices = choices end

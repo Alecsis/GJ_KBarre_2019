@@ -289,8 +289,13 @@ local scenes = {
                 "and make your kid version proud",
                 "of your day to day choices!",
             },
-            transition = {speed = 2, image = "coeurPixel.png", doesEnd = true},
-            destination = "lastLevel",
+            transition = {speed = 2, image = "coeurPixel.png"},
+            destination = "final",
+        },
+
+        ["final"] = {
+            type = "final",
+            sound = "Ilona.mp3",
         },
 
 }

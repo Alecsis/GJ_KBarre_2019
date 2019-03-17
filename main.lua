@@ -10,6 +10,7 @@ function love.load()
     local SceneChoiceBase = require("src.scenes.SceneChoiceBase")
     local SceneTransitionImage = require("src.scenes.SceneTransitionImage")
     local SceneGameBall = require("src.scenes.SceneGameBall")
+    local SceneFinal = require("src.scenes.SceneFinal")
 
     local PathsVerification = require("tests.PathsVerification")
 
@@ -31,10 +32,12 @@ function love.load()
         elseif v.type == "game" then
             local Scene = require("src.scenes." .. v.scene)
             sceneManager:register(k, Scene(sceneManager, v, player))
+        elseif v.type == "final" then
+            sceneManager:register(k, SceneFinal(sceneManager, v, player))
         end
     end
 
-    PathsVerification(SceneData, "Beginning")
+    -- PathsVerification(SceneData, "Beginning")
 
     -- load start scene by default
     
