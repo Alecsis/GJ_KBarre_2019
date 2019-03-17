@@ -54,18 +54,22 @@ local function update(self, dt)
             -- collide top left
             self:setVelocity(1200, -800)
             self.onGround = false
+            self:playSound()
         elseif self:isInPlayer(self.pos.x - self.dimensions.w / 2, self.pos.y) then
             -- collide bottom left
             self:setVelocity(1200, -800)
             self.onGround = false
+            self:playSound()
         elseif self:isInPlayer(self.pos.x + self.dimensions.w / 2, self.pos.y + self.dimensions.h) and not (self.againstWall and not self.onGround) then
             -- collide top right
             self:setVelocity(-1200, -800)
             self.onGround = false
+            self:playSound()
         elseif self:isInPlayer(self.pos.x + self.dimensions.w / 2, self.pos.y) and not (self.againstWall and not self.onGround) then
             -- collide bottom right
             self:setVelocity(-1200, -800)
             self.onGround = false
+            self:playSound()
         end
     end
 
@@ -83,6 +87,15 @@ local function update(self, dt)
         end
     end
 end
+
+local function playSound(self)
+    if not self.sound:isPlaying() then
+        self.sound:seek(0)
+        self.sound:play()
+    end
+end
+
+
 local function isInPlayer(self, x, y)
     local top, right, bottom, left = self.player:getBounds()
     return not (x < left or x > right or y < top or y > bottom)
@@ -135,12 +148,15 @@ local function Ball(player)
     self.onGround = false
     self.againstWall = false
     self.player = player
+    self.sound = love.audio.newSource("assets/soccer-ball.mp3", "stream")
+    self.sound:setVolume(0.5)
 
      -- methods
     self.update = update
     self.draw = draw
-    self.setSpritesheet = setSpritesheet
+    self.playSound = playSound
     self.isInPlayer = isInPlayer
+    self.setSpritesheet = setSpritesheet
 
     -- spritesheet & animations
     local props = require("data.EntitiesProperties")
