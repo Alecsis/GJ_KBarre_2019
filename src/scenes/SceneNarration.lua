@@ -39,7 +39,8 @@ local function SceneNarration(pSceneManager, pData)
                             destination = self.data.destination,
                             music = self.music,
                             image = self.data.transition.image,
-                            speed = self.data.transition.speed
+                            speed = self.data.transition.speed,
+                            doesEnd = self.data.transition.doesEnd,
                         }
                     )
                 else

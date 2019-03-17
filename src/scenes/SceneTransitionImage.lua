@@ -22,6 +22,12 @@ local function SceneTransitionImage(pSceneManager)
         self.music = args.music
         self.musicVol = 1
 
+        self.doesEnd = args.doesEnd
+        if args.doesEnd then
+            print("oui")
+
+        end
+
         self.sound = args.sound
         if self.sound then
             self.sound:play()
@@ -43,7 +49,11 @@ local function SceneTransitionImage(pSceneManager)
         self.music:setVolume(self.musicVol)
         if self.tmr > self.speed then
             self.music:stop()
-            self.manager:load(self.destination)
+            if self.doesEnd then
+                love.event.quit()
+            else
+                self.manager:load(self.destination)
+            end
         end
     end
 
@@ -60,7 +70,11 @@ local function SceneTransitionImage(pSceneManager)
 
     function self:keyPressed(k)
         self.music:stop()
-        self.manager:load(self.destination)
+        if self.doesEnd then
+            love.event.quit()
+        else
+            self.manager:load(self.destination)
+        end
     end
 
     return self

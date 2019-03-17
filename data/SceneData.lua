@@ -250,7 +250,7 @@ local scenes = {
                 right = {
                     text = "Indochine",
                     sound = "aventurierIndochine.mp3",
-                    background = "tektonic.jpg",
+                    background = "indochine.jpg",
                     npc = nil,
                     destination = "lastLevel",
                 },
@@ -289,7 +289,7 @@ local scenes = {
                 "and make your kid version proud",
                 "of your day to day choices!",
             },
-            transition = {speed = 2, image = "coeurPixel.png",},
+            transition = {speed = 2, image = "coeurPixel.png", doesEnd = true},
             destination = "lastLevel",
         },
 
