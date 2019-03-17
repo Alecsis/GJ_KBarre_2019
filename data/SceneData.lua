@@ -100,202 +100,203 @@ local scenes = {
     },
 
     -- Scène narration level one -- 
-        ["firstLevel"] = {
-            type = "narrative",
-            sound = "theLeftouts.mp3",
-            script = {
-                "If you could go back",
-                "would you choose the same things?",
-                "Choose the same people to trust",
-                "and to love?",
-                "Would you get addicted the same way?",
-            },
-            transition = {speed = 2, image = "coeurPixel.png",},
-            destination = "afterFirstLevel"
+    ["firstLevel"] = {
+        type = "narrative",
+        sound = "theLeftouts.mp3",
+        script = {
+            "If you could go back",
+            "would you choose the same things?",
+            "Choose the same people to trust",
+            "and to love?",
+            "Would you get addicted the same way?",
         },
-    
-        -- première scène niveau 1 -- 
-    
-        ["afterFirstLevel"] = {
-            type = "choice",
-            choices = {
-                left = {
-                    text = "Les écrans",
-                    sound = "cinema.mp3",
-                    background = "tnt.jpg",
-                    npc = nil,
-                    destination = "screens",
-                },  
-                right = {
-                    text = "Les booms de folie",
-                    sound = "demonsDeMinuit.mp3",
-                    background = "tektonic.jpg",
-                    npc = nil,
-                    destination = "Dancing",
-                },
-            },
-            transition = true,
-        },
+        transition = {speed = 2, image = "coeurPixel.png",},
+        destination = "afterFirstLevel"
+    },
 
-        ["screens"] = {
-            type = "choice",
-            choices = {
-                left = {
-                    text = "Les DVD",
-                    sound = "dvdSound.mp3",
-                    background = "dvd.jpeg",
-                    npc = nil,
-                    destination = "lesDVD",
-                },  
-                right = {
-                    text = "La trilogie du samedi",
-                    sound = "trilogieDuSamedi.mp3",
-                    background = "trilogieDuSamedi.jpg",
-                    npc = nil,
-                    destination = "trilogieDuSamedi",
-                },
-            },
-            transition = true,
-        },
+    -- première scène niveau 1 -- 
 
-        ["lesDVD"] = {
-            type = "choice",
-            choices = {
-                left = {
-                    text = "Le Seigneur des Anneaux",
-                    sound = "seigneurDesAnneaux.mp3",
-                    background = "seigneurDesAnneaux.jpg",
-                    npc = nil,
-                    destination = "lastLevel",
-                },
-                right = {
-                    text = "Harry Potter",
-                    sound = "HP.mp3",
-                    background = "HP.jpg",
-                    npc = nil,
-                    destination = "HermioneOuGinny",
-                },
+    ["afterFirstLevel"] = {
+        type = "choice",
+        choices = {
+            left = {
+                text = "Les écrans",
+                sound = "cinema.mp3",
+                background = "tnt.jpg",
+                npc = nil,
+                destination = "screens",
+            },  
+            right = {
+                text = "Les booms de folie",
+                sound = "demonsDeMinuit.mp3",
+                background = "tektonic.jpg",
+                npc = nil,
+                destination = "Dancing",
             },
         },
-        ["trilogieDuSamedi"] = {
-            type = "choice",
-            choices = {
-                left = {
-                    text = "Prison Break",
-                    sound = "PrisonBreak.mp3",
-                    background = "Diddle.jpg",
-                    npc = nil,
-                    destination = "lastLevel",
-                },
-                right = {
-                    text = "Charmed",
-                    sound = "charmedSound.mp3",
-                    background = "Pokemon.jpg",
-                    npc = nil,
-                    destination = "agentsSecret",
-                },
+        transition = true,
+    },
+
+    ["screens"] = {
+        type = "choice",
+        choices = {
+            left = {
+                text = "Les DVD",
+                sound = "dvdSound.mp3",
+                background = "dvd.jpeg",
+                npc = nil,
+                destination = "lesDVD",
+            },  
+            right = {
+                text = "La trilogie du samedi",
+                sound = "trilogieDuSamedi.mp3",
+                background = "trilogieDuSamedi.jpg",
+                npc = nil,
+                destination = "trilogieDuSamedi",
             },
         },
+        transition = true,
+    },
 
-        ["HermioneOuGinny"] = {
-            type = "choice",
-            choices = {
-                left = {
-                    text = "Hermione",
-                    sound = "Hermione.mp3",
-                    background = "Hermione.jpg",
-                    npc = nil,
-                    destination = "lastLevel",
-                },
-                right = {
-                    text = "Ginny",
-                    sound = "Ginny.mp3",
-                    background = "ginny.jpg",
-                    npc = nil,
-                    destination = "Disney",
-                },
+    ["lesDVD"] = {
+        type = "choice",
+        choices = {
+            left = {
+                text = "Le Seigneur des Anneaux",
+                sound = "seigneurDesAnneaux.mp3",
+                background = "seigneurDesAnneaux.jpg",
+                npc = nil,
+                destination = "lastLevel",
+            },
+            right = {
+                text = "Harry Potter",
+                sound = "HP.mp3",
+                background = "HP.jpg",
+                npc = nil,
+                destination = "HermioneOuGinny",
+                action = (function(player) player:addGoldenSnitch() end),
             },
         },
-
-        ["Disney"] = {
-            type = "choice",
-            choices = {
-                left = {
-                    text = "Mulan",
-                    sound = "mulanSound.mp3",
-                    background = "Mulan.jpg",
-                    npc = nil,
-                    destination = "LastLevel",
-                },
-                right = {
-                    text = "Le Roi Lion",
-                    sound = "roiLionSound.mp3",
-                    background = "roiLion.jpg",
-                    npc = nil,
-                    destination = "lastLevel",
-                },
+    },
+    ["trilogieDuSamedi"] = {
+        type = "choice",
+        choices = {
+            left = {
+                text = "Prison Break",
+                sound = "PrisonBreak.mp3",
+                background = "Diddle.jpg",
+                npc = nil,
+                destination = "lastLevel",
+            },
+            right = {
+                text = "Charmed",
+                sound = "charmedSound.mp3",
+                background = "Pokemon.jpg",
+                npc = nil,
+                destination = "agentsSecret",
             },
         },
+    },
 
-        ["Dancing"] = {
-            type = "choice",
-            choices = {
-                left = {
-                    text = "Manau",
-                    sound = "tribuDeDana.mp3",
-                    background = "tribuDeDana.jpg",
-                    npc = nil,
-                    destination = "lastLevel",
-                },  
-                right = {
-                    text = "Indochine",
-                    sound = "aventurierIndochine.mp3",
-                    background = "indochine.jpg",
-                    npc = nil,
-                    destination = "lastLevel",
-                },
+    ["HermioneOuGinny"] = {
+        type = "choice",
+        choices = {
+            left = {
+                text = "Hermione",
+                sound = "Hermione.mp3",
+                background = "Hermione.jpg",
+                npc = nil,
+                destination = "lastLevel",
             },
-            transition = true,
-        },
-
-            ["agentsSecret"] = {
-                type = "choice",
-                choices = {
-                    left = {
-                        text = "Code Lyoko",
-                        sound = "codeLyoko.mp3",
-                        background = "codeLyoko.jpg",
-                        npc = nil,
-                        destination = "lastLevel",
-                    },
-                    right = {
-                        text = "Totally Spies",
-                        sound = "totallySpied.mp3",
-                        background = "totallySpies.jpg",
-                        npc = nil,
-                        destination = "lastLevel",
-                    },
-                },
+            right = {
+                text = "Ginny",
+                sound = "Ginny.mp3",
+                background = "ginny.jpg",
+                npc = nil,
+                destination = "Disney",
             },
+        },
+    },
 
-
-        ["lastLevel"] = {
-            type = "narrative",
-            sound = "Ilona.mp3",
-            script = {
-                "What sort of adult are you?",
-                "Nobody can tell you but yourself.",
-                "Be whoever the f you want,",
-                "and make your kid version proud",
-                "of your day to day choices!",
+    ["Disney"] = {
+        type = "choice",
+        choices = {
+            left = {
+                text = "Mulan",
+                sound = "mulanSound.mp3",
+                background = "Mulan.jpg",
+                npc = nil,
+                destination = "LastLevel",
             },
-            transition = {speed = 2, image = "coeurPixel.png"},
-            destination = "final",
+            right = {
+                text = "Le Roi Lion",
+                sound = "roiLionSound.mp3",
+                background = "roiLion.jpg",
+                npc = nil,
+                destination = "lastLevel",
+            },
         },
+    },
 
-        ["final"] = {
-            type = "final",
+    ["Dancing"] = {
+        type = "choice",
+        choices = {
+            left = {
+                text = "Manau",
+                sound = "tribuDeDana.mp3",
+                background = "tribuDeDana.jpg",
+                npc = nil,
+                destination = "lastLevel",
+            },  
+            right = {
+                text = "Indochine",
+                sound = "aventurierIndochine.mp3",
+                background = "indochine.jpg",
+                npc = nil,
+                destination = "lastLevel",
+            },
         },
+        transition = true,
+    },
+
+    ["agentsSecret"] = {
+        type = "choice",
+        choices = {
+            left = {
+                text = "Code Lyoko",
+                sound = "codeLyoko.mp3",
+                background = "codeLyoko.jpg",
+                npc = nil,
+                destination = "lastLevel",
+            },
+            right = {
+                text = "Totally Spies",
+                sound = "totallySpied.mp3",
+                background = "totallySpies.jpg",
+                npc = nil,
+                destination = "lastLevel",
+            },
+        },
+    },
+
+
+    ["lastLevel"] = {
+        type = "narrative",
+        sound = "Ilona.mp3",
+        script = {
+            "What sort of adult are you?",
+            "Nobody can tell you but yourself.",
+            "Be whoever the f you want,",
+            "and make your kid version proud",
+            "of your day to day choices!",
+        },
+        transition = {speed = 2, image = "coeurPixel.png"},
+        destination = "final",
+    },
+
+    ["final"] = {
+        type = "final",
+    },
 
 }
 
