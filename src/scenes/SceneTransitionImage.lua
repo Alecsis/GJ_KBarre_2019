@@ -49,7 +49,7 @@ local function SceneTransitionImage(pSceneManager)
     end
 
     function self:keyPressed(k)
-        self.music:stop()²²
+        self.music:stop()
         self.manager:load(self.destination)
     end
 
