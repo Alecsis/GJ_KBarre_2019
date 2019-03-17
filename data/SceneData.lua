@@ -184,14 +184,14 @@ local scenes = {
             left = {
                 text = "Prison Break",
                 sound = "PrisonBreak.mp3",
-                background = "Diddle.jpg",
+                background = "PrisonBreak.jpg",
                 npc = nil,
                 destination = "lastLevel",
             },
             right = {
                 text = "Charmed",
                 sound = "charmedSound.mp3",
-                background = "Pokemon.jpg",
+                background = "charmed.jpg",
                 npc = nil,
                 destination = "agentsSecret",
             },
