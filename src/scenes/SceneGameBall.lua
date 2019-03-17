@@ -164,7 +164,7 @@ local function draw(self)
         self.cages.scale
     )
 
-    love.graphics.setColor(1, 0, 1)
+    --[[love.graphics.setColor(1, 0, 1)
     for i = 1, #self.cages.colliders do
         local coll = self.cages.colliders[i]
         local w = coll.right - coll.left
@@ -172,6 +172,7 @@ local function draw(self)
         love.graphics.rectangle('line', coll.left, coll.top, w, h)
     end
     love.graphics.setColor(1, 1, 1)
+    ]]
 
     if self.shadeTmr > 0 then
         love.graphics.setColor(0, 0, 0, self.shadeTmr)
