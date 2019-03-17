@@ -33,6 +33,7 @@ function love.load()
 
     -- load start scene by default
     sceneManager:load("Beginning")
+    --sceneManager:load("Ball")
 end
 
 function love.update(dt) sceneManager:update(dt) end
