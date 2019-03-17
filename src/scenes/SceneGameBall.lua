@@ -51,6 +51,15 @@ local function init(self, args)
     self.cages.left = self.cages.x
     self.cages.right = self.cages.x + self.cages.width
 
+    self.video = love.graphics.newVideo("assets/Olive-et-Tom.ogv", { audio=false })
+    self.video:play()
+    self.videoX = (self.width - self.video:getWidth()) / 2
+    self.videoY = 0
+
+    self.music = love.audio.newSource("assets/Olive-et-Tom.mp3", "stream")
+    self.music:play()
+    self.music:setLooping(true)
+
     ----- player ----
     self.player:setPosition(self.width / 2 - 1, 0)
     self.ball:setPosition(0, self.height - 100)
@@ -65,10 +74,19 @@ local function update(self, dt)
 
     self:updatePawns(dt)
 
+    if not self.video:isPlaying() then
+        self.video:rewind()
+        self.video:play()
+    end
+
     if self.player.pos.y > self.height + 2 * self.player.dimensions.h then self:validatedChoice() end
 end
 
 local function exit(self)
+    if self.music then
+        self.music:stop()
+        self.music:release()
+    end
 end
 
 local function draw(self)
@@ -83,9 +101,11 @@ local function draw(self)
         self.mariobg.scale
     )
 
-    -- reset drawing options
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.setFont(love.graphics.newFont())
+    love.graphics.draw(
+        self.video,
+        self.videoX,
+        self.videoY
+    )
 
     -- draw wall
     love.graphics.draw(
