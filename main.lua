@@ -11,6 +11,8 @@ function love.load()
     local SceneTransitionImage = require("src.scenes.SceneTransitionImage")
     local SceneGameBall = require("src.scenes.SceneGameBall")
 
+    local PathsVerification = require("tests.PathsVerification")
+
     -- create scene manager
     sceneManager = SceneManager()
 
@@ -33,6 +35,8 @@ function love.load()
             sceneManager:register(k, Scene(sceneManager, v, player, pikachu, ball))
         end
     end
+
+    PathsVerification(SceneData, "Beginning")
 
     -- load start scene by default
     sceneManager:load("Beginning")
