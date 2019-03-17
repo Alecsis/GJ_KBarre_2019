@@ -50,6 +50,20 @@ local function init(self, args)
     self.cages.bottom = self.cages.y + self.cages.height
     self.cages.left = self.cages.x
     self.cages.right = self.cages.x + self.cages.width
+    self.cages.colliders = {
+        {
+            top = self.cages.top,
+            right = self.cages.right,
+            bottom = self.cages.bottom,
+            left = self.cages.right - self.cages.width / 10,
+        },
+        {
+            top = self.cages.top,
+            right = self.cages.right,
+            bottom = self.cages.top + self.cages.height / 10,
+            left = self.cages.left,
+        }
+    }
 
     self.video = love.graphics.newVideo("assets/Olive-et-Tom.ogv", { audio=false })
     self.video:play()
@@ -142,6 +156,15 @@ local function draw(self)
         self.cages.scale
     )
 
+    love.graphics.setColor(1, 0, 1)
+    for i = 1, #self.cages.colliders do
+        local coll = self.cages.colliders[i]
+        local w = coll.right - coll.left
+        local h = coll.bottom - coll.top
+        love.graphics.rectangle('line', coll.left, coll.top, w, h)
+    end
+    love.graphics.setColor(1, 1, 1)
+
     if self.shadeTmr > 0 then
         love.graphics.setColor(0, 0, 0, self.shadeTmr)
         love.graphics.rectangle("fill", 0, 0, self.width, self.height)
@@ -165,12 +188,8 @@ local function validatedChoice(self)
     )
 end
 
-local function updatePawns(self, dt)
-    self.player:update(dt)
-    self.npc:update(dt)
-
+local function playerLogic(self)
     ---- Player movement ----
-
     -- keep Y velocity
     self.player:setVelocity(0, self.player.vel.y)
 
@@ -178,155 +197,161 @@ local function updatePawns(self, dt)
     local isDown = love.keyboard.isDown
     local vel = 300
     if isDown('left') then
-        self.player:accelerate(-vel, 0)
+        if isDown('lshift') then
+            self.player:accelerate(-2 * vel, 0)
+        else
+            self.player:accelerate(-vel, 0)
+        end
         self.player.xflip = -1
     end
     if isDown('right') then
-        self.player:accelerate(vel, 0)
+        if isDown('lshift') then
+            self.player:accelerate(2 * vel, 0)
+        else
+            self.player:accelerate(vel, 0)
+        end
         self.player.xflip = 1
     end
     if (isDown('space') or isDown("up")) and self.player.onGround then
         self.player:setVelocity(self.player.vel.x, -1000)
         self.player.onGround = false
     end
+end
 
-    self.player.againstWall = false
-    self:handleCollisions(self.player, dt)
-
-    -- ball movement
-    self.ball:update(dt)
-
-    self.ball.againstWall = false
-    local vy = self.ball.vel.y
-    self:handleCollisions(self.ball, dt)
-    local newvy = self.ball.vel.y
-
-    if vy > 20 and newvy < 20 then
-        self.ball.vel.y = -vy / 2
-    end
-
+local function ballLogic(self)
     if self.ball.pos.y > self.height + 100 then
         if self.ball.pos.x > self.width / 2 then
             self.ball:setPosition(0, self.height - 100)
-            self.ball:setVelocity(1000, -1000)
+            self.ball:setVelocity(500, -1000)
         else
             self.ball:setPosition(self.width, self.height - 100)
-            self.ball:setVelocity(-1000, -1000)
+            self.ball:setVelocity(-500, -1000)
         end
     end
 end
 
-local function handleCollisions(self, pawn, dt)
-    -- accelerate
-    local gravity = 3040 * dt
-    pawn:accelerate(0, gravity)
+local function updatePawns(self, dt)
+    -- specific logics
+    self:playerLogic(dt)
+    self:ballLogic(dt)
+    self.npc:update(dt)
 
-    -- update position
-    local vx, vy = pawn:getVelocity()
-    pawn:move(vx * dt, vy * dt)
+    -- reset some flags
+    self.player.onGround = false
+    self.ball.onGround = false
+    self.ball.againstWall = false
+    self.player.againstWall = false
 
-    ----- collision with cages -----
-    if pawn == self.ball then
-        -- side
-        local pw, ph = pawn:getDimensions()
+    -- perform collision multiple times
+    local precision = 2
+    local dtNew = dt / precision
+    for i = 1, precision do
+        -- accelerate
+        local gravity = 2040 * dtNew
+        self.player:accelerate(0, gravity)
+        self.ball:accelerate(0, gravity)
+    
+        -- update position
+        local vx, vy = self.player:getVelocity()
+        self.player:move(vx * dtNew, vy * dtNew)
+        local vx, vy = self.ball:getVelocity()
+        self.ball:move(vx * dtNew, vy * dtNew)
 
-        local ptop, pright, pbottom, pleft = pawn:getBounds()
-
-        local ptop, pright, pbottom, pleft = pawn:getBounds()
-        local goingRight = pawn.vel.x > 0
-        local dx = 0
-
-        local collisionTop = false
-        local collisionRight = false
-        local collisionBottom = false
-        local collisionLeft = false
-
-        if goingRight then
-        local collision = self:isInCage(pright, ptop + ph / 5) or self:isInCage(pright, (ptop + pbottom) / 2) or self:isInCage(pright, pbottom - ph / 5)
-            if collision then dx = self.cages.right - 10 - 0.1 - pright end
+        -- player
+        self:handleCollisionsNoResolution(self.player, self.platform, dtNew)
+        self:handleCollisionsNoResolution(self.player, self.wall, dtNew)
+        self.player:update(dtNew)
+        -- ball
+        self:handleCollisionsNoResolution(self.ball, self.platform, dtNew)
+        self:handleCollisionsNoResolution(self.ball, self.wall, dtNew)
+        for i = 1, #self.cages.colliders do
+            local collider = self.cages.colliders[i]
+            self:handleCollisionsNoResolution(self.ball, collider, dtNew)
         end
-        pawn:move(dx, 0)
-
-        -- top
-        local pw, ph = pawn:getDimensions()
-
-        local ptop, pright, pbottom, pleft = pawn:getBounds()
-        local goingDown = pawn.vel.y > 0
-        local dy = 0
-        if goingDown then
-            pawn.onGround = false
-            local collision = self:isInCage(pright - pw / 5, pbottom) or self:isInCage((pleft + pright) / 2, pbottom) or self:isInCage(pleft + pw / 5, pbottom)
-            if collision then
-                pawn:setVelocity(pawn.vel.x, 0)
-                dy = self.cages.top - 0.1 - pbottom
-                pawn.onGround = true
-            end
-        else
-            local collision = self:isInCage(pright - pw / 5, ptop) or self:isInCage((pleft + pright) / 2, ptop) or self:isInCage(pleft + pw / 5, ptop)
-            if collision then dy = self.cages.top + 0.1 - ptop + 10 end
-        end
-        pawn:move(0, dy)
+        self.ball:update(dtNew)
     end
+end
 
-    ---- collision with platform ----
-    -- player bounds
+local function handleCollisionsNoResolution(self, pawn, pPlatform, dt)
+    -- collision
+    -- player bounds    
     local pw, ph = pawn:getDimensions()
-
     local ptop, pright, pbottom, pleft = pawn:getBounds()
+
+    -- get direction
     local goingDown = pawn.vel.y > 0
+
+    -- collision flags
+    local collTop = false
+    local collRight = false
+    local collBottom = false
+    local collLeft = false
+
     local dy = 0
     if goingDown then
-        pawn.onGround = false
-        local collision = self:isInPlatform(pright - pw / 5, pbottom) or self:isInPlatform((pleft + pright) / 2, pbottom) or self:isInPlatform(pleft + pw / 5, pbottom)
+        local collision = self:isInPlatform(pPlatform, pright - pw / 3, pbottom) or self:isInPlatform(pPlatform, (pleft + pright) / 2, pbottom) or self:isInPlatform(pPlatform, pleft + pw / 3, pbottom)
         if collision then
-            pawn:setVelocity(pawn.vel.x, 0)
-            dy = self.platform.top - 0.1 - pbottom
+            collBottom = true
+            dy = pPlatform.top - 0.1 - pbottom
             pawn.onGround = true
         end
     else
-        local collision = self:isInPlatform(pright - pw / 5, ptop) or self:isInPlatform((pleft + pright) / 2, ptop) or self:isInPlatform(pleft + pw / 5, ptop)
-        if collision then dy = self.platform.right + 0.1 - pleft end
-    end
-    pawn:move(0, dy)
-
-    ---- collision with platform ----
-    -- player bounds
-    local pw, ph = pawn:getDimensions()
-
-    local ptop, pright, pbottom, pleft = pawn:getBounds()
-
-    local ptop, pright, pbottom, pleft = pawn:getBounds()
-    local goingRight = pawn.vel.x > 0
-    local dx = 0
-    pawn.againstWall = false
-    if not goingRight then
-        local collision = self:isInWall(pleft, ptop + ph / 5) or self:isInWall(pleft, (ptop + pbottom) / 2) or self:isInWall(pleft, pbottom - ph / 5)
+        local collision = self:isInPlatform(pPlatform, pright - pw / 3, ptop) or self:isInPlatform(pPlatform, (pleft + pright) / 2, ptop) or self:isInPlatform(pPlatform, pleft + pw / 3, ptop)
         if collision then
-            dx = self.wall.right - 0.1 - pleft
-            pawn.againstWall = true
+            collTop = true
+            dy = pPlatform.bottom + 0.1 - ptop
         end
     end
+
+    -- rectify position
+    pawn:move(0, dy)
+
+    -- object collision callback
+    if collTop then pawn:onCollision('top') end
+    if collBottom then pawn:onCollision('bottom') end
+
+    -- get new bounds
+    local ptop, pright, pbottom, pleft = pawn:getBounds()
+
+    -- get direction
+    local goingLeft = pawn.vel.x < 0
+
+    local dx = 0
+    if goingLeft then
+        -- compute collisions
+        local collision = self:isInPlatform(pPlatform, pleft, ptop + ph / 3)
+        collision = collision or self:isInPlatform(pPlatform, pleft, (ptop + pbottom) / 2)
+        collision = collision or self:isInPlatform(pPlatform, pleft, pbottom - ph / 3)
+        -- react to collisions
+        if collision then
+            dx = pPlatform.right + 0.1 - pleft
+            pawn.againstWall = true
+            collLeft = true
+        end
+    else
+        -- compute collisions
+        local collision = self:isInPlatform(pPlatform, pright, ptop + ph / 3)
+        collision = collision or self:isInPlatform(pPlatform, pright, (ptop + pbottom) / 2)
+        collision = collision or self:isInPlatform(pPlatform, pright, pbottom - ph / 3)
+        -- react to collisions
+        if collision then
+            dx = pPlatform.left - 0.1 - pright
+            pawn.againstWall = true
+            collRight = true
+        end
+    end
+
+    -- rectify position
     pawn:move(dx, 0)
+
+    -- object collision callback
+    if collRight then pawn:onCollision('right') end
+    if collLeft then pawn:onCollision('left') end
+
 end
 
-local function isInPlatform(self, x, y)
-    return not (x < self.platform.left or x > self.platform.right or y < self.platform.top or y > self.platform.bottom)
-end
-
-local function isInWall(self, x, y)
-    return not (x < self.wall.left or x > self.wall.right or y < self.wall.top or y > self.wall.bottom)
-end
-
-local function isInCage(self, x, y)
-    if (x >= self.cages.right - 10 and x < self.cages.right and y > self.cages.top and y < self.cages.bottom) then
-        return true
-    end
-
-    if (x > self.cages.left and x < self.cages.right and y < self.cages.top and y >= self.cages.top - 10) then
-        return true
-    end
-
-    return false
+local function isInPlatform(self, pPlatform, x, y)
+    return not (x < pPlatform.left or x > pPlatform.right or y < pPlatform.top or y > pPlatform.bottom)
 end
 
 local function SceneChoiceBase(pSceneManager, pData, player, pikachu, ball)
@@ -338,7 +363,6 @@ local function SceneChoiceBase(pSceneManager, pData, player, pikachu, ball)
 
     ----- interface functions ----
     self.isInPlatform = isInPlatform
-    self.isInWall = isInWall
     self.isInCage = isInCage
     self.update = update
     self.exit = exit
@@ -347,7 +371,9 @@ local function SceneChoiceBase(pSceneManager, pData, player, pikachu, ball)
     self.keyPressed = keyPressed
     self.validatedChoice = validatedChoice
     self.updatePawns = updatePawns
-    self.handleCollisions = handleCollisions
+    self.playerLogic = playerLogic
+    self.ballLogic = ballLogic
+    self.handleCollisionsNoResolution = handleCollisionsNoResolution
 
     return self
 end

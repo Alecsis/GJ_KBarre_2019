@@ -103,7 +103,7 @@ local function makeGirly(self)
     self.isGirly = true
 end
 
-local function onCollision(pSide)
+local function onCollision(self, pSide)
     if pSide == "top" then
         self.vel.y = 0
     elseif pSide == "bottom" then
@@ -131,7 +131,7 @@ local function Player()
     self.update = update
     self.draw = draw
     self.setSpritesheet = setSpritesheet
-    self.onCollision = self.onCollision
+    self.onCollision = onCollision
     self.addPikachu = addPikachu
     self.addBall = addBall
     self.makeGirly = makeGirly

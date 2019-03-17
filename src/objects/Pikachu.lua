@@ -105,6 +105,18 @@ local function setSpritesheet(self, playerProps)
     end
 end
 
+local function onCollision(self, pSide)
+    if pSide == "top" then
+        self.vel.y = 0
+    elseif pSide == "bottom" then
+        self.vel.y = 0
+    elseif pSide == "left" then
+        self.vel.x = 0
+    elseif pSide == "right" then
+        self.vel.x = 0
+    end
+end
+
 local function Pikachu(player)
     local Pawn = require("src.objects.Pawn")
     local self = Pawn()
@@ -114,8 +126,9 @@ local function Pikachu(player)
     self.onGround = false
     self.againstWall = false
     self.player = player
-
-     -- methods
+    
+    -- methods
+    self.onCollision = onCollision
     self.update = update
     self.draw = draw
     self.setSpritesheet = setSpritesheet
