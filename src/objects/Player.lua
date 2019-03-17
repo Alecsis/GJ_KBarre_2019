@@ -139,7 +139,7 @@ local function Player()
 
     self.pikachu = require("src.objects.Pikachu")(self)
     self.ball = require("src.objects.Ball")(self)
-    self.goldenSnitch = require("src.objects.goldenSnitch")(self)
+    self.goldenSnitch = require("src.objects.GoldenSnitch")(self)
 
     -- methods
     self.update = update
