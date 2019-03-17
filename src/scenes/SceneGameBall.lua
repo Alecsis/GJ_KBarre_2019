@@ -60,7 +60,11 @@ local function init(self, args)
 end
 
 local function update(self, dt)
+    self.shadeTmr = self.shadeTmr - dt
+    if self.shadeTmr <= 0 then self.shadeTmr = 0 end
+
     self:updatePawns(dt)
+
     if self.player.pos.y > self.height + 2 * self.player.dimensions.h then self:validatedChoice() end
 end
 
@@ -128,9 +132,6 @@ end
 local function updatePawns(self, dt)
     self.player:update(dt)
 
-    self.shadeTmr = self.shadeTmr - dt
-    if self.shadeTmr <= 0 then self.shadeTmr = 0 end
-
     ---- Player movement ----
 
     -- keep Y velocity
@@ -197,6 +198,12 @@ local function handleCollisions(self, pawn, dt)
         local ptop, pright, pbottom, pleft = pawn:getBounds()
         local goingRight = pawn.vel.x > 0
         local dx = 0
+
+        local collisionTop = false
+        local collisionRight = false
+        local collisionBottom = false
+        local collisionLeft = false
+
         if goingRight then
         local collision = self:isInCage(pright, ptop + ph / 5) or self:isInCage(pright, (ptop + pbottom) / 2) or self:isInCage(pright, pbottom - ph / 5)
             if collision then dx = self.cages.right - 10 - 0.1 - pright end
