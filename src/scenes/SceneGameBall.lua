@@ -250,17 +250,17 @@ local function updatePawns(self, dt)
         self.ball:move(vx * dtNew, vy * dtNew)
 
         -- player
-        self.player:update(dtNew)
         self:handleCollisionsNoResolution(self.player, self.platform, dtNew)
         self:handleCollisionsNoResolution(self.player, self.wall, dtNew)
+        self.player:update(dtNew)
         -- ball
-        self.ball:update(dtNew)
         self:handleCollisionsNoResolution(self.ball, self.platform, dtNew)
         self:handleCollisionsNoResolution(self.ball, self.wall, dtNew)
         for i = 1, #self.cages.colliders do
             local collider = self.cages.colliders[i]
             self:handleCollisionsNoResolution(self.ball, collider, dtNew)
         end
+        self.ball:update(dtNew)
     end
 end
 
