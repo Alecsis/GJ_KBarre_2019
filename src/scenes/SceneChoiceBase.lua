@@ -58,11 +58,14 @@ local function init(self, args)
 end
 
 local function update(self, dt)
+    -- update pawns
     self:updatePawns(dt)
 
+    -- change screen shading
     self.shadeTmr = self.shadeTmr - dt
     if self.shadeTmr <= 0 then self.shadeTmr = 0 end
 
+    -- Change player direction
     if self.player.pos.x < self.width / 2 - 1 then
         -- Select left choice
         if self.playerSide ~= "left" then self:choiceChanged("left") end
@@ -71,10 +74,12 @@ local function update(self, dt)
         if self.playerSide ~= "right" then self:choiceChanged("right") end
     end
 
+    -- change volume
     local volume = math.abs(self.player.pos.x - self.width / 2) / (self.width / 2)
-    -- volume = math.pow(volume, 1/3)
+    volume = math.pow(volume, 1/3)
     self.currentMusic:setVolume(volume)
 
+    -- change choice
     if self.player.pos.y > self.height + 2 * self.player.dimensions.h then self:validatedChoice() end
 end
 
