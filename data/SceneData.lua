@@ -36,7 +36,7 @@ local scenes = {
         type = "game",
         scene = "SceneGameBall",
         background = "Olive-et-Tom-background.jpg",
-        destination = "firstLevel"
+        destination = "Olive et Tom"
     },
     ["Princesse Sarah"] = {
         type = "choice",
