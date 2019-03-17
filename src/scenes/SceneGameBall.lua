@@ -151,6 +151,18 @@ end
 local function keyPressed(self, k) if k == "escape" then self.manager:load("menu") end end
 
 local function validatedChoice(self)
+    -- print("Player chose " .. self.playerSide)
+    -- print("Going to: " .. destination)
+    -- load new scene
+    self.manager:load(
+        "transition",
+        {
+            music = self.music,
+            image = self.data.background,
+            speed = 1,
+            destination = self.data.destination
+        }
+    )
 end
 
 local function updatePawns(self, dt)
@@ -315,21 +327,6 @@ local function isInCage(self, x, y)
     end
 
     return false
-end
-
-local function validatedChoice(self)
-    -- print("Player chose " .. self.playerSide)
-    -- print("Going to: " .. destination)
-    -- load new scene
-    self.manager:load(
-        "transition",
-        {
-            music = self.music,
-            image = self.data.background,
-            speed = 1,
-            destination = self.data.destination
-        }
-    )
 end
 
 local function SceneChoiceBase(pSceneManager, pData, player, pikachu, ball)
