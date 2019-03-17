@@ -102,7 +102,10 @@ local function update(self, dt)
     if self.player.pos.y > self.height + 2 * self.player.dimensions.h then self:validatedChoice() end
 end
 
-local function exit(self) end
+local function exit(self)
+    self.video:stop()
+    self.video:release()
+end
 
 local function draw(self)
     love.graphics.print("Generic choice scene")
