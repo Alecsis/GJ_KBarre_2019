@@ -11,11 +11,12 @@ local function SceneManager()
     function sceneManager:load(k, args)
         local newScene = self.lstScenes[k]
         if newScene == nil then
-            print("!SceneManager: Scene " .. k .. " unknown.")
+            print("!SceneManager: Unknown " .. k)
         else
             if self.currentScene ~= nil then
-                self.currentScene:exit()
+                self.currentScene:exit()                
             end
+            print("_SceneManager: Load " .. k)
             self.currentScene = newScene
             self.currentScene:init(args)
         end
