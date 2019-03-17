@@ -283,11 +283,11 @@ local scenes = {
             type = "narrative",
             sound = "Ilona.mp3",
             script = {
-                "What sort of adult are you ?",
+                "What sort of adult are you?",
                 "Nobody can tell you but yourself.",
                 "Be whoever the f you want,",
                 "and make your kid version proud",
-                "of your day to day choices?",
+                "of your day to day choices!",
             },
             transition = {speed = 2, image = "coeurPixel.png",},
             destination = "lastLevel",
