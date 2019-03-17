@@ -73,6 +73,7 @@ local scenes = {
                 background = "Pokemon.jpg",
                 npc = "pikachu",
                 destination = "firstLevel",
+                action = (function(player) player:addPikachu() return end),
             },
         },
     },
