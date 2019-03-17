@@ -140,6 +140,32 @@ local props = {
         defaultAnimation = "idle",
 
     },
+    ["princessSarah"] = {
+        spritesheet = {
+            filename = "assets/princessSarah.png",
+            frameWidth = 100,
+            frameHeight = 144,
+            width = 4,
+        },
+        animations = {
+            ["idle"] = {frames = {1, 2, 3, 4}, speed = 1 / 4, next = "idle",},
+        },
+        defaultAnimation = "idle",
+
+    },
+    ["boom"] = {
+        spritesheet = {
+            filename = "assets/boom-export.png",
+            frameWidth = 48*2,
+            frameHeight = 48*2,
+            width = 8,
+        },
+        animations = {
+            ["idle"] = {frames = {1, 2, 3, 4, 5, 6, 7, 8}, speed = 1 / 8, next = "idle",},
+        },
+        defaultAnimation = "idle",
+
+    },
 }
 
 return props

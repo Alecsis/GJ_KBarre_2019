@@ -98,10 +98,11 @@ local scenes = {
             },
         },
     },
+
     -- Scène narration level one -- 
         ["firstLevel"] = {
             type = "narrative",
-            sound = "beginningTheme.mp3",
+            sound = "theLeftouts.mp3",
             script = {
                 "If you could go back",
                 "would you choose the same things?",
@@ -251,7 +252,7 @@ local scenes = {
                     sound = "aventurierIndochine.mp3",
                     background = "tektonic.jpg",
                     npc = nil,
-                    destination = "Dancing",
+                    destination = "lastLevel",
                 },
             },
             transition = true,
@@ -280,16 +281,16 @@ local scenes = {
 
         ["lastLevel"] = {
             type = "narrative",
-            sound = "beginningTheme.mp3",
+            sound = "Ilona.mp3",
             script = {
-                "If you could go back",
-                "would you choose the same things?",
-                "Choose the same people to trust",
-                "and to love?",
-                "Would you get addicted the same way?",
+                "What sort of adult are you ?",
+                "Nobody can tell you but yourself.",
+                "Be whoever the f you want,",
+                "and make your kid version proud",
+                "of your day to day choices?",
             },
             transition = {speed = 2, image = "coeurPixel.png",},
-            destination = "afterFirstLevel"
+            destination = "lastLevel",
         },
 
 }

@@ -24,8 +24,8 @@ local function draw(self)
         0 -- y origin
     )
 
-    local top, right, bottom, left = self:getBounds()
-    love.graphics.rectangle('line', left, top, right - left, bottom - top)
+    --local top, right, bottom, left = self:getBounds()
+    --love.graphics.rectangle('line', left, top, right - left, bottom - top)
 
     if self.hasBall then self.ball:draw() end
 end

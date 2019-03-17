@@ -164,7 +164,7 @@ local function draw(self)
         self.cages.scale
     )
 
-    love.graphics.setColor(1, 0, 1)
+    --[[love.graphics.setColor(1, 0, 1)
     for i = 1, #self.cages.colliders do
         local coll = self.cages.colliders[i]
         local w = coll.right - coll.left
@@ -172,6 +172,7 @@ local function draw(self)
         love.graphics.rectangle('line', coll.left, coll.top, w, h)
     end
     love.graphics.setColor(1, 1, 1)
+    ]]
 
     if self.shadeTmr > 0 then
         love.graphics.setColor(0, 0, 0, self.shadeTmr)
@@ -205,14 +206,14 @@ local function playerLogic(self)
     local isDown = love.keyboard.isDown
     local vel = 300
     if isDown('left') then
-        if isDown('lshift') then
+        if isDown('lshift') or isDown('down') then
             self.player:accelerate(-2 * vel, 0)
         else
             self.player:accelerate(-vel, 0)
         end
         self.player.xflip = -1
     end
-    if isDown('right') then
+    if isDown('right') or isDown('down') then
         if isDown('lshift') then
             self.player:accelerate(2 * vel, 0)
         else
