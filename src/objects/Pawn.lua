@@ -4,8 +4,14 @@ local function update(self, dt)
 end
 
 local function draw(self)
+    local top, right, bottom, left = self:getBounds()
+    local w = right - left
+    local h = bottom - top
+    love.graphics.setColor(0,1,0)
+    love.graphics.rectangle("fill", left, top, w, h)
+    love.graphics.setColor(1,0,1)
+    love.graphics.rectangle("line", left, top, w, h)
     love.graphics.setColor(1,1,1)
-    love.graphics.circle("line", self.pos.x, self.pos.y, 3)
 end
 
 local function setPosition(self, x, y)
@@ -47,7 +53,8 @@ end
 
 local function getDimensions(self) return self.dimensions.w, self.dimensions.h end
 
-local function onCollision(pSide)
+local function onCollision(self, pSide)
+    print(pSide)
     if pSide == "top" then
         self.vel.y = - self.vel.y
     elseif pSide == "bottom" then
@@ -65,7 +72,7 @@ local function Pawn()
 
     self.pos = {x = 0, y = 0}
     self.vel = {x = 0, y = 0}
-    self.dimensions = {w = 0, h = 0}
+    self.dimensions = {w = 10, h =10}
     self.setPosition = setPosition
     self.getPosition = getPosition
     self.move = move
