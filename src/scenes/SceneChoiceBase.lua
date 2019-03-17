@@ -104,11 +104,13 @@ local function draw(self)
         self.platform.scale
     )
 
-    -- draw player
+    -- draw player and items
     if self.player.hasPikachu then self.pikachu:draw() end
-    self.ball:draw()
 
     self.player:draw()
+
+    if self.player.hasBall then self.ball:draw() end
+
 
     if self.shadeTmr > 0 then
         love.graphics.setColor(0, 0, 0, self.shadeTmr)
