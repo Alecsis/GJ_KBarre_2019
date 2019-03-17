@@ -61,6 +61,19 @@ local props = {
         defaultAnimation = "idle",
 
     },
+    ["Olive-et-Tom"] = {
+        spritesheet = {
+            filename = "assets/oliveEtTom.png",
+            frameWidth = 32 * scale,
+            frameHeight = 45 * scale,
+            width = 4,
+        },
+        animations = {
+            ["idle"] = {frames = {1, 2, 3, 4}, speed = 1 / 4, next = "idle",},
+        },
+        defaultAnimation = "idle",
+
+    },
 }
 
 return props

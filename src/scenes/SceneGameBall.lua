@@ -60,6 +60,11 @@ local function init(self, args)
     self.music:play()
     self.music:setLooping(true)
 
+    self.npc = require("src.objects.NPC")("Olive-et-Tom")
+    self.npc.pos.x = self.wall.right + 50
+    self.npc.pos.y = self.platform.y
+    self.npc.xflip = -1
+
     ----- player ----
     self.player:setPosition(self.width / 2 - 1, 0)
     self.ball:setPosition(0, self.height - 100)
@@ -125,6 +130,9 @@ local function draw(self)
         self.platform.scale
     )
 
+    -- draw npc
+    self.npc:draw()
+
     -- draw player
     self.ball:draw()
     self.player:draw()
@@ -151,6 +159,7 @@ end
 
 local function updatePawns(self, dt)
     self.player:update(dt)
+    self.npc:update(dt)
 
     ---- Player movement ----
 
