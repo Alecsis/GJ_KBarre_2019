@@ -156,9 +156,35 @@ local props = {
     ["boom"] = {
         spritesheet = {
             filename = "assets/boom-export.png",
-            frameWidth = 48*2,
-            frameHeight = 48*2,
+            frameWidth = 24*scale,
+            frameHeight = 24*scale,
             width = 8,
+        },
+        animations = {
+            ["idle"] = {frames = {1, 2, 3, 4, 5, 6, 7, 8}, speed = 1 / 8, next = "idle",},
+        },
+        defaultAnimation = "idle",
+
+    },
+    ["cinema"] = {
+        spritesheet = {
+            filename = "assets/cinemaFood.png",
+            frameWidth = 17*scale,
+            frameHeight = 14*scale,
+            width = 1,
+        },
+        animations = {
+            ["idle"] = {frames = {1}, speed = 1, next = "idle",},
+        },
+        defaultAnimation = "idle",
+
+    },
+    ["seigneurDesAnneaux"] = {
+        spritesheet = {
+            filename = "assets/seigneurDesAnneauxAnimated.png",
+            frameWidth = 19*scale,
+            frameHeight = 27*scale,
+            width = 4,
         },
         animations = {
             ["idle"] = {frames = {1, 2, 3, 4, 5, 6, 7, 8}, speed = 1 / 8, next = "idle",},
