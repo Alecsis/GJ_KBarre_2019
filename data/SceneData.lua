@@ -63,7 +63,7 @@ local scenes = {
                 text = "Pokemon",
                 sound = "pokemonGenerique.mp3",
                 background = "Pokemon.jpg",
-                destination = "start",
+                destination = "firstLevel",
             },
         },
     },
@@ -74,17 +74,110 @@ local scenes = {
                 text = "Skyblog",
                 sound = "skyblog.mp3",
                 background = "skyblogs2.png",
-                destination = "start",
+                destination = "firstLevel",
             },
             right = {
                 npc = "wizzMSNAnimated",
                 text = "MSN",
                 sound = "MSN.mp3",
                 background = "msn.png",
-                destination = "start",
+                destination = "firstLevel",
             },
         },
     },
+    -- Scène narration level one -- 
+        ["firstLevel"] = {
+            type = "narrative",
+            sound = "beginningTheme.mp3",
+            script = {
+                "If you could go back",
+                "would you choose the same things ?",
+                "Choose the same people to trust",
+                "and to love ?",
+                "Would you get addicted the same way ?",
+            },
+            transition = {speed = 2, image = "coeurPixel.png",},
+            destination = "afterFirstLevel"
+        },
+    
+        -- première scène niveau 1 -- 
+    
+        ["afterFirstLevel"] = {
+            type = "choice",
+            choices = {
+                left = {
+                    text = "Les écrans",
+                    sound = "cinema.mp3",
+                    background = "tnt.jpg",
+                    destination = "screens",
+                },  
+                right = {
+                    npc = "oliveEtTom",
+                    text = "Les booms de folie",
+                    sound = "Olive-et-Tom-preview.mp3",
+                    background = "Olive-et-Tom-background.jpg",
+                    destination = "Dancing",
+                },
+            },
+            transition = true,
+        },
+
+        ["screens"] = {
+            type = "choice",
+            choices = {
+                left = {
+                    text = "Les DVD",
+                    sound = "Princesse-Sarah-preview.mp3",
+                    background = "Princesse-Sarah-background.jpg",
+                    destination = "lesDVD",
+                },  
+                right = {
+                    npc = "oliveEtTom",
+                    text = "La trilogie du samedi",
+                    sound = "Olive-et-Tom-preview.mp3",
+                    background = "Olive-et-Tom-background.jpg",
+                    destination = "trilogieDuSamedi",
+                },
+            },
+            transition = true,
+        },
+
+        ["lesDVD"] = {
+            type = "choice",
+            choices = {
+                left = {
+                    npc = "",
+                    text = "Le Seigneur des Anneaux",
+                    sound = "seigneurDesAnneaux.mp3",
+                    background = "seigneurDesAnneaux.jpg",
+                    destination = "",
+                },
+                right = {
+                    text = "Harry Potter",
+                    sound = "HP.mp3",
+                    background = "HP.jpg",
+                    destination = "",
+                },
+            },
+        },
+        ["trilogieDuSamedi"] = {
+            type = "choice",
+            choices = {
+                left = {
+                    npc = "",
+                    text = "Prison Break",
+                    sound = "aventurierIndochine.mp3",
+                    background = "Diddle.jpg",
+                    destination = "",
+                },
+                right = {
+                    text = "Charmed",
+                    sound = "tribuDeDana.mp3",
+                    background = "Pokemon.jpg",
+                    destination = "piperOrPhoebe",
+                },
+            },
+        },
 }
 
 return scenes
