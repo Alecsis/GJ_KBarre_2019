@@ -98,8 +98,8 @@ local function addPikachu(self) self.hasPikachu = true end
 local function addBall(self) self.hasBall = true end
 
 local function makeGirly(self)
-    local playerProps = require("data.PlayerProperties")
-    self:setSpritesheet(playerProps, playerProps.spritesheetGirly)
+    local props = require("data.EntitiesProperties")
+    self:setSpritesheet(props["girly"])
     self.isGirly = true
 end
 
