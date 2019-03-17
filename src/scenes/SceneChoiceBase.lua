@@ -35,14 +35,18 @@ local function init(self, args)
     self.platform.right = self.platform.x + self.platform.width
 
     ----- npc -----
-    self.npcLeft = require("src.objects.NPC")("Diddle")
-    self.npcLeft.pos.x = self.platform.left + 50
-    self.npcLeft.pos.y = self.platform.y
-    self.npcLeft.xflip = -1
+    if self.choices["left"]["npc"] then
+        self.npcLeft = require("src.objects.NPC")(self.choices["left"]["npc"])
+        self.npcLeft.pos.x = self.platform.left + 50
+        self.npcLeft.pos.y = self.platform.y
+        self.npcLeft.xflip = -1
+    end
 
-    self.npcRight = require("src.objects.NPC")("Olive-et-Tom")
-    self.npcRight.pos.x = self.platform.right - 50
-    self.npcRight.pos.y = self.platform.y
+    if self.choices["right"]["npc"] then
+        self.npcRight = require("src.objects.NPC")(self.choices["right"]["npc"])
+        self.npcRight.pos.x = self.platform.right - 50
+        self.npcRight.pos.y = self.platform.y
+    end
 
     ----- player ----
     self.player:setPosition(self.width / 2 - 1, 0)

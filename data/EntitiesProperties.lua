@@ -77,8 +77,8 @@ local props = {
     ["Diddle"] = {
         spritesheet = {
             filename = "assets/didleAnimated.png",
-            frameWidth = 32,
-            frameHeight = 45,
+            frameWidth = 32 * scale,
+            frameHeight = 45 * scale,
             width = 4,
         },
         animations = {
@@ -102,13 +102,13 @@ local props = {
     },
     ["wizz"] = {
         spritesheet = {
-            filename = "assets/gameBoyAnimated.png",
+            filename = "assets/wizzMSNAnimated.png",
             frameWidth = 31 * scale,
             frameHeight = 22 * scale,
-            width = 4,
+            width = 6,
         },
         animations = {
-            ["idle"] = {frames = {1, 2, 3, 4}, speed = 1 / 4, next = "idle",},
+            ["idle"] = {frames = {1, 2, 3, 4, 5, 6}, speed = 1 / 12, next = "idle",},
         },
         defaultAnimation = "idle",
 
