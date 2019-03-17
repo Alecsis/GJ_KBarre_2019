@@ -7,6 +7,10 @@ local function SceneTransitionImage(pSceneManager)
         self.image = love.graphics.newImage("assets/" .. args.image)
         self.imagew = self.image:getWidth()
         self.imageh = self.image:getHeight()
+        self.scale = math.min(self.screenw / self.imagew, self.screenh / self.imageh)
+
+        self.imagex = (self.screenw - self.imagew * self.scale) / 2
+        self.imagey = (self.screenh - self.imageh * self.scale) / 2
 
         self.speed = args.speed
 
@@ -44,8 +48,14 @@ local function SceneTransitionImage(pSceneManager)
     end
 
     function self:draw()
-        love.graphics.setColor(1,1,1,self.alpha)
-        love.graphics.draw(self.image, self.screenw / 2, self.screenh / 2, 0, 1, 1, self.imagew / 2, self.imageh / 2)
+        love.graphics.setColor(1, 1, 1, self.alpha)
+        love.graphics.draw(
+            self.image,
+            self.imagex,
+            self.imagey,
+            0,
+            self.scale
+        )
     end
 
     function self:keyPressed(k)
