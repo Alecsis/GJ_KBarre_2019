@@ -39,6 +39,7 @@ function love.load()
     PathsVerification(SceneData, "Beginning")
 
     -- load start scene by default
+    
     sceneManager:load("Beginning")
     --sceneManager:load("Ball")
 end

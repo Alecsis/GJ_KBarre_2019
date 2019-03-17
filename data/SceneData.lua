@@ -126,8 +126,8 @@ local scenes = {
             },  
             right = {
                 text = "Les booms de folie",
-                sound = "Olive-et-Tom-preview.mp3",
-                background = "Olive-et-Tom-background.jpg",
+                sound = "demonsDeMinuit.mp3",
+                background = "tektonic.jpg",
                 npc = nil,
                 destination = "Dancing",
             },
