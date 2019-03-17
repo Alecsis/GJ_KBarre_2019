@@ -35,36 +35,39 @@ local function update(self, dt)
         -- print(anim.frames[self.frame])
     end
 
+    local drag = 100 * dt
     if self.vel.x > 0 then
-        self:accelerate(-2000*dt, 0)
+        self:accelerate(-drag, 0)
 
         if self.vel.x < 0 then
             self.vel.x = 0
         end
     elseif self.vel.x < 0 then
-        self:accelerate(2000*dt, 0)
+        self:accelerate(drag, 0)
 
         if self.vel.x > 0 then
             self.vel.x = 0
         end
     end
 
+    local xvel = 600
+    local yvel = 400
     if math.abs(self.vel.x) < 1000 then
         if self:isInPlayer(self.pos.x - self.dimensions.w / 2, self.pos.y - self.dimensions.h) then
             -- collide top left
-            self:setVelocity(1200, -800)
+            self:setVelocity(xvel, -yvel)
             self.onGround = false
         elseif self:isInPlayer(self.pos.x - self.dimensions.w / 2, self.pos.y) then
             -- collide bottom left
-            self:setVelocity(1200, -800)
+            self:setVelocity(xvel, -yvel)
             self.onGround = false
         elseif self:isInPlayer(self.pos.x + self.dimensions.w / 2, self.pos.y + self.dimensions.h) and not (self.againstWall and not self.onGround) then
             -- collide top right
-            self:setVelocity(-1200, -800)
+            self:setVelocity(-xvel, -yvel)
             self.onGround = false
         elseif self:isInPlayer(self.pos.x + self.dimensions.w / 2, self.pos.y) and not (self.againstWall and not self.onGround) then
             -- collide bottom right
-            self:setVelocity(-1200, -800)
+            self:setVelocity(-xvel, -yvel)
             self.onGround = false
         end
     end
@@ -126,6 +129,22 @@ local function setSpritesheet(self, playerProps)
     end
 end
 
+local function onCollision(self, pSide)
+    if pSide == "top" then
+        self.vel.x = self.vel.x * 0.7
+        self.vel.y = - self.vel.y * 0.8
+    elseif pSide == "bottom" then
+        self.vel.y = - self.vel.y * 0.7
+        self.vel.x = self.vel.x * 0.8
+    elseif pSide == "left" then
+        self.vel.x = - self.vel.x * 0.7
+        self.vel.y = self.vel.y * 0.8
+    elseif pSide == "right" then
+        self.vel.x = - self.vel.x * 0.7
+        self.vel.y = self.vel.y * 0.8
+    end
+end
+
 local function Ball(player)
     local Pawn = require("src.objects.Pawn")
     local self = Pawn()
@@ -141,6 +160,7 @@ local function Ball(player)
     self.draw = draw
     self.setSpritesheet = setSpritesheet
     self.isInPlayer = isInPlayer
+    self.onCollision = onCollision
 
     -- spritesheet & animations
     local props = require("data.EntitiesProperties")
