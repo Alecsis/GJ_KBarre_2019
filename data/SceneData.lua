@@ -187,7 +187,7 @@ local scenes = {
                 right = {
                     text = "Charmed",
                     sound = "charmedSound.mp3",
-                    background = "Pokemon.jpg",
+                    background = "charmed.jpg",
                     npc = nil,
                     destination = "agentsSecret",
                 },
