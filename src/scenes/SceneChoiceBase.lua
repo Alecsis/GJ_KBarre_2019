@@ -34,6 +34,20 @@ local function init(self, args)
     self.platform.left = self.platform.x
     self.platform.right = self.platform.x + self.platform.width
 
+    ----- npc -----
+    if self.choices["left"]["npc"] then
+        self.npcLeft = require("src.objects.NPC")(self.choices["left"]["npc"])
+        self.npcLeft.pos.x = self.platform.left + 50
+        self.npcLeft.pos.y = self.platform.y
+        self.npcLeft.xflip = -1
+    end
+
+    if self.choices["right"]["npc"] then
+        self.npcRight = require("src.objects.NPC")(self.choices["right"]["npc"])
+        self.npcRight.pos.x = self.platform.right - 50
+        self.npcRight.pos.y = self.platform.y
+    end
+
     ----- player ----
     self.player:setPosition(self.width / 2 - 1, 0)
     self.pikachu:setPosition(self.player.pos.x - 50, self.player.pos.y)
@@ -52,9 +66,8 @@ local function init(self, args)
             "stream"
         )
         self.currentMusic:play()
+        self.currentMusic:setLooping(true)
     end
-
-    self.player:addBall()
 end
 
 local function update(self, dt)
@@ -110,11 +123,16 @@ local function draw(self)
         self.platform.scale
     )
 
-    -- draw player
+    -- draw player and items
+    if self.npcLeft then self.npcLeft:draw() end
+    if self.npcRight then self.npcRight:draw() end
+
     if self.player.hasPikachu then self.pikachu:draw() end
-    self.ball:draw()
 
     self.player:draw()
+
+    if self.player.hasBall then self.ball:draw() end
+
 
     if self.shadeTmr > 0 then
         love.graphics.setColor(0, 0, 0, self.shadeTmr)
@@ -136,6 +154,7 @@ local function choiceChanged(self, newSide)
     end
     self.currentMusic = love.audio.newSource('assets/' .. self.choices[newSide].sound, "stream")
     self.currentMusic:play()
+    self.currentMusic:setLooping(true)
     self.playerSide = newSide
 end
 
@@ -155,6 +174,9 @@ local function validatedChoice(self)
 end
 
 local function updatePawns(self, dt)
+    if self.npcLeft then self.npcLeft:update(dt) end
+    if self.npcRight then self.npcRight:update(dt) end
+
     self.player:update(dt)
 
     ---- Player movement ----

@@ -61,6 +61,58 @@ local props = {
         defaultAnimation = "idle",
 
     },
+    ["Olive-et-Tom"] = {
+        spritesheet = {
+            filename = "assets/oliveEtTomAnimated.png",
+            frameWidth = 32 * scale,
+            frameHeight = 45 * scale,
+            width = 4,
+        },
+        animations = {
+            ["idle"] = {frames = {1, 2, 3, 4}, speed = 1 / 4, next = "idle",},
+        },
+        defaultAnimation = "idle",
+
+    },
+    ["Diddle"] = {
+        spritesheet = {
+            filename = "assets/didleAnimated.png",
+            frameWidth = 32 * scale,
+            frameHeight = 45 * scale,
+            width = 4,
+        },
+        animations = {
+            ["idle"] = {frames = {1, 2, 3, 4}, speed = 1 / 4, next = "idle",},
+        },
+        defaultAnimation = "idle",
+
+    },
+    ["Game-Boy"] = {
+        spritesheet = {
+            filename = "assets/gameBoyAnimated.png",
+            frameWidth = 32 * scale,
+            frameHeight = 32 * scale,
+            width = 4,
+        },
+        animations = {
+            ["idle"] = {frames = {1, 2, 3, 4}, speed = 1 / 4, next = "idle",},
+        },
+        defaultAnimation = "idle",
+
+    },
+    ["wizz"] = {
+        spritesheet = {
+            filename = "assets/wizzMSNAnimated.png",
+            frameWidth = 31 * scale,
+            frameHeight = 22 * scale,
+            width = 6,
+        },
+        animations = {
+            ["idle"] = {frames = {1, 2, 3, 4, 5, 6}, speed = 1 / 12, next = "idle",},
+        },
+        defaultAnimation = "idle",
+
+    },
 }
 
 return props

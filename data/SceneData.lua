@@ -19,32 +19,40 @@ local scenes = {
                 text = "Princesse Sarah",
                 sound = "Princesse-Sarah-preview.mp3",
                 background = "Princesse-Sarah-background.jpg",
+                npc = nil,
                 destination = "Princesse Sarah",
             },
             right = {
-                npc = "oliveEtTom",
                 text = "Olive et Tom",
                 sound = "Olive-et-Tom-preview.mp3",
                 background = "Olive-et-Tom-background.jpg",
-                destination = "Olive et Tom",
+                npc = "Olive-et-Tom",
+                destination = "Olive et Tom minijeu",
             },
         },
         transition = true,
+    },
+    ["Olive et Tom minijeu"] = {
+        type = "game",
+        scene = "SceneGameBall",
+        background = "Olive-et-Tom-background.jpg",
+        destination = "firstLevel"
     },
     ["Princesse Sarah"] = {
         type = "choice",
         choices = {
             left = {
-                npc = "gameBoyAnimated",
                 text = "Game Boy",
                 sound = "Pokemon-Kbarre.mp3",
                 background = "Gameboy.jpg",
+                npc = "Game-Boy",
                 destination = "Princesse Sarah",
             },
             right = {
                 text = "Tamagochi",
                 sound = "Tamagotchi.mp3",
                 background = "tamagochi.jpg",
+                npc = nil,
                 destination = "Tamagochi",
             },
         },
@@ -53,17 +61,18 @@ local scenes = {
         type = "choice",
         choices = {
             left = {
-                npc = "didleAnimated",
                 text = "Didle",
                 sound = "Diddle-musique.mp3",
                 background = "Diddle.jpg",
-                destination = "start",
+                npc = "Diddle",
+                destination = "firstLevel",
             },
             right = {
                 text = "Pokemon",
                 sound = "pokemonGenerique.mp3",
                 background = "Pokemon.jpg",
-                destination = "start",
+                npc = "pikachu",
+                destination = "firstLevel",
             },
         },
     },
@@ -74,17 +83,115 @@ local scenes = {
                 text = "Skyblog",
                 sound = "skyblog.mp3",
                 background = "skyblogs2.png",
-                destination = "start",
+                npc = nil,
+                destination = "firstLevel",
             },
             right = {
-                npc = "wizzMSNAnimated",
                 text = "MSN",
                 sound = "MSN.mp3",
                 background = "msn.png",
-                destination = "start",
+                npc = "wizz",
+                destination = "firstLevel",
             },
         },
     },
+    -- Scène narration level one -- 
+        ["firstLevel"] = {
+            type = "narrative",
+            sound = "beginningTheme.mp3",
+            script = {
+                "If you could go back",
+                "would you choose the same things?",
+                "Choose the same people to trust",
+                "and to love?",
+                "Would you get addicted the same way?",
+            },
+            transition = {speed = 2, image = "coeurPixel.png",},
+            destination = "afterFirstLevel"
+        },
+    
+        -- première scène niveau 1 -- 
+    
+        ["afterFirstLevel"] = {
+            type = "choice",
+            choices = {
+                left = {
+                    text = "Les écrans",
+                    sound = "cinema.mp3",
+                    background = "tnt.jpg",
+                    npc = nil,
+                    destination = "screens",
+                },  
+                right = {
+                    text = "Les booms de folie",
+                    sound = "Olive-et-Tom-preview.mp3",
+                    background = "Olive-et-Tom-background.jpg",
+                    npc = nil,
+                    destination = "Dancing",
+                },
+            },
+            transition = true,
+        },
+
+        ["screens"] = {
+            type = "choice",
+            choices = {
+                left = {
+                    text = "Les DVD",
+                    sound = "Princesse-Sarah-preview.mp3",
+                    background = "Princesse-Sarah-background.jpg",
+                    npc = nil,
+                    destination = "lesDVD",
+                },  
+                right = {
+                    text = "La trilogie du samedi",
+                    sound = "trilogieDuSamedi.mp3",
+                    background = "trilogieDuSamedi.jpg",
+                    npc = nil,
+                    destination = "trilogieDuSamedi",
+                },
+            },
+            transition = true,
+        },
+
+        ["lesDVD"] = {
+            type = "choice",
+            choices = {
+                left = {
+                    text = "Le Seigneur des Anneaux",
+                    sound = "seigneurDesAnneaux.mp3",
+                    background = "seigneurDesAnneaux.jpg",
+                    npc = nil,
+                    destination = "",
+                },
+                right = {
+                    text = "Harry Potter",
+                    sound = "HP.mp3",
+                    background = "HP.jpg",
+                    npc = nil,
+                    destination = "",
+                },
+            },
+        },
+        ["trilogieDuSamedi"] = {
+            type = "choice",
+            choices = {
+                left = {
+                    text = "Prison Break",
+                    sound = "PrisonBreak.mp3",
+                    background = "Diddle.jpg",
+                    npc = nil,
+                    destination = "",
+                },
+                right = {
+                    text = "Charmed",
+                    sound = "tribuDeDana.mp3",
+                    background = "Pokemon.jpg",
+                    npc = nil,
+                    destination = "piperOrPhoebe",
+                },
+            },
+        },
 }
 
 return scenes

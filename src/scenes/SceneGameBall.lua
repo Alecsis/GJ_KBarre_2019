@@ -65,7 +65,22 @@ local function init(self, args)
         }
     }
 
+    self.video = love.graphics.newVideo("assets/Olive-et-Tom.ogv", { audio=false })
+    self.video:play()
+    self.videoX = (self.width - self.video:getWidth()) / 2
+    self.videoY = 0
+
+    self.music = love.audio.newSource("assets/Olive-et-Tom.mp3", "stream")
+    self.music:play()
+    self.music:setLooping(true)
+
+    self.npc = require("src.objects.NPC")("Olive-et-Tom")
+    self.npc.pos.x = self.wall.right + 50
+    self.npc.pos.y = self.platform.y
+    self.npc.xflip = -1
+
     ----- player ----
+    self.player:addBall()
     self.player:setPosition(self.width / 2 - 1, 0)
     self.ball:setPosition(0, self.height - 100)
 
@@ -78,6 +93,11 @@ local function update(self, dt)
     if self.shadeTmr <= 0 then self.shadeTmr = 0 end
 
     self:updatePawns(dt)
+
+    if not self.video:isPlaying() then
+        self.video:rewind()
+        self.video:play()
+    end
 
     if self.player.pos.y > self.height + 2 * self.player.dimensions.h then self:validatedChoice() end
 end
@@ -96,9 +116,11 @@ local function draw(self)
         self.mariobg.scale
     )
 
-    -- reset drawing options
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.setFont(love.graphics.newFont())
+    love.graphics.draw(
+        self.video,
+        self.videoX,
+        self.videoY
+    )
 
     -- draw wall
     love.graphics.draw(
@@ -117,6 +139,9 @@ local function draw(self)
         0,
         self.platform.scale
     )
+
+    -- draw npc
+    self.npc:draw()
 
     -- draw player
     self.ball:draw()
@@ -147,8 +172,6 @@ local function draw(self)
 end
 
 local function keyPressed(self, k) if k == "escape" then self.manager:load("menu") end end
-
-local function validatedChoice(self) end
 
 local function playerLogic(self)
     ---- Player movement ----
@@ -188,6 +211,7 @@ local function updatePawns(self, dt)
     -- specific logics
     self:playerLogic(dt)
     self:ballLogic(dt)
+    self.npc:update(dt)
 
     -- reset some flags
     self.player.onGround = false
@@ -307,9 +331,25 @@ local function isInPlatform(self, pPlatform, x, y)
     return not (x < pPlatform.left or x > pPlatform.right or y < pPlatform.top or y > pPlatform.bottom)
 end
 
-local function SceneChoiceBase(pSceneManager, player, pikachu, ball)
+local function validatedChoice(self)
+    -- print("Player chose " .. self.playerSide)
+    -- print("Going to: " .. destination)
+    -- load new scene
+    self.manager:load(
+        "transition",
+        {
+            music = self.music,
+            image = self.data.background,
+            speed = 1,
+            destination = self.data.destination
+        }
+    )
+end
+
+local function SceneChoiceBase(pSceneManager, pData, player, pikachu, ball)
     local SceneBase = require("lib.SceneBase")
     local self = SceneBase(pSceneManager)
+    self.data = pData
     self.player = player
     self.ball = ball
 
