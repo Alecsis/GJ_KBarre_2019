@@ -5,12 +5,6 @@ local function draw(self)
     local h = self.dimensions.h
     love.graphics.setColor(1, 1, 1)
 
-    if self.hasSnitch then self.goldenSnitch:draw() end
-    if self.hasPikachu then self.pikachu:draw() end
-
-    -- love.graphics.rectangle("fill", x - w / 2, y - h, w, h)
-    -- love.graphics.setColor(1, 0, 1)
-    -- love.graphics.rectangle("line", x - w / 2, y - h, w, h)
     local quad = self.lstQuads[self.currentAnimation][self.frame]
     love.graphics.draw(
         self.image,
@@ -23,11 +17,6 @@ local function draw(self)
         w / 2, -- x origin
         0 -- y origin
     )
-
-    local top, right, bottom, left = self:getBounds()
-    love.graphics.rectangle('line', left, top, right - left, bottom - top)
-
-    if self.hasBall then self.ball:draw() end
 end
 
 local function update(self, dt)
@@ -43,27 +32,45 @@ local function update(self, dt)
         else
             self.animOver = false
         end
-        -- print(anim.frames[self.frame])
     end
 
-    if self.currentAnimation == "idle" then
-        if self.vel.x ~= 0 then
-            self.currentAnimation = "walk"
-            self.frame = 1
-            self.animTmr = 0
-        end
-    elseif self.currentAnimation == "walk" then
-        if self.vel.x == 0 then
-            self.currentAnimation = "idle"
-            self.frame = 1
-            self.animTmr = 0
-        end
+    if self.pos.x < self.player.pos.x then
+        self.xflip = 1
+    else
+        self.xflip = -1
+    end
+
+    -- Follow player's x position
+    local targetX = 0
+    if self.player.xflip == 1 then
+        targetX = self.player.pos.x - self.player.dimensions.w / 2 - self.dimensions.w / 2 - 20
+    else
+        targetX = self.player.pos.x + self.player.dimensions.w / 2 + self.dimensions.w / 2 + 20
+    end
+
+    local vel = (targetX - self.pos.x)
+    local sgn = (vel < 0 and -1) or 1
+    self.vel.x = 100 * sgn * math.log(1 + math.abs(vel)) * math.sqrt(2)
+
+    if math.abs(self.vel.x) < 1 then
+        self.vel.x = 0
+    end
+
+    -- Follow player's x position
+    local targetY = self.player.pos.y - self.player.dimensions.h + 20
+
+    local vel = (targetY - self.pos.y)
+    local sgn = (vel < 0 and -1) or 1
+    self.vel.y = 75 * sgn * math.log(1 + math.abs(vel)) * math.sqrt(2)
+
+    if math.abs(self.vel.y) < 1 then
+        self.vel.y = 0
     end
 end
 
 local function setSpritesheet(self, playerProps)
-    -- physical bounds
     local spritesheet = playerProps.spritesheet
+     -- physical bounds
     self.dimensions = {
         w = spritesheet.frameWidth,
         h = spritesheet.frameHeight,
@@ -86,7 +93,7 @@ local function setSpritesheet(self, playerProps)
             local col = frame - row * spritesheet.width
             local x = (col - 1) * spritesheet.frameWidth
             local y = row * spritesheet.frameHeight
-            -- print(x, y)
+            --print(x, y)
             quads[i] = love.graphics.newQuad(
                 x,
                 y,
@@ -99,62 +106,30 @@ local function setSpritesheet(self, playerProps)
     end
 end
 
-local function addPikachu(self) self.hasPikachu = true end
+local function onCollision(self, pSide) end
 
-local function addBall(self) self.hasBall = true end
-
-local function addGoldenSnitch(self) self.hasSnitch = true end
-
-local function makeGirly(self)
-    local props = require("data.EntitiesProperties")
-    self:setSpritesheet(props["girly"])
-    self.isGirly = true
-end
-
-local function onCollision(self, pSide)
-    if pSide == "top" then
-        self.vel.y = 0
-    elseif pSide == "bottom" then
-        self.vel.y = 0
-    elseif pSide == "left" then
-        self.vel.x = 0
-    elseif pSide == "right" then
-        self.vel.x = 0
-    end
-end
-
-local function Player()
+local function GoldenSnitch(player)
     local Pawn = require("src.objects.Pawn")
     local self = Pawn()
 
     -- attributes
-    self.type = "player" -- do we collide bottom
+    self.type = "floating"  -- do we collide bottom
     self.onGround = false
     self.againstWall = false
-    self.hasPikachu = false
-    self.hasBall = false
-    self.hasSnitch = false
-    self.isGirly = false
-
-    self.pikachu = require("src.objects.Pikachu")(self)
-    self.ball = require("src.objects.Ball")(self)
-    self.goldenSnitch = require("src.objects.goldenSnitch")(self)
-
+    self.player = player
+    
     -- methods
+    self.onCollision = onCollision
     self.update = update
     self.draw = draw
     self.setSpritesheet = setSpritesheet
-    self.onCollision = onCollision
-    self.addPikachu = addPikachu
-    self.addBall = addBall
-    self.addGoldenSnitch = addGoldenSnitch
-    self.makeGirly = makeGirly
+
 
     -- spritesheet & animations
     local props = require("data.EntitiesProperties")
-    self:setSpritesheet(props["default"])
+    self:setSpritesheet(props["pikachu"])
 
     return self
 end
 
-return Player
+return GoldenSnitch

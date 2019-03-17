@@ -362,7 +362,7 @@ local function isInPlatform(self, pPlatform, x, y)
     return not (x < pPlatform.left or x > pPlatform.right or y < pPlatform.top or y > pPlatform.bottom)
 end
 
-local function SceneChoiceBase(pSceneManager, pData, player, pikachu, ball)
+local function SceneChoiceBase(pSceneManager, pData, player)
     local SceneBase = require("lib.SceneBase")
     local self = SceneBase(pSceneManager)
     self.data = pData

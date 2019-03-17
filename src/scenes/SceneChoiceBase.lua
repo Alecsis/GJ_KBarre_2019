@@ -50,12 +50,14 @@ local function init(self, args)
 
     ----- player ----
     self.player:setPosition(self.width / 2 - 1, 0)
-    self.pikachu:setPosition(self.player.pos.x - 50, self.player.pos.y)
-    self.ball:setPosition(0, self.height - 100)
+    self.player.pikachu:setPosition(self.player.pos.x - 50, self.player.pos.y)
+    self.player.ball:setPosition(0, self.height - 100)
+    self.player.goldenSnitch:setPosition(self.player.pos.x, self.height - 100)
 
     self.player:setVelocity(0, 0)
-    self.pikachu:setVelocity(0, 0)
-    self.ball:setVelocity(1000, -1000)
+    self.player.pikachu:setVelocity(0, 0)
+    self.player.ball:setVelocity(1000, -1000)
+    self.player.goldenSnitch:setVelocity(0, 0)
 
     self.playerSide = "left"
     self:choiceChanged(self.playerSide)
@@ -123,15 +125,10 @@ local function draw(self)
         self.platform.scale
     )
 
-    -- draw player and items
+    -- draw npcs and player
     if self.npcLeft then self.npcLeft:draw() end
     if self.npcRight then self.npcRight:draw() end
-
-    if self.player.hasPikachu then self.pikachu:draw() end
-
     self.player:draw()
-
-    if self.player.hasBall then self.ball:draw() end
 
     if self.shadeTmr > 0 then
         love.graphics.setColor(0, 0, 0, self.shadeTmr)
@@ -205,13 +202,13 @@ local function playerLogic(self)
 end
 
 local function ballLogic(self)
-    if self.ball.pos.y > self.height + 100 then
-        if self.ball.pos.x > self.width / 2 then
-            self.ball:setPosition(0, self.height - 100)
-            self.ball:setVelocity(500, -1000)
+    if self.player.ball.pos.y > self.height + 100 then
+        if self.player.ball.pos.x > self.width / 2 then
+            self.player.ball:setPosition(0, self.height - 100)
+            self.player.ball:setVelocity(500, -1000)
         else
-            self.ball:setPosition(self.width, self.height - 100)
-            self.ball:setVelocity(-500, -1000)
+            self.player.ball:setPosition(self.width, self.height - 100)
+            self.player.ball:setVelocity(-500, -1000)
         end
     end
 end
@@ -225,8 +222,8 @@ local function updatePawns(self, dt)
     self.player.onGround = false
     self.player.againstWall = false
     if self.player.hasPikachu then
-        self.pikachu.onGround = false
-        self.pikachu.againstWall = false
+        self.player.pikachu.onGround = false
+        self.player.pikachu.againstWall = false
     end
 
     -- perform collision multiple times
@@ -236,13 +233,10 @@ local function updatePawns(self, dt)
         -- accelerate
         local gravity = 2040 * dtNew
         self.player:accelerate(0, gravity)
-        self.ball:accelerate(0, gravity)
 
         -- update position
         local vx, vy = self.player:getVelocity()
         self.player:move(vx * dtNew, vy * dtNew)
-        local vx, vy = self.ball:getVelocity()
-        self.ball:move(vx * dtNew, vy * dtNew)
 
         -- player
         self:handleCollisionsNoResolution(self.player, self.platform, dtNew)
@@ -254,17 +248,28 @@ local function updatePawns(self, dt)
 
         -- pikachu 
         if self.player.hasPikachu then
-            self.pikachu:accelerate(0, gravity)
-            local vx, vy = self.pikachu:getVelocity()
-            self.pikachu:move(vx * dtNew, vy * dtNew)
-            self:handleCollisionsNoResolution(self.pikachu, self.platform, dtNew)
-            self.pikachu:update(dtNew)
+            self.player.pikachu:accelerate(0, gravity)
+            local vx, vy = self.player.pikachu:getVelocity()
+            self.player.pikachu:move(vx * dtNew, vy * dtNew)
+            self:handleCollisionsNoResolution(self.player.pikachu, self.platform, dtNew)
+            self.player.pikachu:update(dtNew)
         end
 
         -- ball
         if self.player.hasBall then
-            self:handleCollisionsNoResolution(self.ball, self.platform, dtNew)
-            self.ball:update(dtNew)
+            self.player.ball:accelerate(0, gravity)
+            local vx, vy = self.player.ball:getVelocity()
+            self.player.ball:move(vx * dtNew, vy * dtNew)
+            self:handleCollisionsNoResolution(self.player.ball, self.platform, dtNew)
+            self.player.ball:update(dtNew)
+        end
+
+        -- snitch
+        if self.player.hasSnitch then
+            self.player.goldenSnitch:accelerate(0, gravity)
+            local vx, vy = self.player.goldenSnitch:getVelocity()
+            self.player.goldenSnitch:move(vx * dtNew, vy * dtNew)
+            self.player.goldenSnitch:update(dtNew)
         end
     end
 end
@@ -351,13 +356,11 @@ local function isInPlatform(self, pPlatform, x, y)
     return not (x < pPlatform.left or x > pPlatform.right or y < pPlatform.top or y > pPlatform.bottom)
 end
 
-local function SceneChoiceBase(pSceneManager, pData, player, pikachu, ball)
+local function SceneChoiceBase(pSceneManager, pData, player)
     local SceneBase = require("lib.SceneBase")
     local self = SceneBase(pSceneManager)
     self.data = pData
     self.player = player
-    self.pikachu = pikachu
-    self.ball = ball
 
     ----- interface functions ----
     self.isInPlatform = isInPlatform
