@@ -21,23 +21,28 @@ local scenes = {
                 background = "Princesse-Sarah-background.jpg",
                 npc = nil,
                 destination = "Princesse Sarah",
+                action = (function(player) player:makeGirly() end),
             },
             right = {
-                npc = "oliveEtTom",
                 text = "Olive et Tom",
                 sound = "Olive-et-Tom-preview.mp3",
                 background = "Olive-et-Tom-background.jpg",
                 npc = "Olive-et-Tom",
-                destination = "Olive et Tom",
+                destination = "Olive et Tom minijeu",
             },
         },
         transition = true,
+    },
+    ["Olive et Tom minijeu"] = {
+        type = "game",
+        scene = "SceneGameBall",
+        background = "Olive-et-Tom-background.jpg",
+        destination = "Olive et Tom"
     },
     ["Princesse Sarah"] = {
         type = "choice",
         choices = {
             left = {
-                npc = "gameBoyAnimated",
                 text = "Game Boy",
                 sound = "Pokemon-Kbarre.mp3",
                 background = "Gameboy.jpg",
@@ -57,12 +62,12 @@ local scenes = {
         type = "choice",
         choices = {
             left = {
-                npc = "didleAnimated",
                 text = "Didle",
                 sound = "Diddle-musique.mp3",
                 background = "Diddle.jpg",
                 npc = "Diddle",
-                destination = "start",
+                destination = "firstLevel",
+                action = (function(player) player:makeGirly() end)
             },
             right = {
                 text = "Pokemon",
@@ -70,6 +75,7 @@ local scenes = {
                 background = "Pokemon.jpg",
                 npc = "pikachu",
                 destination = "firstLevel",
+                action = (function(player) player:addPikachu() end),
             },
         },
     },
@@ -84,7 +90,6 @@ local scenes = {
                 destination = "firstLevel",
             },
             right = {
-                npc = "wizzMSNAnimated",
                 text = "MSN",
                 sound = "MSN.mp3",
                 background = "msn.png",

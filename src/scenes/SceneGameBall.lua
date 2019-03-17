@@ -41,7 +41,7 @@ local function init(self, args)
 
     self.cages = {}
     self.cages.sprite = love.graphics.newImage("assets/cageFoot.png")
-    self.cages.height = self.ball.dimensions.h * 4
+    self.cages.height = self.player.ball.dimensions.h * 4
     self.cages.scale = self.cages.height / self.cages.sprite:getHeight()
     self.cages.width = self.cages.scale * self.cages.sprite:getWidth()
     self.cages.x = self.platform.x + self.platform.width - self.cages.width
@@ -80,10 +80,10 @@ local function init(self, args)
     ----- player ----
     self.player:addBall()
     self.player:setPosition(self.width / 2 - 1, 0)
-    self.ball:setPosition(0, self.height - 100)
+    self.player.ball:setPosition(0, self.height - 100)
 
     self.player:setVelocity(0, 0)
-    self.ball:setVelocity(1000, -1000)
+    self.player.ball:setVelocity(1000, -1000)
 end
 
 local function update(self, dt)
@@ -152,7 +152,7 @@ local function draw(self)
     self.npc:draw()
 
     -- draw player
-    self.ball:draw()
+    self.player.ball:draw()
     self.player:draw()
 
     -- draw cages
@@ -227,13 +227,13 @@ local function playerLogic(self)
 end
 
 local function ballLogic(self)
-    if self.ball.pos.y > self.height + 100 then
-        if self.ball.pos.x > self.width / 2 then
-            self.ball:setPosition(0, self.height - 100)
-            self.ball:setVelocity(500, -1000)
+    if self.player.ball.pos.y > self.height + 100 then
+        if self.player.ball.pos.x > self.width / 2 then
+            self.player.ball:setPosition(0, self.height - 100)
+            self.player.ball:setVelocity(500, -1000)
         else
-            self.ball:setPosition(self.width, self.height - 100)
-            self.ball:setVelocity(-500, -1000)
+            self.player.ball:setPosition(self.width, self.height - 100)
+            self.player.ball:setVelocity(-500, -1000)
         end
     end
 end
@@ -246,8 +246,8 @@ local function updatePawns(self, dt)
 
     -- reset some flags
     self.player.onGround = false
-    self.ball.onGround = false
-    self.ball.againstWall = false
+    self.player.ball.onGround = false
+    self.player.ball.againstWall = false
     self.player.againstWall = false
 
     -- perform collision multiple times
@@ -257,26 +257,26 @@ local function updatePawns(self, dt)
         -- accelerate
         local gravity = 2040 * dtNew
         self.player:accelerate(0, gravity)
-        self.ball:accelerate(0, gravity)
+        self.player.ball:accelerate(0, gravity)
     
         -- update position
         local vx, vy = self.player:getVelocity()
         self.player:move(vx * dtNew, vy * dtNew)
-        local vx, vy = self.ball:getVelocity()
-        self.ball:move(vx * dtNew, vy * dtNew)
+        local vx, vy = self.player.ball:getVelocity()
+        self.player.ball:move(vx * dtNew, vy * dtNew)
 
         -- player
         self:handleCollisionsNoResolution(self.player, self.platform, dtNew)
         self:handleCollisionsNoResolution(self.player, self.wall, dtNew)
         self.player:update(dtNew)
         -- ball
-        self:handleCollisionsNoResolution(self.ball, self.platform, dtNew)
-        self:handleCollisionsNoResolution(self.ball, self.wall, dtNew)
+        self:handleCollisionsNoResolution(self.player.ball, self.platform, dtNew)
+        self:handleCollisionsNoResolution(self.player.ball, self.wall, dtNew)
         for i = 1, #self.cages.colliders do
             local collider = self.cages.colliders[i]
-            self:handleCollisionsNoResolution(self.ball, collider, dtNew)
+            self:handleCollisionsNoResolution(self.player.ball, collider, dtNew)
         end
-        self.ball:update(dtNew)
+        self.player.ball:update(dtNew)
     end
 end
 
@@ -367,7 +367,6 @@ local function SceneChoiceBase(pSceneManager, pData, player)
     local self = SceneBase(pSceneManager)
     self.data = pData
     self.player = player
-    self.ball = ball
 
     ----- interface functions ----
     self.isInPlatform = isInPlatform
