@@ -122,6 +122,7 @@ local function Player()
     -- attributes
     self.type = "player" -- do we collide bottom
     self.onGround = false
+    self.againstWall = false
     self.hasPikachu = false
     self.hasBall = false
     self.isGirly = false
