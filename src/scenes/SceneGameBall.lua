@@ -71,8 +71,6 @@ local function init(self, args)
     self.videoY = 0
 
     self.music = love.audio.newSource("assets/Olive-et-Tom.mp3", "stream")
-    self.music:play()
-    self.music:setLooping(true)
 
     self.npc = require("src.objects.NPC")("Olive-et-Tom")
     self.npc.pos.x = self.wall.right + 50
@@ -99,11 +97,18 @@ local function update(self, dt)
         self.video:play()
     end
 
+    if not self.music:isPlaying() then
+        self.music = love.audio.newSource("assets/Olive-et-Tom.mp3", "stream")
+        self.music:seek(0)
+        self.music:setVolume(1.0)
+        self.music:play()
+    end
+
     if self.player.pos.y > self.height + 2 * self.player.dimensions.h then self:validatedChoice() end
 end
 
 local function exit(self)
-    self.video:stop()
+    -- self.video:stop()
     self.video:release()
 end
 

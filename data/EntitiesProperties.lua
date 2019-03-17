@@ -43,7 +43,7 @@ local props = {
         },
         
         animations = {
-            ["idle"] = {frames = {1}, speed = 0, next = "walk",},
+            ["idle"] = {frames = {1}, speed = 0, next = "idle",},
             ["walk"] = {frames = {1, 2, 3, 4}, speed = 1 / 4, next = "idle",},
         },
         defaultAnimation = "idle",
@@ -56,7 +56,7 @@ local props = {
             width = 4,
         },
         animations = {
-            ["idle"] = {frames = {5, 6, 7, 8}, speed = 1 / 4, next = "walk",},
+            ["idle"] = {frames = {5, 6, 7, 8}, speed = 1 / 4, next = "idle",},
             ["walk"] = {frames = {1, 2, 3, 4}, speed = 1 / 4, next = "idle",},
         },
         defaultAnimation = "idle",
