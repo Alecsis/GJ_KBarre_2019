@@ -197,11 +197,19 @@ local function playerLogic(self)
     local isDown = love.keyboard.isDown
     local vel = 300
     if isDown('left') then
-        self.player:accelerate(-vel, 0)
+        if isDown('lshift') then
+            self.player:accelerate(-2 * vel, 0)
+        else
+            self.player:accelerate(-vel, 0)
+        end
         self.player.xflip = -1
     end
     if isDown('right') then
-        self.player:accelerate(vel, 0)
+        if isDown('lshift') then
+            self.player:accelerate(2 * vel, 0)
+        else
+            self.player:accelerate(vel, 0)
+        end
         self.player.xflip = 1
     end
     if (isDown('space') or isDown("up")) and self.player.onGround then
