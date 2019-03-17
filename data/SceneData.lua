@@ -19,7 +19,7 @@ local scenes = {
                 text = "Princesse Sarah",
                 sound = "Princesse-Sarah-preview.mp3",
                 background = "Princesse-Sarah-background.jpg",
-                npc = nil,
+                npc = "princessSarah",
                 destination = "Princesse Sarah",
                 action = (function(player) player:makeGirly() end),
             },
@@ -226,7 +226,7 @@ local scenes = {
                 sound = "mulanSound.mp3",
                 background = "Mulan.jpg",
                 npc = nil,
-                destination = "LastLevel",
+                destination = "lastLevel",
             },
             right = {
                 text = "Le Roi Lion",
