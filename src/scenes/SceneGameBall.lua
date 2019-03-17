@@ -199,7 +199,7 @@ local function handleCollisions(self, pawn, dt)
         local dx = 0
         if goingRight then
         local collision = self:isInCage(pright, ptop + ph / 5) or self:isInCage(pright, (ptop + pbottom) / 2) or self:isInCage(pright, pbottom - ph / 5)
-            if collision then dx = self.cages.right - 10 - 0.1 - pright - 10 end
+            if collision then dx = self.cages.right - 10 - 0.1 - pright end
         end
         pawn:move(dx, 0)
 
@@ -219,7 +219,7 @@ local function handleCollisions(self, pawn, dt)
             end
         else
             local collision = self:isInCage(pright - pw / 5, ptop) or self:isInCage((pleft + pright) / 2, ptop) or self:isInCage(pleft + pw / 5, ptop)
-            if collision then dy = self.cages.right + 0.1 - pleft end
+            if collision then dy = self.cages.top + 0.1 - ptop + 10 end
         end
         pawn:move(0, dy)
     end
