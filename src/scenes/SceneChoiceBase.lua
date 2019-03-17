@@ -34,6 +34,16 @@ local function init(self, args)
     self.platform.left = self.platform.x
     self.platform.right = self.platform.x + self.platform.width
 
+    ----- npc -----
+    self.npcLeft = require("src.objects.NPC")("Diddle")
+    self.npcLeft.pos.x = self.platform.left + 50
+    self.npcLeft.pos.y = self.platform.y
+    self.npcLeft.xflip = -1
+
+    self.npcRight = require("src.objects.NPC")("Olive-et-Tom")
+    self.npcRight.pos.x = self.platform.right - 50
+    self.npcRight.pos.y = self.platform.y
+
     ----- player ----
     self.player:setPosition(self.width / 2 - 1, 0)
     self.pikachu:setPosition(self.player.pos.x - 50, self.player.pos.y)
@@ -105,6 +115,9 @@ local function draw(self)
     )
 
     -- draw player and items
+    if self.npcLeft then self.npcLeft:draw() end
+    if self.npcRight then self.npcRight:draw() end
+
     if self.player.hasPikachu then self.pikachu:draw() end
 
     self.player:draw()
@@ -152,6 +165,9 @@ local function validatedChoice(self)
 end
 
 local function updatePawns(self, dt)
+    if self.npcLeft then self.npcLeft:update(dt) end
+    if self.npcRight then self.npcRight:update(dt) end
+
     self.player:update(dt)
 
     ---- Player movement ----
