@@ -36,7 +36,7 @@ local scenes = {
         type = "game",
         scene = "SceneGameBall",
         background = "Olive-et-Tom-background.jpg",
-        destination = "firstLevel"
+        destination = "Olive et Tom"
     },
     ["Princesse Sarah"] = {
         type = "choice",
@@ -73,6 +73,7 @@ local scenes = {
                 background = "Pokemon.jpg",
                 npc = "pikachu",
                 destination = "firstLevel",
+                action = (function(player) player:addPikachu() return end),
             },
         },
     },

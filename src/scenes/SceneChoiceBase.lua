@@ -162,6 +162,10 @@ local function validatedChoice(self)
     -- print("Player chose " .. self.playerSide)
     -- print("Going to: " .. destination)
     -- load new scene
+    if self.choices[self.playerSide].action then
+        self.choices[self.playerSide].action(self.player)
+    end
+
     self.manager:load(
         "transition",
         {
@@ -212,7 +216,6 @@ local function updatePawns(self, dt)
 
     -- pikachu movement
     if self.player.hasPikachu then
-        print(self.player.pos.x)
         self.pikachu:update(dt)
         self:handleCollisions(self.pikachu, dt)
     end

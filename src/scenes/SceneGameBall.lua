@@ -173,6 +173,21 @@ end
 
 local function keyPressed(self, k) if k == "escape" then self.manager:load("menu") end end
 
+local function validatedChoice(self)
+    -- print("Player chose " .. self.playerSide)
+    -- print("Going to: " .. destination)
+    -- load new scene
+    self.manager:load(
+        "transition",
+        {
+            music = self.music,
+            image = self.data.background,
+            speed = 1,
+            destination = self.data.destination
+        }
+    )
+end
+
 local function playerLogic(self)
     ---- Player movement ----
     -- keep Y velocity
@@ -329,21 +344,6 @@ end
 
 local function isInPlatform(self, pPlatform, x, y)
     return not (x < pPlatform.left or x > pPlatform.right or y < pPlatform.top or y > pPlatform.bottom)
-end
-
-local function validatedChoice(self)
-    -- print("Player chose " .. self.playerSide)
-    -- print("Going to: " .. destination)
-    -- load new scene
-    self.manager:load(
-        "transition",
-        {
-            music = self.music,
-            image = self.data.background,
-            speed = 1,
-            destination = self.data.destination
-        }
-    )
 end
 
 local function SceneChoiceBase(pSceneManager, pData, player, pikachu, ball)
