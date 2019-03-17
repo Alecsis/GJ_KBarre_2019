@@ -19,7 +19,7 @@ local scenes = {
                 text = "Princesse Sarah",
                 sound = "Princesse-Sarah-preview.mp3",
                 background = "Princesse-Sarah-background.jpg",
-                npc = "princessSarah",
+                npc = nil,
                 destination = "Princesse Sarah",
                 action = (function(player) player:makeGirly() end),
             },
@@ -130,7 +130,7 @@ local scenes = {
                     text = "Les booms de folie",
                     sound = "demonsDeMinuit.mp3",
                     background = "tektonic.jpg",
-                    npc = "boom",
+                    npc = nil,
                     destination = "Dancing",
                 },
             },
@@ -290,7 +290,7 @@ local scenes = {
                 "of your day to day choices?",
             },
             transition = {speed = 2, image = "coeurPixel.png",},
-            destination = nil,
+            destination = "lastLevel",
         },
 
 }
