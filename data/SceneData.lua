@@ -21,28 +21,23 @@ local scenes = {
                 background = "Princesse-Sarah-background.jpg",
                 npc = nil,
                 destination = "Princesse Sarah",
-                action = (function(player) player:makeGirly() end),
             },
             right = {
+                npc = "oliveEtTom",
                 text = "Olive et Tom",
                 sound = "Olive-et-Tom-preview.mp3",
                 background = "Olive-et-Tom-background.jpg",
                 npc = "Olive-et-Tom",
-                destination = "Olive et Tom minijeu",
+                destination = "Olive et Tom",
             },
         },
         transition = true,
-    },
-    ["Olive et Tom minijeu"] = {
-        type = "game",
-        scene = "SceneGameBall",
-        background = "Olive-et-Tom-background.jpg",
-        destination = "Olive et Tom"
     },
     ["Princesse Sarah"] = {
         type = "choice",
         choices = {
             left = {
+                npc = "gameBoyAnimated",
                 text = "Game Boy",
                 sound = "Pokemon-Kbarre.mp3",
                 background = "Gameboy.jpg",
@@ -62,12 +57,12 @@ local scenes = {
         type = "choice",
         choices = {
             left = {
+                npc = "didleAnimated",
                 text = "Didle",
                 sound = "Diddle-musique.mp3",
                 background = "Diddle.jpg",
                 npc = "Diddle",
-                destination = "firstLevel",
-                action = (function(player) player:makeGirly() end),
+                destination = "start",
             },
             right = {
                 text = "Pokemon",
@@ -75,7 +70,6 @@ local scenes = {
                 background = "Pokemon.jpg",
                 npc = "pikachu",
                 destination = "firstLevel",
-                action = (function(player) player:addPikachu() end),
             },
         },
     },
@@ -90,6 +84,7 @@ local scenes = {
                 destination = "firstLevel",
             },
             right = {
+                npc = "wizzMSNAnimated",
                 text = "MSN",
                 sound = "MSN.mp3",
                 background = "msn.png",
@@ -99,101 +94,178 @@ local scenes = {
         },
     },
     -- Scène narration level one -- 
-    ["firstLevel"] = {
-        type = "narrative",
-        sound = "beginningTheme.mp3",
-        script = {
-            "If you could go back",
-            "would you choose the same things?",
-            "Choose the same people to trust",
-            "and to love?",
-            "Would you get addicted the same way?",
+        ["firstLevel"] = {
+            type = "narrative",
+            sound = "beginningTheme.mp3",
+            script = {
+                "If you could go back",
+                "would you choose the same things?",
+                "Choose the same people to trust",
+                "and to love?",
+                "Would you get addicted the same way?",
+            },
+            transition = {speed = 2, image = "coeurPixel.png",},
+            destination = "afterFirstLevel"
         },
-        transition = {speed = 2, image = "coeurPixel.png",},
-        destination = "afterFirstLevel"
-    },
+    
+        -- première scène niveau 1 -- 
+    
+        ["afterFirstLevel"] = {
+            type = "choice",
+            choices = {
+                left = {
+                    text = "Les écrans",
+                    sound = "cinema.mp3",
+                    background = "tnt.jpg",
+                    npc = nil,
+                    destination = "screens",
+                },  
+                right = {
+                    text = "Les booms de folie",
+                    sound = "demonsDeMinuit.mp3",
+                    background = "tektonic.jpg",
+                    npc = nil,
+                    destination = "Dancing",
+                },
+            },
+            transition = true,
+        },
 
-    -- première scène niveau 1 -- 
-    ["afterFirstLevel"] = {
-        type = "choice",
-        choices = {
-            left = {
-                text = "Les écrans",
-                sound = "cinema.mp3",
-                background = "tnt.jpg",
-                npc = nil,
-                destination = "screens",
-            },  
-            right = {
-                text = "Les booms de folie",
-                sound = "demonsDeMinuit.mp3",
-                background = "tektonic.jpg",
-                npc = nil,
-                destination = "Dancing",
+        ["screens"] = {
+            type = "choice",
+            choices = {
+                left = {
+                    text = "Les DVD",
+                    sound = "Princesse-Sarah-preview.mp3",
+                    background = "dvdSound.jpg",
+                    npc = nil,
+                    destination = "lesDVD",
+                },  
+                right = {
+                    text = "La trilogie du samedi",
+                    sound = "trilogieDuSamedi.mp3",
+                    background = "trilogieDuSamedi.jpg",
+                    npc = nil,
+                    destination = "trilogieDuSamedi",
+                },
             },
+            transition = true,
         },
-        transition = true,
-    },
 
-    ["screens"] = {
-        type = "choice",
-        choices = {
-            left = {
-                text = "Les DVD",
-                sound = "Princesse-Sarah-preview.mp3",
-                background = "Princesse-Sarah-background.jpg",
-                npc = nil,
-                destination = "lesDVD",
-            },  
-            right = {
-                text = "La trilogie du samedi",
-                sound = "trilogieDuSamedi.mp3",
-                background = "trilogieDuSamedi.jpg",
-                npc = nil,
-                destination = "trilogieDuSamedi",
+        ["lesDVD"] = {
+            type = "choice",
+            choices = {
+                left = {
+                    text = "Le Seigneur des Anneaux",
+                    sound = "seigneurDesAnneaux.mp3",
+                    background = "seigneurDesAnneaux.jpg",
+                    npc = nil,
+                    destination = "lastLevel",
+                },
+                right = {
+                    text = "Harry Potter",
+                    sound = "HP.mp3",
+                    background = "HP.jpg",
+                    npc = nil,
+                    destination = "HermioneOuGinny",
+                },
             },
         },
-        transition = true,
-    },
+        ["trilogieDuSamedi"] = {
+            type = "choice",
+            choices = {
+                left = {
+                    text = "Prison Break",
+                    sound = "PrisonBreak.mp3",
+                    background = "Diddle.jpg",
+                    npc = nil,
+                    destination = "lastLevel",
+                },
+                right = {
+                    text = "Charmed",
+                    sound = "charmedSound.mp3",
+                    background = "Pokemon.jpg",
+                    npc = nil,
+                    destination = "agentsSecret",
+                },
+            },
+        },
 
-    ["lesDVD"] = {
-        type = "choice",
-        choices = {
-            left = {
-                text = "Le Seigneur des Anneaux",
-                sound = "seigneurDesAnneaux.mp3",
-                background = "seigneurDesAnneaux.jpg",
-                npc = nil,
-                destination = "",
-            },
-            right = {
-                text = "Harry Potter",
-                sound = "HP.mp3",
-                background = "HP.jpg",
-                npc = nil,
-                destination = "",
-            },
-        },
-    },
-    ["trilogieDuSamedi"] = {
-        type = "choice",
-        choices = {
-            left = {
-                text = "Prison Break",
-                sound = "PrisonBreak.mp3",
-                background = "Diddle.jpg",
-                npc = nil,
-                destination = "",
-            },
-            right = {
-                text = "Charmed",
-                sound = "tribuDeDana.mp3",
-                background = "Pokemon.jpg",
-                npc = nil,
-                destination = "piperOrPhoebe",
+        ["HermioneOuGinny"] = {
+            type = "choice",
+            choices = {
+                left = {
+                    text = "Hermione",
+                    sound = "Hermione.mp3",
+                    background = "Hermione.jpg",
+                    npc = nil,
+                    destination = "lastLevel",
+                },
+                right = {
+                    text = "Ginny",
+                    sound = "Ginny.mp3",
+                    background = "ginny.jpg",
+                    npc = nil,
+                    destination = "Disney",
+                },
             },
         },
-    },
+
+        ["Disney"] = {
+            type = "choice",
+            choices = {
+                left = {
+                    text = "Mulan",
+                    sound = "mulanSound.mp3",
+                    background = "Mulan.jpg",
+                    npc = nil,
+                    destination = "LastLevel",
+                },
+                right = {
+                    text = "Le Roi Lion",
+                    sound = "roiLionSound.mp3",
+                    background = "roiLion.jpg",
+                    npc = nil,
+                    destination = "lastLevel",
+                },
+            },
+        },
+
+        ["Dancing"] = {
+            type = "choice",
+            choices = {
+                left = {
+                    text = "Manau",
+                    sound = "tribuDeDana.mp3",
+                    background = "tribuDeDana.jpg",
+                    npc = nil,
+                    destination = "lastLevel",
+                },  
+                right = {
+                    text = "Indochine",
+                    sound = "aventurierIndochine.mp3",
+                    background = "tektonic.jpg",
+                    npc = nil,
+                    destination = "Dancing",
+                },
+            },
+            transition = true,
+        },
+
+        ["lastLevel"] = {
+            type = "narrative",
+            sound = "beginningTheme.mp3",
+            script = {
+                "If you could go back",
+                "would you choose the same things?",
+                "Choose the same people to trust",
+                "and to love?",
+                "Would you get addicted the same way?",
+            },
+            transition = {speed = 2, image = "coeurPixel.png",},
+            destination = "afterFirstLevel"
+        },
+
 }
 
 return scenes

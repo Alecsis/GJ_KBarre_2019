@@ -48,6 +48,11 @@ local function SceneTransitionImage(pSceneManager)
         love.graphics.draw(self.image, self.screenw / 2, self.screenh / 2, 0, 1, 1, self.imagew / 2, self.imageh / 2)
     end
 
+    function self:keyPressed(k)
+        self.music:stop()²²
+        self.manager:load(self.destination)
+    end
+
     return self
 end
 
