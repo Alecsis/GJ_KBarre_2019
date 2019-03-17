@@ -127,7 +127,7 @@ local function GoldenSnitch(player)
 
     -- spritesheet & animations
     local props = require("data.EntitiesProperties")
-    self:setSpritesheet(props["pikachu"])
+    self:setSpritesheet(props["golden snitch"])
 
     return self
 end
